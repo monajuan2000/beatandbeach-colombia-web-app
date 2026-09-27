@@ -1,3 +1,5 @@
+import colombiaFeaturedImage from '../../assets/COLOMBIA_1.jpeg'
+
 export function Hero() {
     return (
         <section className="hero-section" id="discover">
@@ -35,7 +37,14 @@ export function Hero() {
             </div>
 
             <div className="hero-visual" aria-label="Featured destinations summary">
-                <div className="feature-card destination-visual">
+                <div
+                    className="feature-card destination-visual"
+                    style={{
+                        backgroundImage: `linear-gradient(135deg, rgba(12, 74, 110, 0.72), rgba(15, 23, 42, 0.58)), url("${colombiaFeaturedImage}")`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center bottom',
+                    }}
+                >
                     <div className="destination-image-overlay" />
                     <div className="destination-copy">
                         <span className="card-tag">Featured</span>

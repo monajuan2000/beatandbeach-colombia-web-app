@@ -1,17 +1,15 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { HashRouter, Routes, Route } from 'react-router-dom'
-import './index.css'
-import App from './App.tsx'
-import { MedellinEventsPage } from './pages/MedellinEventsPage'
+import { HashRouter } from 'react-router-dom'
+// Global styles load first so component styles can build on them.
+import './styles/global.css'
+import './styles/shared.css'
+import { App } from './app/App'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HashRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/medellin-events" element={<MedellinEventsPage />} />
-      </Routes>
+      <App />
     </HashRouter>
   </StrictMode>,
 )

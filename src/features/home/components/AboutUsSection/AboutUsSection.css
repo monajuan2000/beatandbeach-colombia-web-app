@@ -1,0 +1,64 @@
+.about-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 420px;
+  border-radius: 32px;
+  background: radial-gradient(circle at center, rgba(34, 197, 94, 0.2), rgba(15, 23, 42, 0.1) 45%, rgba(15, 23, 42, 0.85) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: inset 0 0 30px rgba(59, 130, 246, 0.12), 0 18px 40px rgba(15, 23, 42, 0.22);
+}
+
+.about-logo {
+  width: min(350px, 80%);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 36px rgba(52, 211, 153, 0.18));
+}
+
+.about-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.about-copy h2 {
+  margin: 0;
+  font-size: clamp(2.2rem, 3vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.06em;
+}
+
+.about-copy p {
+  color: #cbd5e1;
+  line-height: 1.8;
+  font-size: 1.02rem;
+}
+
+.about-points {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.about-point {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.about-point strong {
+  color: #f8fafc;
+  font-size: 1rem;
+}
+
+.about-point span {
+  color: #cbd5e1;
+  line-height: 1.6;
+  font-size: 0.88rem;
+}

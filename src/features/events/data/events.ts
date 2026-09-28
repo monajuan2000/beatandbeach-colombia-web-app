@@ -1,0 +1,192 @@
+import type { EventItem } from '../types'
+import edcColombiaImage from '@/assets/images/events/edc-colombia-2026.jpeg'
+
+export const events: EventItem[] = [
+    {
+        id: 'edc-colombia-2026',
+        title: 'EDC Colombia 2026',
+        cityId: 'medellin',
+        category: 'Electronic music',
+        date: '10–11 Oct 2026',
+        location: 'Festival grounds',
+        summary:
+            'The city’s biggest electronic celebration with immersive stages, iconic DJs, and a full weekend of music, lights, and atmosphere.',
+        price: 'Tickets on sale',
+        featured: true,
+        audience: 'Electronic music fans',
+        image: edcColombiaImage,
+    },
+    {
+        id: 'medellin-sound-park',
+        title: 'Sound Park Festival',
+        cityId: 'medellin',
+        category: 'Music',
+        date: 'June 22, 2026',
+        location: 'Explora Park',
+        summary: 'A multi-stage music celebration blending local and international artists with food and design pop-ups.',
+        price: 'From $80.000',
+        featured: true,
+        audience: 'Young adults and music lovers',
+    },
+    {
+        id: 'cartagena-barrio-arts',
+        title: 'Cartagena Arts Night',
+        cityId: 'cartagena',
+        category: 'Culture',
+        date: 'July 4, 2026',
+        location: 'Getsemaní',
+        summary: 'A creative evening of visual arts, local storytelling, and cultural performances in the historic center.',
+        price: 'From $60.000',
+        featured: true,
+        audience: 'Culture enthusiasts',
+    },
+    {
+        id: 'guatape-lake-run',
+        title: 'Guatapé Lake Run',
+        cityId: 'guatape',
+        category: 'Adventure',
+        date: 'August 15, 2026',
+        location: 'Lake Guatapé',
+        summary: 'An outdoor running and wellness event with panoramic routes, local food, and eco-friendly activities.',
+        price: 'From $45.000',
+        featured: true,
+        audience: 'Active travelers and fitness lovers',
+    },
+    {
+        id: 'medellin-food-market',
+        title: 'Urban Food Market',
+        cityId: 'medellin',
+        category: 'Food',
+        date: 'Every Saturday',
+        location: 'El Poblado',
+        summary: 'A modern food market featuring signature dishes, artisan drinks, and live music.',
+        price: 'Free Entry',
+        featured: false,
+        audience: 'Families and foodies',
+    },
+    {
+        id: 'medellin-music-week',
+        title: 'Medellín Music Week',
+        cityId: 'medellin',
+        category: 'Concert series',
+        date: '18 Sep 2026',
+        location: 'El Poblado',
+        summary:
+            'A week of concerts, indie showcases, and urban culture experiences that bring together local and global artists.',
+        price: 'From $50.000',
+        featured: false,
+        audience: 'Live music lovers',
+    },
+    {
+        id: 'medellin-flower-festival',
+        title: 'Flower Festival',
+        cityId: 'medellin',
+        category: 'Cultural fair',
+        date: '2 Oct 2026',
+        location: 'Historic Center',
+        summary:
+            'One of the city’s most iconic celebrations, combining music, flowers, local gastronomy, and community traditions.',
+        price: 'Free Entry',
+        featured: false,
+        audience: 'Families and culture lovers',
+    },
+    {
+        id: 'medellin-arena-live',
+        title: 'Arena Medellín Live',
+        cityId: 'medellin',
+        category: 'Live concert',
+        date: '7 Nov 2026',
+        location: 'Arena Medellín',
+        summary:
+            'A major venue for concerts, pop, rock, and global talent, designed for a high-energy night experience.',
+        price: 'From $120.000',
+        featured: false,
+        audience: 'Concert goers',
+    },
+    {
+        id: 'medellin-salsa-nights',
+        title: 'Salsa & Rhythm Nights',
+        cityId: 'medellin',
+        category: 'Dance experience',
+        date: 'Every Friday',
+        location: 'Various clubs',
+        summary:
+            'A rotating selection of salsa, electronic fusion, and live sets in Medellín’s nightlife scene.',
+        price: 'From $30.000',
+        featured: false,
+        audience: 'Dancers and night owls',
+    },
+    {
+        id: 'medellin-innovation-fair',
+        title: 'Innovation & Design Fair',
+        cityId: 'medellin',
+        category: 'Expo / convention',
+        date: '21 Nov 2026',
+        location: 'Ruta N',
+        summary:
+            'An entrepreneurship and innovation event with talks, culture spaces, networking, and brand showcases.',
+        price: 'From $40.000',
+        featured: false,
+        audience: 'Founders and creatives',
+    },
+    {
+        id: 'cali-fair',
+        title: 'Cali Fair',
+        cityId: 'cali',
+        category: 'Cultural fair',
+        date: '25–30 Dec 2026',
+        location: 'Across the city',
+        summary:
+            'Cali’s legendary year-end fair with its grand salsa parade, orchestras, concerts, and a citywide festive atmosphere.',
+        price: 'Free & ticketed events',
+        featured: true,
+        audience: 'Salsa lovers and festival goers',
+    },
+    {
+        id: 'cali-salsa-juanchito',
+        title: 'Salsa Nights in Juanchito',
+        cityId: 'cali',
+        category: 'Dance experience',
+        date: 'Every Saturday',
+        location: 'Juanchito',
+        summary:
+            'A guided night through Cali’s most iconic salsa venues, with a beginner class before hitting the dance floor.',
+        price: 'From $70.000',
+        featured: false,
+        audience: 'Dancers of every level',
+    },
+    {
+        id: 'cartagena-sunset-sessions',
+        title: 'Sunset Beach Sessions',
+        cityId: 'cartagena',
+        category: 'Music',
+        date: 'Every Sunday',
+        location: 'Bocagrande',
+        summary:
+            'Live DJ sets and Caribbean sounds on the beach as the sun goes down over the bay.',
+        price: 'From $55.000',
+        featured: false,
+        audience: 'Beach and music lovers',
+    },
+    {
+        id: 'guatape-paddle-day',
+        title: 'Paddle & Viewpoint Day',
+        cityId: 'guatape',
+        category: 'Adventure',
+        date: 'Weekends',
+        location: 'El Peñol',
+        summary:
+            'A full-day experience combining kayaking on the reservoir with the climb to the famous rock viewpoint.',
+        price: 'From $95.000',
+        featured: false,
+        audience: 'Outdoor explorers',
+    },
+]
+
+export function getEventById(id: string) {
+    return events.find((event) => event.id === id)
+}
+
+export function getEventsByCity(cityId: string) {
+    return events.filter((event) => event.cityId === cityId)
+}

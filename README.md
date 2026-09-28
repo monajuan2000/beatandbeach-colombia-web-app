@@ -1,75 +1,45 @@
-# React + TypeScript + Vite
+# Beat & Beach Colombia
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Tourism and events web app showcasing curated experiences in Medellín, Cali, Cartagena, and Guatapé.
 
-Currently, two official plugins are available:
+Built with React 19, TypeScript, Vite, and React Router (`HashRouter`, for GitHub Pages).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Scripts
 
-## React Compiler
+| Command | Description |
+| --- | --- |
+| `npm install` | Install dependencies |
+| `npm run dev` | Start the dev server at `http://localhost:5173/beatandbeach-colombia-web-app/` |
+| `npm run build` | Type-check and build into `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run lint` | Run ESLint |
+| `npm run deploy` | Build and publish `dist/` to GitHub Pages |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project structure
 
 ```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+src/
+├── app/                 # App root: providers and routes
+├── assets/images/       # Images grouped by domain (brand, cities, destinations, events)
+├── components/          # Shared, domain-agnostic building blocks
+│   ├── layout/          # Page chrome (SiteHeader)
+│   ├── routing/         # Router helpers (ScrollManager)
+│   └── ui/              # Reusable UI (Badge, Chip, FilterChips, Modal, SectionHeader)
+├── features/            # Domain modules
+│   ├── cities/          # components/, data/, types.ts
+│   ├── events/          # components/, data/, types.ts
+│   ├── home/            # Home page sections, data/, types.ts
+│   └── trip/            # Saved events + trip planner (context/, components/)
+├── pages/               # Route-level screens (HomePage, CityPage)
+├── styles/              # global.css (base/reset) and shared.css (buttons, tags, rows)
+└── main.tsx             # Entry point
 ```
+
+## Conventions
+
+- **English only**: file names, folders, components, identifiers, CSS classes, asset names, and data ids.
+- **One component per folder**: `ComponentName/ComponentName.tsx` with its styles in `ComponentName/ComponentName.css`, imported by the component itself.
+- **PascalCase** for component files and folders; **camelCase** for data/helper modules; **kebab-case** for assets and CSS classes.
+- **Feature first**: code that belongs to one domain lives in `features/<domain>/`; only truly shared pieces go in `components/` or `styles/`.
+- **`@/` alias** points to `src/` — prefer it over deep relative paths across features.
+- **In-page navigation**: because `HashRouter` owns the URL hash, link to sections with `<Link to="/" state={{ scrollTo: 'section-id' }}>` instead of `href="#section-id"`.

@@ -1,0 +1,142 @@
+.planner-intro {
+  color: #cbd5e1;
+}
+
+.planner-saved {
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.planner-saved-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #f8fafc;
+}
+
+.planner-saved-header span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: rgba(52, 211, 153, 0.14);
+  color: #a7f3d0;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.planner-empty {
+  margin-top: 8px;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.planner-saved-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.planner-saved-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.planner-saved-list li div {
+  display: flex;
+  flex-direction: column;
+}
+
+.planner-saved-list strong {
+  color: #f8fafc;
+  font-size: 0.95rem;
+}
+
+.planner-saved-list small {
+  color: #94a3b8;
+}
+
+.planner-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.form-field-full {
+  grid-column: 1 / -1;
+}
+
+.form-field > span,
+.form-field legend {
+  padding: 0;
+  color: #7dd3fc;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.form-field .chip-group {
+  justify-content: flex-start;
+  margin-top: 8px;
+}
+
+.form-field input,
+.form-field select {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(2, 8, 23, 0.6);
+  color: #f8fafc;
+  font: inherit;
+  color-scheme: dark;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  outline: none;
+  border-color: rgba(125, 211, 252, 0.6);
+  box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.15);
+}
+
+.planner-submit {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.planner-success p {
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.planner-success strong {
+  color: #f8fafc;
+}
+
+@media (max-width: 640px) {
+  .planner-form {
+    grid-template-columns: 1fr;
+  }
+}

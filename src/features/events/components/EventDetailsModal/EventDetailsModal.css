@@ -1,0 +1,31 @@
+.event-details-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.event-details-location {
+  margin: 0;
+  color: #7dd3fc;
+  font-weight: 600;
+}
+
+.event-details-summary {
+  margin: 0;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.event-details .meta-pill-row {
+  margin-top: 0.2rem;
+}
+
+.event-details-audience {
+  color: #cbd5e1;
+  font-size: 0.92rem;
+}
+
+.event-details-audience strong {
+  color: #f8fafc;
+}

@@ -1,0 +1,19 @@
+.events-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.events-list {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+}
+
+@media (max-width: 960px) {
+  .events-list {
+    grid-template-columns: 1fr;
+  }
+}

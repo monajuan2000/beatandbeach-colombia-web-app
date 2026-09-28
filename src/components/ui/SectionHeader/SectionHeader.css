@@ -1,0 +1,14 @@
+.section-header {
+  margin-bottom: 26px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1.06;
+  letter-spacing: -0.06em;
+  max-width: 760px;
+}

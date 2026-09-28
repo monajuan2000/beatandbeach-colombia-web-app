@@ -1,0 +1,106 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+  background: rgba(2, 8, 23, 0.72);
+  backdrop-filter: blur(10px);
+  animation: modalFade 0.2s ease;
+}
+
+.modal-panel {
+  position: relative;
+  width: min(100%, 560px);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  border-radius: 28px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(9, 15, 28, 0.98));
+  box-shadow: 0 30px 60px rgba(2, 6, 23, 0.5);
+  outline: none;
+  animation: modalRise 0.25s ease;
+}
+
+.modal-panel-wide {
+  width: min(100%, 720px);
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(15, 23, 42, 0.8);
+  color: #e2e8f0;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  border-color: rgba(125, 211, 252, 0.42);
+}
+
+.modal-visual {
+  height: 200px;
+  background-size: cover;
+  background-position: center 70%;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px;
+}
+
+.modal-body h3 {
+  margin: 0;
+  padding-right: 40px;
+  color: #f8fafc;
+  font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+.modal-body .eyebrow {
+  margin-bottom: 0;
+}
+
+.modal-actions {
+  margin-top: 0.6rem;
+}
+
+@keyframes modalFade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalRise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .modal-body {
+    padding: 22px;
+  }
+}

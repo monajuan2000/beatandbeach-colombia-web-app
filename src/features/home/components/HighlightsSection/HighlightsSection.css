@@ -1,7 +1,8 @@
 .highlights-grid {
   display: grid;
   gap: 20px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  /* 2×2: the section shares its row with the heading, so four columns get too narrow for longer copy. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .highlight-card {

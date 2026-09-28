@@ -72,6 +72,12 @@
   color: #7dd3fc;
 }
 
+.site-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .trip-count {
   display: inline-grid;
   place-items: center;

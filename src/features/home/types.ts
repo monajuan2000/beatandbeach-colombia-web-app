@@ -1,7 +1,9 @@
+import type { LocalizedText } from '@/i18n/types'
+
 export type Highlight = {
     id: string
-    title: string
-    description: string
+    title: LocalizedText
+    description: LocalizedText
     icon: string
 }
 
@@ -9,9 +11,9 @@ export type ProjectAccent = 'green' | 'blue' | 'purple'
 
 export type Project = {
     id: string
-    name: string
-    type: string
-    description: string
-    status: string
+    name: LocalizedText
+    type: LocalizedText
+    description: LocalizedText
+    status: LocalizedText
     accent: ProjectAccent
 }

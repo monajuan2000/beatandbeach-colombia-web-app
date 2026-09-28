@@ -1,66 +1,78 @@
-import type { City } from '../types'
 import medellinCardImage from '@/assets/images/cities/medellin-card.jpeg'
+import type { City } from '../types'
 
 export const cities: City[] = [
     {
         id: 'medellin',
         name: 'Medellín',
-        region: 'Andean rhythm',
-        tagline: 'Urban energy, culture, and nightlife',
-        description: 'A vibrant city full of innovation, nightlife, and contemporary culture.',
-        intro:
-            'Medellín merges innovation, culture, and nightlife in a way that makes every week feel like a celebration. From electronic music gatherings to big-city festivals, there is always something happening.',
-        highlights: ['Nightlife', 'Gastronomy', 'Creative districts'],
+        region: { en: 'Andean rhythm', es: 'Ritmo andino' },
+        description: {
+            en: 'A vibrant city full of innovation, nightlife, and contemporary culture.',
+            es: 'Una ciudad vibrante llena de innovación, vida nocturna y cultura contemporánea.',
+        },
+        intro: {
+            en: 'Medellín merges innovation, culture, and nightlife in a way that makes every week feel like a celebration. From electronic music gatherings to big-city festivals, there is always something happening.',
+            es: 'Medellín combina innovación, cultura y vida nocturna de una forma que hace que cada semana se sienta como una celebración. Desde encuentros de música electrónica hasta grandes festivales, siempre hay algo pasando.',
+        },
         stats: [
-            { value: '25+', label: 'major events per month' },
-            { value: '3', label: 'top nightlife districts' },
-            { value: '1', label: 'city full of energy' },
+            { value: '25+', label: { en: 'major events per month', es: 'grandes eventos al mes' } },
+            { value: '3', label: { en: 'top nightlife districts', es: 'zonas top de vida nocturna' } },
+            { value: '1', label: { en: 'city full of energy', es: 'ciudad llena de energía' } },
         ],
         image: medellinCardImage,
     },
     {
         id: 'cali',
         name: 'Cali',
-        region: 'Salsa and energy',
-        tagline: 'The world capital of salsa',
-        description: 'A city of movement, music, and strong local identity with a deep cultural pulse.',
-        intro:
-            'Cali lives to the beat of salsa. Its dance schools, legendary clubs, and year-end fair turn every visit into a lesson in rhythm, joy, and Pacific-influenced culture.',
-        highlights: ['Salsa clubs', 'Pacific culture', 'Year-end fair'],
+        region: { en: 'Salsa and energy', es: 'Salsa y energía' },
+        description: {
+            en: 'A city of movement, music, and strong local identity with a deep cultural pulse.',
+            es: 'Una ciudad de movimiento, música y fuerte identidad local, con un profundo pulso cultural.',
+        },
+        intro: {
+            en: 'Cali lives to the beat of salsa. Its dance schools, legendary clubs, and year-end fair turn every visit into a lesson in rhythm, joy, and Pacific-influenced culture.',
+            es: 'Cali vive al ritmo de la salsa. Sus escuelas de baile, sus discotecas legendarias y su feria de fin de año convierten cada visita en una lección de ritmo, alegría y cultura con influencia del Pacífico.',
+        },
         stats: [
-            { value: '100+', label: 'salsa schools and clubs' },
-            { value: '6', label: 'days of the Cali Fair' },
-            { value: '1', label: 'rhythm that never stops' },
+            { value: '100+', label: { en: 'salsa schools and clubs', es: 'escuelas y clubes de salsa' } },
+            { value: '6', label: { en: 'days of the Cali Fair', es: 'días de Feria de Cali' } },
+            { value: '1', label: { en: 'rhythm that never stops', es: 'ritmo que nunca se detiene' } },
         ],
     },
     {
         id: 'cartagena',
         name: 'Cartagena',
-        region: 'Historic coast',
-        tagline: 'Historic charm by the sea',
-        description: 'Colorful colonial streets, Caribbean breeze, and unforgettable sunsets.',
-        intro:
-            'Colorful streets, colonial architecture, and unforgettable sunsets make Cartagena a premium destination for culture lovers, with art nights and beachfront sessions all year long.',
-        highlights: ['Beachfront events', 'Historic center', 'Sunset tours'],
+        region: { en: 'Historic coast', es: 'Costa histórica' },
+        description: {
+            en: 'Colorful colonial streets, Caribbean breeze, and unforgettable sunsets.',
+            es: 'Calles coloniales llenas de color, brisa caribeña y atardeceres inolvidables.',
+        },
+        intro: {
+            en: 'Colorful streets, colonial architecture, and unforgettable sunsets make Cartagena a premium destination for culture lovers, with art nights and beachfront sessions all year long.',
+            es: 'Sus calles coloridas, su arquitectura colonial y sus atardeceres inolvidables hacen de Cartagena un destino premium para los amantes de la cultura, con noches de arte y sesiones frente al mar todo el año.',
+        },
         stats: [
-            { value: '11 km', label: 'of colonial walls' },
-            { value: '30+', label: 'nearby islands' },
-            { value: '365', label: 'days of Caribbean sun' },
+            { value: '11 km', label: { en: 'of colonial walls', es: 'de murallas coloniales' } },
+            { value: '30+', label: { en: 'nearby islands', es: 'islas cercanas' } },
+            { value: '365', label: { en: 'days of Caribbean sun', es: 'días de sol caribeño' } },
         ],
     },
     {
         id: 'guatape',
         name: 'Guatapé',
-        region: 'Lake & mountain views',
-        tagline: 'Mountain views and scenic adventures',
-        description: 'A scenic getaway with lakes, colorful houses, and outdoor adventure.',
-        intro:
-            'A scenic lake town with colorful facades, turquoise waters, and unforgettable outdoor experiences, just two hours from Medellín.',
-        highlights: ['Outdoor activities', 'Lake views', 'Local artisan culture'],
+        region: { en: 'Lake & mountain views', es: 'Lago y montaña' },
+        description: {
+            en: 'A scenic getaway with lakes, colorful houses, and outdoor adventure.',
+            es: 'Una escapada escénica con lagos, casas coloridas y aventura al aire libre.',
+        },
+        intro: {
+            en: 'A scenic lake town with colorful facades, turquoise waters, and unforgettable outdoor experiences, just two hours from Medellín.',
+            es: 'Un pueblo junto al lago con fachadas coloridas, aguas turquesa y experiencias al aire libre inolvidables, a solo dos horas de Medellín.',
+        },
         stats: [
-            { value: '740', label: 'steps up El Peñol' },
-            { value: '2 h', label: 'from Medellín' },
-            { value: '1', label: 'lake full of islands' },
+            { value: '740', label: { en: 'steps up El Peñol', es: 'escalones hasta la cima de El Peñol' } },
+            { value: '2 h', label: { en: 'from Medellín', es: 'desde Medellín' } },
+            { value: '1', label: { en: 'lake full of islands', es: 'lago lleno de islas' } },
         ],
     },
 ]

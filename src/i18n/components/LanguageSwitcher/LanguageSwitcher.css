@@ -1,0 +1,31 @@
+.language-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.language-switcher-option {
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 0.75rem;
+  background: transparent;
+  color: #cbd5e1;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.language-switcher-option:hover {
+  color: #f8fafc;
+}
+
+.language-switcher-option.is-active {
+  background: linear-gradient(135deg, #34d399, #3b82f6);
+  color: #04111d;
+}

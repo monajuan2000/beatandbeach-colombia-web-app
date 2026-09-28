@@ -76,6 +76,7 @@ main section[id] {
   color: #7dd3fc;
   padding: 0;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .primary-button:hover,

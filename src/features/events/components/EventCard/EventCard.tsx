@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react'
 import { Badge } from '@/components/ui/Badge/Badge'
 import { getCityById } from '@/features/cities/data/cities'
 import { useTrip } from '@/features/trip/context/TripContext'
+import { useTranslation } from '@/i18n/context/LanguageContext'
 import type { EventItem } from '../../types'
 import './EventCard.css'
 
@@ -24,10 +25,12 @@ function imageBackground(image: string): CSSProperties {
 
 export function EventCard({ event, onViewDetails, variant = 'standard' }: EventCardProps) {
     const { isEventSaved } = useTrip()
+    const { t, localize } = useTranslation()
+    const categoryLabel = t.events.categories[event.category]
 
     const detailsButton = (
         <button type="button" className="text-button" onClick={() => onViewDetails(event)}>
-            View details
+            {t.common.viewDetails}
         </button>
     )
 
@@ -38,18 +41,18 @@ export function EventCard({ event, onViewDetails, variant = 'standard' }: EventC
                 style={event.image ? imageBackground(event.image) : undefined}
             >
                 <div className="event-card-row">
-                    <Badge tone="blue">{event.category}</Badge>
-                    <span className="event-card-date">{event.date}</span>
+                    <Badge tone="blue">{categoryLabel}</Badge>
+                    <span className="event-card-date">{localize(event.date)}</span>
                 </div>
 
-                <h3>{event.title}</h3>
-                <p className="event-card-location">{event.location}</p>
-                <p className="event-card-summary">{event.summary}</p>
+                <h3>{localize(event.title)}</h3>
+                <p className="event-card-location">{localize(event.location)}</p>
+                <p className="event-card-summary">{localize(event.summary)}</p>
 
                 <div className="event-card-row event-card-footer">
                     <small>
-                        {event.price}
-                        {isEventSaved(event.id) ? ' · ✓ Saved' : ''}
+                        {localize(event.price)}
+                        {isEventSaved(event.id) ? ` · ${t.events.card.saved}` : ''}
                     </small>
                     {detailsButton}
                 </div>
@@ -60,20 +63,20 @@ export function EventCard({ event, onViewDetails, variant = 'standard' }: EventC
     return (
         <article className={`event-card event-card-standard ${event.featured ? 'is-featured' : ''}`}>
             <div className="event-card-row">
-                <Badge tone="blue">{event.category}</Badge>
-                {event.featured ? <Badge tone="green">Featured</Badge> : null}
+                <Badge tone="blue">{categoryLabel}</Badge>
+                {event.featured ? <Badge tone="green">{t.common.featured}</Badge> : null}
             </div>
-            <h3>{event.title}</h3>
+            <h3>{localize(event.title)}</h3>
             <p className="event-card-location">
-                {getCityById(event.cityId)?.name} · {event.location}
+                {getCityById(event.cityId)?.name} · {localize(event.location)}
             </p>
-            <p className="event-card-summary">{event.summary}</p>
+            <p className="event-card-summary">{localize(event.summary)}</p>
             <div className="event-card-row event-card-meta">
-                <span>{event.date}</span>
-                <span>{event.price}</span>
+                <span>{localize(event.date)}</span>
+                <span>{localize(event.price)}</span>
             </div>
             <div className="event-card-row event-card-footer">
-                <small>{event.audience}</small>
+                <small>{localize(event.audience)}</small>
                 {detailsButton}
             </div>
         </article>

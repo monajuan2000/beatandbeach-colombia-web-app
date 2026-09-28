@@ -1,20 +1,21 @@
 import wondersBannerImage from '@/assets/images/destinations/colombia-wonders-banner.jpeg'
+import { useTranslation } from '@/i18n/context/LanguageContext'
 import './ColombiaWondersShowcase.css'
 
 export function ColombiaWondersShowcase() {
+    const { t } = useTranslation()
+    const copy = t.home.wonders
+
     return (
-        <section className="wonders-showcase" aria-label="Colombia highlights banner">
+        <section className="wonders-showcase" aria-label={copy.ariaLabel}>
             <div
                 className="wonders-showcase-visual"
                 style={{ backgroundImage: `url("${wondersBannerImage}")` }}
             />
             <div className="wonders-showcase-copy">
-                <span className="eyebrow">A country of contrasts</span>
-                <h2>Wonders of Colombia</h2>
-                <p>
-                    From the Caribbean coast to the Andes and the Pacific, Colombia offers a rich mix of
-                    culture, color, and unforgettable landscapes in every region.
-                </p>
+                <span className="eyebrow">{copy.eyebrow}</span>
+                <h2>{copy.title}</h2>
+                <p>{copy.description}</p>
             </div>
         </section>
     )

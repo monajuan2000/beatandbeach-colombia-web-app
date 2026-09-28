@@ -1,51 +1,32 @@
 import logoImage from '@/assets/images/brand/beat-and-beach-logo.png'
+import { useTranslation } from '@/i18n/context/LanguageContext'
 import './AboutUsSection.css'
 
 export function AboutUsSection() {
+    const { t } = useTranslation()
+    const copy = t.home.about
+
     return (
         <section className="content-section" id="about">
             <div className="about-visual">
-                <img
-                    src={logoImage}
-                    alt="Beat and Beach Colombia logo"
-                    className="about-logo"
-                />
+                <img src={logoImage} alt={t.common.header.logoAlt} className="about-logo" />
             </div>
 
             <div className="about-copy">
-                <span className="eyebrow">About us</span>
-                <h2>We turn Colombia into an unforgettable travel story.</h2>
+                <span className="eyebrow">{copy.eyebrow}</span>
+                <h2>{copy.title}</h2>
 
-                <p>
-                    Beat & Beach Colombia is a tourism brand created to connect travelers with the
-                    rhythm, culture, and beauty of the country’s most iconic destinations. We design
-                    experiences that blend local identity, premium hospitality, and authentic moments in
-                    Medellín, Cartagena, and Guatapé.
-                </p>
-
-                <p>
-                    Our mission is simple: help visitors discover the soul of Colombia through carefully
-                    curated events, cultural experiences, coastal energy, and scenic escapes that feel both
-                    exciting and deeply local.
-                </p>
+                {copy.paragraphs.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                ))}
 
                 <div className="about-points">
-                    <div className="about-point">
-                        <strong>Curated journeys</strong>
-                        <span>Thoughtful experiences built around each destination.</span>
-                    </div>
-                    <div className="about-point">
-                        <strong>Local identity</strong>
-                        <span>Authentic moments shaped by regional culture and community.</span>
-                    </div>
-                    <div className="about-point">
-                        <strong>Memorable events</strong>
-                        <span>Music, culture, nightlife, and adventure in one itinerary.</span>
-                    </div>
-                    <div className="about-point">
-                        <strong>Premium service</strong>
-                        <span>Professional guidance for travelers who want quality and ease.</span>
-                    </div>
+                    {copy.points.map((point) => (
+                        <div key={point.title} className="about-point">
+                            <strong>{point.title}</strong>
+                            <span>{point.description}</span>
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>

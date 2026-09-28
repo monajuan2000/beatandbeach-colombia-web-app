@@ -9,6 +9,7 @@ import { EventDetailsModal } from '@/features/events/components/EventDetailsModa
 import { getEventsByCity } from '@/features/events/data/events'
 import type { EventItem } from '@/features/events/types'
 import { useTrip } from '@/features/trip/context/TripContext'
+import { useTranslation } from '@/i18n/context/LanguageContext'
 import './CityPage.css'
 
 const ALL = 'all'
@@ -25,16 +26,18 @@ export function CityPage() {
 
 function CityPageContent({ city }: { city: City }) {
     const { openPlanner } = useTrip()
+    const { t, localize } = useTranslation()
+    const copy = t.cities.page
     const [categoryFilter, setCategoryFilter] = useState(ALL)
     const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null)
 
     const cityEvents = getEventsByCity(city.id)
     const categories = [...new Set(cityEvents.map((event) => event.category))]
     const categoryFilters: FilterOption[] = [
-        { value: ALL, label: 'All', count: cityEvents.length },
+        { value: ALL, label: t.common.all, count: cityEvents.length },
         ...categories.map((category) => ({
             value: category,
-            label: category,
+            label: t.events.categories[category],
             count: cityEvents.filter((event) => event.category === category).length,
         })),
     ]
@@ -48,32 +51,32 @@ function CityPageContent({ city }: { city: City }) {
 
             <header className="city-page-banner">
                 <div>
-                    <span className="eyebrow">City experience</span>
-                    <h1>{city.name} events</h1>
-                    <p>{city.description}</p>
+                    <span className="eyebrow">{copy.eyebrow}</span>
+                    <h1>{copy.title(city.name)}</h1>
+                    <p>{localize(city.description)}</p>
                 </div>
                 <div className="city-page-actions">
                     <button type="button" className="primary-button" onClick={() => openPlanner(city.id)}>
-                        Plan a trip to {city.name}
+                        {copy.planTrip(city.name)}
                     </button>
                     <Link to="/" className="secondary-button city-page-back">
-                        Back to home
+                        {t.common.backToHome}
                     </Link>
                 </div>
             </header>
 
             <section className="city-page-intro">
                 <div className="city-page-highlight">
-                    <span className="card-tag">Featured</span>
-                    <h2>Why {city.name} stands out</h2>
-                    <p>{city.intro}</p>
+                    <span className="card-tag">{t.common.featured}</span>
+                    <h2>{copy.whyStandsOut(city.name)}</h2>
+                    <p>{localize(city.intro)}</p>
                 </div>
 
                 <div className="city-page-stats">
                     {city.stats.map((stat) => (
-                        <div key={stat.label}>
+                        <div key={stat.label.en}>
                             <strong>{stat.value}</strong>
-                            <span>{stat.label}</span>
+                            <span>{localize(stat.label)}</span>
                         </div>
                     ))}
                 </div>
@@ -83,7 +86,7 @@ function CityPageContent({ city }: { city: City }) {
             {categories.length > 1 && categories.length < cityEvents.length ? (
                 <div className="city-page-toolbar">
                     <FilterChips
-                        label={`Filter ${city.name} events by category`}
+                        label={copy.filterAriaLabel(city.name)}
                         options={categoryFilters}
                         value={categoryFilter}
                         onChange={setCategoryFilter}
@@ -91,14 +94,14 @@ function CityPageContent({ city }: { city: City }) {
                 </div>
             ) : null}
 
-            <section className="city-page-events" aria-label={`${city.name} events list`}>
+            <section className="city-page-events" aria-label={copy.eventsAriaLabel(city.name)}>
                 {visibleEvents.map((event) => (
                     <EventCard key={event.id} event={event} variant="city" onViewDetails={setSelectedEvent} />
                 ))}
             </section>
 
-            <section className="city-page-more" aria-label="Other destinations">
-                <span className="eyebrow">Keep exploring</span>
+            <section className="city-page-more" aria-label={copy.otherDestinationsAriaLabel}>
+                <span className="eyebrow">{copy.keepExploring}</span>
                 <nav className="pill-row">
                     {otherCities.map((item) => (
                         <Link key={item.id} to={`/cities/${item.id}`}>

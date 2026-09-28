@@ -6,11 +6,13 @@ type ModalProps = {
     isOpen: boolean
     onClose: () => void
     labelledBy: string
+    /** Accessible label for the close button, in the active language. */
+    closeLabel: string
     children: ReactNode
     wide?: boolean
 }
 
-export function Modal({ isOpen, onClose, labelledBy, children, wide = false }: ModalProps) {
+export function Modal({ isOpen, onClose, labelledBy, closeLabel, children, wide = false }: ModalProps) {
     const panelRef = useRef<HTMLDivElement>(null)
     // Parents pass inline callbacks; keep the latest one without re-running the open/close effect.
     const onCloseRef = useRef(onClose)
@@ -58,7 +60,7 @@ export function Modal({ isOpen, onClose, labelledBy, children, wide = false }: M
                 aria-labelledby={labelledBy}
                 tabIndex={-1}
             >
-                <button type="button" className="modal-close" onClick={onClose} aria-label="Close">
+                <button type="button" className="modal-close" onClick={onClose} aria-label={closeLabel}>
                     ×
                 </button>
                 {children}

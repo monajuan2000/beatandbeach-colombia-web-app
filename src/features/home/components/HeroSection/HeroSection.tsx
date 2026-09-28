@@ -1,45 +1,46 @@
 import { Link } from 'react-router-dom'
 import featuredDestinationImage from '@/assets/images/destinations/colombia-featured-destination.jpeg'
 import { cities } from '@/features/cities/data/cities'
+import { useTranslation } from '@/i18n/context/LanguageContext'
 import './HeroSection.css'
 
 export function HeroSection() {
+    const { t } = useTranslation()
+    const copy = t.home.hero
+
     return (
         <section className="hero-section" id="discover">
             <div className="hero-copy">
-                <span className="eyebrow">Live unforgettable experiences</span>
-                <h1>Discover the best events across Colombia’s most iconic destinations.</h1>
-                <p>
-                    Explore the energy of Medellín, the charm of Cartagena, and the scenic beauty of
-                    Guatapé through curated experiences designed for travelers and locals alike.
-                </p>
+                <span className="eyebrow">{copy.eyebrow}</span>
+                <h1>{copy.title}</h1>
+                <p>{copy.description}</p>
 
                 <div className="action-row">
                     <Link to="/" state={{ scrollTo: 'events' }} className="primary-button">
-                        Explore events
+                        {copy.exploreEvents}
                     </Link>
                     <Link to="/" state={{ scrollTo: 'cities' }} className="secondary-button">
-                        View cities
+                        {copy.viewCities}
                     </Link>
                 </div>
 
-                <ul className="hero-stats" aria-label="Key event statistics">
+                <ul className="hero-stats" aria-label={copy.statsAriaLabel}>
                     <li>
                         <strong>120+</strong>
-                        <span>Events</span>
+                        <span>{copy.stats.events}</span>
                     </li>
                     <li>
                         <strong>{cities.length}</strong>
-                        <span>Cities</span>
+                        <span>{copy.stats.cities}</span>
                     </li>
                     <li>
                         <strong>4.9/5</strong>
-                        <span>Traveler rating</span>
+                        <span>{copy.stats.rating}</span>
                     </li>
                 </ul>
             </div>
 
-            <div className="hero-visual" aria-label="Featured destinations summary">
+            <div className="hero-visual" aria-label={copy.visualAriaLabel}>
                 <div
                     className="feature-card destination-visual"
                     style={{
@@ -50,13 +51,13 @@ export function HeroSection() {
                 >
                     <div className="destination-image-overlay" />
                     <div className="destination-copy">
-                        <span className="card-tag">Featured</span>
-                        <h3>Colombia</h3>
-                        <p>Urban energy, Caribbean charm, and mountain escapes.</p>
+                        <span className="card-tag">{t.common.featured}</span>
+                        <h3>{copy.destinationTitle}</h3>
+                        <p>{copy.destinationDescription}</p>
                     </div>
                 </div>
 
-                <nav className="pill-row" aria-label="Featured destination list">
+                <nav className="pill-row" aria-label={copy.destinationsAriaLabel}>
                     {cities.map((city) => (
                         <Link key={city.id} to={`/cities/${city.id}`}>
                             {city.name}

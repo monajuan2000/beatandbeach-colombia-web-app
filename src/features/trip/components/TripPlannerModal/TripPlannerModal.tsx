@@ -4,11 +4,12 @@ import { Chip } from '@/components/ui/Chip/Chip'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { cities, getCityById } from '@/features/cities/data/cities'
 import { getEventById } from '@/features/events/data/events'
-import { useTrip } from '../../context/TripContext'
 import type { EventItem } from '@/features/events/types'
+import { useTranslation } from '@/i18n/context/LanguageContext'
+import { useTrip } from '../../context/TripContext'
+import { tripInterests } from '../../data/interests'
+import type { TripInterest } from '../../types'
 import './TripPlannerModal.css'
-
-const INTERESTS = ['Music', 'Culture', 'Nightlife', 'Adventure', 'Food', 'Beach']
 
 function todayIso() {
     const now = new Date()
@@ -19,9 +20,16 @@ function todayIso() {
 
 export function TripPlannerModal() {
     const { isPlannerOpen, closePlanner } = useTrip()
+    const { t } = useTranslation()
 
     return (
-        <Modal isOpen={isPlannerOpen} onClose={closePlanner} labelledBy="trip-planner-title" wide>
+        <Modal
+            isOpen={isPlannerOpen}
+            onClose={closePlanner}
+            labelledBy="trip-planner-title"
+            closeLabel={t.common.close}
+            wide
+        >
             <TripPlannerContent />
         </Modal>
     )
@@ -31,6 +39,8 @@ export function TripPlannerModal() {
 function TripPlannerContent() {
     const navigate = useNavigate()
     const { savedEventIds, toggleSavedEvent, plannerCityId, closePlanner } = useTrip()
+    const { t, localize, locale } = useTranslation()
+    const copy = t.trip
 
     const savedEvents = savedEventIds
         .map((id) => getEventById(id))
@@ -39,12 +49,12 @@ function TripPlannerContent() {
     const [cityId, setCityId] = useState(plannerCityId ?? savedEvents[0]?.cityId ?? cities[0].id)
     const [arrivalDate, setArrivalDate] = useState('')
     const [travelers, setTravelers] = useState(2)
-    const [interests, setInterests] = useState<string[]>([])
+    const [interests, setInterests] = useState<TripInterest[]>([])
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [submitted, setSubmitted] = useState(false)
 
-    const toggleInterest = (interest: string) => {
+    const toggleInterest = (interest: TripInterest) => {
         setInterests((current) =>
             current.includes(interest) ? current.filter((item) => item !== interest) : [...current, interest],
         )
@@ -61,8 +71,7 @@ function TripPlannerContent() {
     }
 
     if (submitted) {
-        const city = getCityById(cityId)
-        const formattedDate = new Date(`${arrivalDate}T00:00:00`).toLocaleDateString('en-US', {
+        const formattedDate = new Date(`${arrivalDate}T00:00:00`).toLocaleDateString(locale, {
             day: 'numeric',
             month: 'long',
             year: 'numeric',
@@ -70,22 +79,23 @@ function TripPlannerContent() {
 
         return (
             <div className="modal-body planner-success">
-                <span className="card-tag">Request received</span>
-                <h3 id="trip-planner-title">Thanks, {name.split(' ')[0]}! Your trip is taking shape.</h3>
+                <span className="card-tag">{copy.success.tag}</span>
+                <h3 id="trip-planner-title">{copy.success.title(name.split(' ')[0])}</h3>
                 <p>
-                    We’ll put together a {city?.name} itinerary for {travelers}{' '}
-                    {travelers === 1 ? 'traveler' : 'travelers'} arriving on {formattedDate}
-                    {savedEvents.length > 0
-                        ? `, including ${savedEvents.length} saved ${savedEvents.length === 1 ? 'event' : 'events'}`
-                        : ''}
-                    . Our team will reach out at <strong>{email}</strong>.
+                    {copy.success.summary({
+                        city: getCityById(cityId)?.name ?? '',
+                        travelers,
+                        date: formattedDate,
+                        savedCount: savedEvents.length,
+                    })}{' '}
+                    {copy.success.contact} <strong>{email}</strong>.
                 </p>
                 <div className="action-row modal-actions">
                     <button type="button" className="primary-button" onClick={closePlanner}>
-                        Done
+                        {copy.success.done}
                     </button>
                     <button type="button" className="secondary-button" onClick={() => setSubmitted(false)}>
-                        Edit request
+                        {copy.success.edit}
                     </button>
                 </div>
             </div>
@@ -94,23 +104,21 @@ function TripPlannerContent() {
 
     return (
         <div className="modal-body">
-            <span className="eyebrow">Plan my trip</span>
-            <h3 id="trip-planner-title">Design your Colombia experience.</h3>
-            <p className="planner-intro">
-                Tell us where and when, and we’ll build an itinerary around the events you love.
-            </p>
+            <span className="eyebrow">{copy.eyebrow}</span>
+            <h3 id="trip-planner-title">{copy.title}</h3>
+            <p className="planner-intro">{copy.intro}</p>
 
             <div className="planner-saved">
                 <div className="planner-saved-header">
-                    <strong>Saved events</strong>
+                    <strong>{copy.savedEvents}</strong>
                     <span>{savedEvents.length}</span>
                 </div>
 
                 {savedEvents.length === 0 ? (
                     <p className="planner-empty">
-                        No events saved yet.{' '}
+                        {copy.noSavedEvents}{' '}
                         <button type="button" className="text-button" onClick={browseEvents}>
-                            Browse events
+                            {copy.browseEvents}
                         </button>
                     </p>
                 ) : (
@@ -118,9 +126,9 @@ function TripPlannerContent() {
                         {savedEvents.map((event) => (
                             <li key={event.id}>
                                 <div>
-                                    <strong>{event.title}</strong>
+                                    <strong>{localize(event.title)}</strong>
                                     <small>
-                                        {getCityById(event.cityId)?.name} · {event.date}
+                                        {getCityById(event.cityId)?.name} · {localize(event.date)}
                                     </small>
                                 </div>
                                 <button
@@ -128,7 +136,7 @@ function TripPlannerContent() {
                                     className="text-button"
                                     onClick={() => toggleSavedEvent(event.id)}
                                 >
-                                    Remove
+                                    {copy.remove}
                                 </button>
                             </li>
                         ))}
@@ -138,7 +146,7 @@ function TripPlannerContent() {
 
             <form className="planner-form" onSubmit={handleSubmit}>
                 <label className="form-field">
-                    <span>Destination</span>
+                    <span>{copy.fields.destination}</span>
                     <select value={cityId} onChange={(event) => setCityId(event.target.value)}>
                         {cities.map((city) => (
                             <option key={city.id} value={city.id}>
@@ -149,7 +157,7 @@ function TripPlannerContent() {
                 </label>
 
                 <label className="form-field">
-                    <span>Arrival date</span>
+                    <span>{copy.fields.arrivalDate}</span>
                     <input
                         type="date"
                         required
@@ -160,7 +168,7 @@ function TripPlannerContent() {
                 </label>
 
                 <label className="form-field">
-                    <span>Travelers</span>
+                    <span>{copy.fields.travelers}</span>
                     <input
                         type="number"
                         required
@@ -172,22 +180,22 @@ function TripPlannerContent() {
                 </label>
 
                 <fieldset className="form-field form-field-full">
-                    <legend>Interests</legend>
+                    <legend>{copy.fields.interests}</legend>
                     <div className="chip-group">
-                        {INTERESTS.map((interest) => (
+                        {tripInterests.map((interest) => (
                             <Chip
                                 key={interest}
                                 isActive={interests.includes(interest)}
                                 onClick={() => toggleInterest(interest)}
                             >
-                                {interest}
+                                {copy.interests[interest]}
                             </Chip>
                         ))}
                     </div>
                 </fieldset>
 
                 <label className="form-field">
-                    <span>Full name</span>
+                    <span>{copy.fields.fullName}</span>
                     <input
                         type="text"
                         required
@@ -198,7 +206,7 @@ function TripPlannerContent() {
                 </label>
 
                 <label className="form-field">
-                    <span>Email</span>
+                    <span>{copy.fields.email}</span>
                     <input
                         type="email"
                         required
@@ -210,7 +218,7 @@ function TripPlannerContent() {
 
                 <div className="form-field-full planner-submit">
                     <button type="submit" className="primary-button">
-                        Send my trip request
+                        {copy.submit}
                     </button>
                 </div>
             </form>

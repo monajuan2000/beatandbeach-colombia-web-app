@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/Badge/Badge'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { getCityById } from '@/features/cities/data/cities'
 import { useTrip } from '@/features/trip/context/TripContext'
+import { useTranslation } from '@/i18n/context/LanguageContext'
 import type { EventItem } from '../../types'
 import './EventDetailsModal.css'
 
@@ -14,6 +15,8 @@ type EventDetailsModalProps = {
 
 export function EventDetailsModal({ event, onClose, showCityLink = true }: EventDetailsModalProps) {
     const { isEventSaved, toggleSavedEvent, openPlanner } = useTrip()
+    const { t, localize } = useTranslation()
+    const copy = t.events.details
 
     if (!event) return null
 
@@ -21,30 +24,30 @@ export function EventDetailsModal({ event, onClose, showCityLink = true }: Event
     const saved = isEventSaved(event.id)
 
     return (
-        <Modal isOpen onClose={onClose} labelledBy="event-details-title">
+        <Modal isOpen onClose={onClose} labelledBy="event-details-title" closeLabel={t.common.close}>
             {event.image ? (
                 <div className="modal-visual" style={{ backgroundImage: `url("${event.image}")` }} />
             ) : null}
 
             <div className="modal-body event-details">
                 <div className="event-details-top">
-                    <Badge tone="blue">{event.category}</Badge>
-                    {event.featured ? <Badge tone="green">Featured</Badge> : null}
+                    <Badge tone="blue">{t.events.categories[event.category]}</Badge>
+                    {event.featured ? <Badge tone="green">{t.common.featured}</Badge> : null}
                 </div>
 
-                <h3 id="event-details-title">{event.title}</h3>
+                <h3 id="event-details-title">{localize(event.title)}</h3>
                 <p className="event-details-location">
-                    {city?.name} · {event.location}
+                    {city?.name} · {localize(event.location)}
                 </p>
-                <p className="event-details-summary">{event.summary}</p>
+                <p className="event-details-summary">{localize(event.summary)}</p>
 
                 <div className="meta-pill-row">
-                    <span>{event.date}</span>
-                    <span>{event.price}</span>
+                    <span>{localize(event.date)}</span>
+                    <span>{localize(event.price)}</span>
                 </div>
 
                 <p className="event-details-audience">
-                    <strong>Best for:</strong> {event.audience}
+                    <strong>{copy.bestFor}</strong> {localize(event.audience)}
                 </p>
 
                 <div className="action-row modal-actions">
@@ -54,7 +57,7 @@ export function EventDetailsModal({ event, onClose, showCityLink = true }: Event
                         onClick={() => toggleSavedEvent(event.id)}
                         aria-pressed={saved}
                     >
-                        {saved ? '✓ Saved to my trip' : 'Add to my trip'}
+                        {saved ? copy.savedToTrip : copy.addToTrip}
                     </button>
 
                     {saved ? (
@@ -66,13 +69,13 @@ export function EventDetailsModal({ event, onClose, showCityLink = true }: Event
                                 openPlanner(event.cityId)
                             }}
                         >
-                            Plan my trip
+                            {copy.planTrip}
                         </button>
                     ) : null}
 
                     {showCityLink && city ? (
                         <Link to={`/cities/${city.id}`} className="secondary-button" onClick={onClose}>
-                            Explore {city.name}
+                            {copy.explore(city.name)}
                         </Link>
                     ) : null}
                 </div>

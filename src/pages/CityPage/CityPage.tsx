@@ -12,6 +12,8 @@ import { EventCard } from '@/features/events/components/EventCard/EventCard'
 import { EventDetailsModal } from '@/features/events/components/EventDetailsModal/EventDetailsModal'
 import { getEventsByCity } from '@/features/events/data/events'
 import type { EventItem } from '@/features/events/types'
+import { SurveyCallout } from '@/features/survey/components/SurveyCallout/SurveyCallout'
+import { getSurveyForCity } from '@/features/survey/data/surveys'
 import { useTrip } from '@/features/trip/context/TripContext'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import './CityPage.css'
@@ -48,6 +50,7 @@ function CityPageContent({ city }: { city: City }) {
     const visibleEvents =
         categoryFilter === ALL ? cityEvents : cityEvents.filter((event) => event.category === categoryFilter)
     const otherCities = citiesByRollout.filter((item) => item.id !== city.id)
+    const survey = getSurveyForCity(city.id)
 
     return (
         <div className="city-page">
@@ -72,6 +75,8 @@ function CityPageContent({ city }: { city: City }) {
                     </Link>
                 </div>
             </header>
+
+            {survey ? <SurveyCallout survey={survey} /> : null}
 
             <CityCoverImage city={city} />
 

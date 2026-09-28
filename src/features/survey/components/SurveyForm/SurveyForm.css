@@ -1,0 +1,205 @@
+.survey-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 28px;
+}
+
+/* Kept in the DOM for bots, invisible to people. */
+.survey-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.survey-section {
+  padding: clamp(22px, 4vw, 36px);
+  border-radius: 28px;
+  box-shadow: var(--shadow-card);
+}
+
+.survey-section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.survey-section-header .eyebrow {
+  margin-bottom: 4px;
+}
+
+.survey-section-header h2 {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+  letter-spacing: -0.03em;
+}
+
+.survey-section-header p {
+  color: var(--color-text-muted);
+}
+
+/* Participant data */
+.survey-participant-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.survey-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.survey-field label {
+  color: var(--color-heading);
+  font-weight: 600;
+}
+
+.survey-field .survey-error,
+.survey-consent .survey-error {
+  margin-left: 0;
+}
+
+.survey-text-input[aria-invalid='true'] {
+  border-color: rgba(225, 29, 72, 0.6);
+}
+
+.survey-consent {
+  margin-top: 20px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: var(--color-surface-muted);
+}
+
+.survey-consent label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  cursor: pointer;
+}
+
+.survey-consent input {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+  accent-color: #2563eb;
+}
+
+/* Sticky bar: progress and submit stay reachable while scrolling a long survey. */
+.survey-submit-bar {
+  position: sticky;
+  bottom: 16px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 20px;
+  border-radius: 22px;
+  border: 1px solid var(--color-border);
+  background: rgba(9, 15, 28, 0.85);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 18px 40px rgba(2, 6, 23, 0.45);
+}
+
+.survey-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+}
+
+.survey-progress-track {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.2);
+  overflow: hidden;
+}
+
+.survey-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gradient-brand);
+  transition: width 0.35s ease;
+}
+
+.survey-submit-message {
+  margin: 0;
+  font-weight: 600;
+}
+
+.survey-submit-message.is-error {
+  color: #fda4af;
+}
+
+.survey-submit-bar .primary-button:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+/* Success */
+.survey-success {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 28px;
+  padding: clamp(24px, 5vw, 48px);
+  border-radius: 28px;
+  box-shadow: var(--shadow-card);
+}
+
+.survey-success h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  letter-spacing: -0.04em;
+}
+
+.survey-success p {
+  max-width: 640px;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+.survey-success .action-row {
+  margin-top: 8px;
+}
+
+/* The white inverse button needs an edge on light surfaces. */
+.survey-success .inverse-button {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-soft);
+}
+
+.survey-success .secondary-button {
+  color: var(--color-heading);
+}
+
+@media (max-width: 640px) {
+  .survey-participant-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .survey-submit-bar {
+    flex-direction: column;
+    align-items: stretch;
+    bottom: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .survey-progress-fill {
+    transition: none;
+  }
+}

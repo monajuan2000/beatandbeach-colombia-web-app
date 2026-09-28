@@ -21,6 +21,7 @@ Built with React 19, TypeScript, Vite, and React Router (`HashRouter`, for GitHu
 src/
 ├── app/                 # App root: providers and routes
 ├── assets/images/       # Images grouped by domain (brand, cities, destinations, events)
+├── config/              # App-wide constants (external links)
 ├── components/          # Shared, domain-agnostic building blocks
 │   ├── layout/          # Page chrome (SiteHeader)
 │   ├── routing/         # Router helpers (ScrollManager)
@@ -29,10 +30,11 @@ src/
 │   ├── cities/          # components/, data/, types.ts
 │   ├── events/          # components/, data/, types.ts
 │   ├── home/            # Home page sections, data/, types.ts
+│   ├── survey/          # Research surveys: data/, components/, utils/ (validation, email payload), config.ts
 │   └── trip/            # Saved events + trip planner (context/, components/)
 ├── hooks/               # Reusable React hooks (useInView for scroll reveals)
 ├── i18n/                # Language support: config, provider, LanguageSwitcher, shared copy
-├── pages/               # Route-level screens (HomePage, CityPage)
+├── pages/               # Route-level screens (HomePage, CityPage, SurveyPage)
 ├── styles/              # tokens.css (color variables, light surface), global.css (base), shared.css (buttons, tags, rows)
 ├── utils/               # Small shared helpers (scroll-reveal stagger, card numbers)
 └── main.tsx             # Entry point
@@ -66,3 +68,7 @@ Two kinds of text, two mechanisms:
 - Stable ids (e.g. event categories, trip interests) are stored in data; their labels live in the dictionaries.
 - To add a new feature's copy: create `features/<feature>/i18n/{en,es}.ts` and register both in `src/i18n/messages.ts`.
 - To add a language: add it to `LANGUAGES` / `LANGUAGE_DETAILS` in `src/i18n/config.ts`, then TypeScript will point at every dictionary and `LocalizedText` that needs the new translation.
+
+## Surveys
+
+Research surveys live in `features/survey/`. Each survey is data (`data/<name>.ts`, registered in `data/surveys.ts`) with bilingual questions typed as `single`, `multiple`, `likert` or `text`; a city page shows its survey callout automatically through `getSurveyForCity`. Responses are always emailed in Spanish via FormSubmit (`features/survey/config.ts`); the first submission triggers an activation email to the destination address.

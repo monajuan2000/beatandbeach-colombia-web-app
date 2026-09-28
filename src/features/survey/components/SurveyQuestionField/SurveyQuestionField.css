@@ -1,0 +1,267 @@
+.survey-question {
+  margin: 0;
+  padding: 20px 0 22px;
+  border: none;
+  min-width: 0;
+}
+
+/* Divider drawn with a shadow: a fieldset border would be cut through by the legend. */
+.survey-question + .survey-question {
+  box-shadow: inset 0 1px 0 var(--color-border);
+}
+
+.survey-question:first-of-type {
+  padding-top: 4px;
+}
+
+/* Floating the legend makes it lay out like a normal block (consistent spacing below it). */
+.survey-question-legend {
+  float: left;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 0;
+  margin-bottom: 14px;
+  color: var(--color-heading);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.survey-question > :not(legend) {
+  clear: both;
+}
+
+.survey-question-number {
+  flex-shrink: 0;
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--gradient-brand);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  box-shadow: 0 8px 18px rgba(59, 130, 246, 0.25);
+}
+
+.survey-question-text {
+  padding-top: 5px;
+}
+
+.survey-question-optional {
+  margin-left: 8px;
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  background: var(--color-chip);
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.survey-question-hint {
+  margin: -6px 0 12px 46px;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+/* Choice options: native radios/checkboxes inside pill-shaped labels. */
+.survey-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-left: 46px;
+}
+
+.survey-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.survey-option:hover {
+  border-color: rgba(59, 130, 246, 0.45);
+}
+
+.survey-option input {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  accent-color: #2563eb;
+}
+
+.survey-option:has(input:checked) {
+  border-color: rgba(37, 99, 235, 0.6);
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.14), rgba(59, 130, 246, 0.14));
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.14);
+  color: var(--color-heading);
+  font-weight: 600;
+}
+
+.survey-option:has(input:focus-visible),
+.survey-likert-point:has(input:focus-visible) {
+  outline: 3px solid rgba(59, 130, 246, 0.35);
+  outline-offset: 2px;
+}
+
+/* Likert 1–5 scale */
+.survey-likert {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  padding-left: 46px;
+}
+
+.survey-likert-point {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 8px;
+  border-radius: 16px;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.survey-likert-point:hover {
+  border-color: rgba(59, 130, 246, 0.45);
+  transform: translateY(-2px);
+}
+
+/* The native radio stays accessible (focus, keyboard) but is visually replaced by the tile. */
+.survey-likert-point input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.survey-likert-value {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-chip);
+  color: var(--color-heading);
+  font-weight: 800;
+}
+
+.survey-likert-label {
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.3;
+}
+
+.survey-likert-point:has(input:checked) {
+  border-color: rgba(37, 99, 235, 0.6);
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.14), rgba(59, 130, 246, 0.14));
+}
+
+.survey-likert-point:has(input:checked) .survey-likert-value {
+  background: var(--gradient-brand);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(59, 130, 246, 0.3);
+}
+
+.survey-likert-point:has(input:checked) .survey-likert-label {
+  color: var(--color-heading);
+  font-weight: 600;
+}
+
+/* Text inputs */
+.survey-text-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 14px;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-heading);
+  font: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.survey-text-input:focus {
+  outline: none;
+  border-color: rgba(37, 99, 235, 0.6);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+}
+
+.survey-other-input {
+  margin: 12px 0 0 46px;
+  width: calc(100% - 46px);
+  max-width: 420px;
+}
+
+.survey-textarea {
+  display: block;
+  margin-left: 46px;
+  width: calc(100% - 46px);
+  resize: vertical;
+}
+
+/* Errors */
+.survey-question.has-error .survey-question-number {
+  background: linear-gradient(135deg, #f97316, #e11d48);
+}
+
+.survey-error {
+  margin: 10px 0 0 46px;
+  color: #be123c;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .survey-options,
+  .survey-likert,
+  .survey-question-hint,
+  .survey-error {
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  .survey-other-input,
+  .survey-textarea {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .survey-likert {
+    gap: 6px;
+  }
+
+  .survey-likert-point {
+    padding: 10px 4px;
+  }
+
+  .survey-likert-label {
+    font-size: 0.62rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .survey-likert-point,
+  .survey-option,
+  .survey-text-input {
+    transition: none;
+  }
+}

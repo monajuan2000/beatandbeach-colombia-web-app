@@ -4,6 +4,8 @@ import { eventsEn } from '@/features/events/i18n/en'
 import { eventsEs } from '@/features/events/i18n/es'
 import { homeEn } from '@/features/home/i18n/en'
 import { homeEs } from '@/features/home/i18n/es'
+import { surveyEn } from '@/features/survey/i18n/en'
+import { surveyEs } from '@/features/survey/i18n/es'
 import { tripEn } from '@/features/trip/i18n/en'
 import { tripEs } from '@/features/trip/i18n/es'
 import type { Language } from './config'
@@ -21,6 +23,7 @@ const en = {
     cities: citiesEn,
     events: eventsEn,
     trip: tripEn,
+    survey: surveyEn,
 }
 
 export type Messages = typeof en
@@ -31,6 +34,7 @@ const es: Messages = {
     cities: citiesEs,
     events: eventsEs,
     trip: tripEs,
+    survey: surveyEs,
 }
 
 export const messages: Record<Language, Messages> = { en, es }

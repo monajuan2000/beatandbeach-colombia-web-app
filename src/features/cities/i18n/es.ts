@@ -24,6 +24,7 @@ export const citiesEs: CitiesMessages = {
         whyStandsOut: (city: string) => `Por qué ${city} se destaca`,
         filterAriaLabel: (city: string) => `Filtrar eventos de ${city} por categoría`,
         eventsAriaLabel: (city: string) => `Lista de eventos de ${city}`,
+        coverAlt: (city: string) => `Paisaje de ${city}`,
         keepExploring: 'Sigue explorando',
         otherDestinationsAriaLabel: 'Otros destinos',
     },

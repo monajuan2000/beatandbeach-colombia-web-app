@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { SiteHeader } from '@/components/layout/SiteHeader/SiteHeader'
 import { FilterChips, type FilterOption } from '@/components/ui/FilterChips/FilterChips'
+import { CityCoverImage } from '@/features/cities/components/CityCoverImage/CityCoverImage'
 import { CityPill } from '@/features/cities/components/CityPill/CityPill'
 import { CityStatusBadge } from '@/features/cities/components/CityStatusBadge/CityStatusBadge'
 import { CityStatusNotice } from '@/features/cities/components/CityStatusNotice/CityStatusNotice'
@@ -71,6 +72,8 @@ function CityPageContent({ city }: { city: City }) {
                     </Link>
                 </div>
             </header>
+
+            <CityCoverImage city={city} />
 
             <section className="city-page-intro">
                 <div className="city-page-highlight">

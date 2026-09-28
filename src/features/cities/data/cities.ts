@@ -1,3 +1,4 @@
+import guatapeCardImage from '@/assets/images/cities/guatape-card.jpeg'
 import medellinCardImage from '@/assets/images/cities/medellin-card.jpeg'
 import type { City } from '../types'
 
@@ -78,6 +79,7 @@ export const cities: City[] = [
             { value: '2 h', label: { en: 'from Medellín', es: 'desde Medellín' } },
             { value: '1', label: { en: 'lake full of islands', es: 'lago lleno de islas' } },
         ],
+        image: guatapeCardImage,
     },
 ]
 

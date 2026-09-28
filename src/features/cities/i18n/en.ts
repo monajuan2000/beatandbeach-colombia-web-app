@@ -24,6 +24,7 @@ export const citiesEn = {
         whyStandsOut: (city: string) => `Why ${city} stands out`,
         filterAriaLabel: (city: string) => `Filter ${city} events by category`,
         eventsAriaLabel: (city: string) => `${city} events list`,
+        coverAlt: (city: string) => `Landscape of ${city}`,
         keepExploring: 'Keep exploring',
         otherDestinationsAriaLabel: 'Other destinations',
     },

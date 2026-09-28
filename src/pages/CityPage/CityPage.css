@@ -70,8 +70,9 @@
 
 .city-page-highlight,
 .city-page-stats {
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-soft);
+  box-shadow: var(--shadow-card);
   border-radius: 24px;
   padding: 24px;
 }
@@ -83,7 +84,7 @@
 
 .city-page-highlight p {
   margin: 0;
-  color: #dbeafe;
+  color: var(--color-text-muted);
   line-height: 1.8;
 }
 
@@ -100,16 +101,16 @@
   gap: 6px;
   padding: 14px 10px;
   border-radius: 18px;
-  background: rgba(15, 23, 42, 0.8);
+  background: var(--color-surface-muted);
 }
 
 .city-page-stats strong {
   font-size: 1.7rem;
-  color: #f8fafc;
+  color: var(--color-heading);
 }
 
 .city-page-stats span {
-  color: #cbd5e1;
+  color: var(--color-text-muted);
   font-size: 0.82rem;
 }
 

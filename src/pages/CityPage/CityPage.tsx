@@ -67,7 +67,7 @@ function CityPageContent({ city }: { city: City }) {
                     <button type="button" className="primary-button" onClick={() => openPlanner(city.id)}>
                         {copy.planTrip(city.name)}
                     </button>
-                    <Link to="/" className="secondary-button city-page-back">
+                    <Link to="/" className="inverse-button city-page-back">
                         {t.common.backToHome}
                     </Link>
                 </div>
@@ -76,13 +76,13 @@ function CityPageContent({ city }: { city: City }) {
             <CityCoverImage city={city} />
 
             <section className="city-page-intro">
-                <div className="city-page-highlight">
+                <div className="city-page-highlight surface-light">
                     <span className="card-tag">{t.common.featured}</span>
                     <h2>{copy.whyStandsOut(city.name)}</h2>
                     <p>{localize(city.intro)}</p>
                 </div>
 
-                <div className="city-page-stats">
+                <div className="city-page-stats surface-light">
                     {city.stats.map((stat) => (
                         <div key={stat.label.en}>
                             <strong>{stat.value}</strong>

@@ -30,9 +30,10 @@ src/
 │   ├── events/          # components/, data/, types.ts
 │   ├── home/            # Home page sections, data/, types.ts
 │   └── trip/            # Saved events + trip planner (context/, components/)
+├── hooks/               # Reusable React hooks (useInView for scroll reveals)
 ├── i18n/                # Language support: config, provider, LanguageSwitcher, shared copy
 ├── pages/               # Route-level screens (HomePage, CityPage)
-├── styles/              # global.css (base/reset) and shared.css (buttons, tags, rows)
+├── styles/              # tokens.css (color variables, light surface), global.css (base), shared.css (buttons, tags, rows)
 └── main.tsx             # Entry point
 ```
 
@@ -43,6 +44,7 @@ src/
 - **PascalCase** for component files and folders; **camelCase** for data/helper modules; **kebab-case** for assets and CSS classes.
 - **Feature first**: code that belongs to one domain lives in `features/<domain>/`; only truly shared pieces go in `components/` or `styles/`.
 - **`@/` alias** points to `src/` — prefer it over deep relative paths across features.
+- **Color tokens**: read colors from the CSS variables in `styles/tokens.css` (`var(--color-text)`, `var(--color-surface)`…) instead of hardcoding them. Add the `surface-light` class to a section or card to switch it to the warm "sand" palette; `surface-band` turns a group of home sections into a rounded light panel.
 - **No hardcoded UI text**: every string a visitor can see (including `aria-label` and `alt`) comes from the i18n layer — see below.
 - **In-page navigation**: because `HashRouter` owns the URL hash, link to sections with `<Link to="/" state={{ scrollTo: 'section-id' }}>` instead of `href="#section-id"`.
 

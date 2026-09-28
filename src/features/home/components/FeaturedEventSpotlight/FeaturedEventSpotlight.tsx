@@ -35,7 +35,7 @@ export function FeaturedEventSpotlight() {
                         {t.common.viewDetails}
                     </button>
                     {city ? (
-                        <Link to={`/cities/${city.id}`} className="secondary-button">
+                        <Link to={`/cities/${city.id}`} className="inverse-button">
                             {copy.moreIn(city.name)}
                         </Link>
                     ) : null}

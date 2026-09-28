@@ -21,7 +21,7 @@ main section[id] {
 .eyebrow {
   display: inline-block;
   margin-bottom: 1rem;
-  color: #7dd3fc;
+  color: var(--color-accent);
   font-size: 0.76rem;
   text-transform: uppercase;
   letter-spacing: 0.18em;
@@ -31,6 +31,7 @@ main section[id] {
 /* Buttons */
 .primary-button,
 .secondary-button,
+.inverse-button,
 .text-button {
   border: none;
   border-radius: 999px;
@@ -39,7 +40,8 @@ main section[id] {
 }
 
 .primary-button,
-.secondary-button {
+.secondary-button,
+.inverse-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -48,7 +50,7 @@ main section[id] {
 }
 
 .primary-button {
-  background: linear-gradient(135deg, #34d399, #3b82f6);
+  background: var(--gradient-brand);
   color: #04111d;
   font-weight: 700;
   padding: 0.9rem 1.5rem;
@@ -57,8 +59,8 @@ main section[id] {
 
 .secondary-button {
   background: transparent;
-  color: #e2e8f0;
-  border: 1px solid rgba(148, 163, 184, 0.35);
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
   padding: 0.9rem 1.4rem;
 }
 
@@ -71,9 +73,23 @@ main section[id] {
   padding: 0.75rem 1.2rem;
 }
 
+/* Solid white secondary action, for contrast next to the brand gradient on dark banners. */
+.inverse-button {
+  background: #ffffff;
+  color: var(--color-navy);
+  border: 1px solid #ffffff;
+  font-weight: 700;
+  padding: 0.9rem 1.4rem;
+  box-shadow: 0 12px 30px rgba(2, 6, 23, 0.35);
+}
+
+.inverse-button:hover {
+  background: var(--color-sand);
+}
+
 .text-button {
   background: transparent;
-  color: #7dd3fc;
+  color: var(--color-accent);
   padding: 0;
   font-weight: 700;
   white-space: nowrap;
@@ -81,6 +97,7 @@ main section[id] {
 
 .primary-button:hover,
 .secondary-button:hover,
+.inverse-button:hover,
 .text-button:hover {
   transform: translateY(-1px);
 }
@@ -90,8 +107,8 @@ main section[id] {
   display: inline-flex;
   padding: 0.35rem 0.75rem;
   border-radius: 999px;
-  background: rgba(52, 211, 153, 0.14);
-  color: #a7f3d0;
+  background: var(--color-tag-bg);
+  color: var(--color-tag-text);
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -140,6 +157,19 @@ main section[id] {
   }
 }
 
+/* Centered heading underline; used together with a `left: 50%` pseudo-element. */
+@keyframes linePulse {
+  0% {
+    opacity: 0.7;
+    transform: translateX(-50%) scaleX(0.96);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scaleX(1.04);
+  }
+}
+
 @media (max-width: 960px) {
   .content-section {
     grid-template-columns: 1fr;
@@ -153,7 +183,8 @@ main section[id] {
   }
 
   .primary-button,
-  .secondary-button {
+  .secondary-button,
+  .inverse-button {
     width: 100%;
   }
 }

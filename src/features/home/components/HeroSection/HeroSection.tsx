@@ -20,7 +20,7 @@ export function HeroSection() {
                     <Link to="/" state={{ scrollTo: 'events' }} className="primary-button">
                         {copy.exploreEvents}
                     </Link>
-                    <Link to="/" state={{ scrollTo: 'cities' }} className="secondary-button">
+                    <Link to="/" state={{ scrollTo: 'cities' }} className="inverse-button">
                         {copy.viewCities}
                     </Link>
                 </div>

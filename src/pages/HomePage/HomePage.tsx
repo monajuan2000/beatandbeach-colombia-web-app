@@ -19,11 +19,15 @@ export function HomePage() {
                 <HighlightedEventsHeading />
                 <ColombiaWondersShowcase />
                 <FeaturedEventSpotlight />
-                <ProjectsSection />
-                <AboutUsSection />
+                <div className="surface-light surface-band">
+                    <ProjectsSection />
+                    <AboutUsSection />
+                </div>
                 <CitiesGrid />
                 <EventsList />
-                <HighlightsSection />
+                <div className="surface-light surface-band">
+                    <HighlightsSection />
+                </div>
             </main>
         </div>
     )

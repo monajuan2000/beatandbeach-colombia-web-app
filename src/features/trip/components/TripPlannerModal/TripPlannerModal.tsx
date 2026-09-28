@@ -2,7 +2,8 @@ import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Chip } from '@/components/ui/Chip/Chip'
 import { Modal } from '@/components/ui/Modal/Modal'
-import { cities, getCityById } from '@/features/cities/data/cities'
+import { CityStatusNotice } from '@/features/cities/components/CityStatusNotice/CityStatusNotice'
+import { citiesByRollout, getCityById } from '@/features/cities/data/cities'
 import { getEventById } from '@/features/events/data/events'
 import type { EventItem } from '@/features/events/types'
 import { useTranslation } from '@/i18n/context/LanguageContext'
@@ -46,13 +47,15 @@ function TripPlannerContent() {
         .map((id) => getEventById(id))
         .filter((event): event is EventItem => Boolean(event))
 
-    const [cityId, setCityId] = useState(plannerCityId ?? savedEvents[0]?.cityId ?? cities[0].id)
+    const [cityId, setCityId] = useState(plannerCityId ?? savedEvents[0]?.cityId ?? citiesByRollout[0].id)
     const [arrivalDate, setArrivalDate] = useState('')
     const [travelers, setTravelers] = useState(2)
     const [interests, setInterests] = useState<TripInterest[]>([])
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [submitted, setSubmitted] = useState(false)
+
+    const selectedCity = getCityById(cityId)
 
     const toggleInterest = (interest: TripInterest) => {
         setInterests((current) =>
@@ -83,7 +86,7 @@ function TripPlannerContent() {
                 <h3 id="trip-planner-title">{copy.success.title(name.split(' ')[0])}</h3>
                 <p>
                     {copy.success.summary({
-                        city: getCityById(cityId)?.name ?? '',
+                        city: selectedCity?.name ?? '',
                         travelers,
                         date: formattedDate,
                         savedCount: savedEvents.length,
@@ -148,9 +151,9 @@ function TripPlannerContent() {
                 <label className="form-field">
                     <span>{copy.fields.destination}</span>
                     <select value={cityId} onChange={(event) => setCityId(event.target.value)}>
-                        {cities.map((city) => (
+                        {citiesByRollout.map((city) => (
                             <option key={city.id} value={city.id}>
-                                {city.name}
+                                {t.cities.status.withStatus(city.name, t.cities.status.labels[city.status])}
                             </option>
                         ))}
                     </select>
@@ -166,6 +169,8 @@ function TripPlannerContent() {
                         onChange={(event) => setArrivalDate(event.target.value)}
                     />
                 </label>
+
+                {selectedCity ? <CityStatusNotice city={selectedCity} className="form-field-full" /> : null}
 
                 <label className="form-field">
                     <span>{copy.fields.travelers}</span>

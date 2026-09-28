@@ -5,6 +5,7 @@ export const cities: City[] = [
     {
         id: 'medellin',
         name: 'Medellín',
+        status: 'launching',
         region: { en: 'Andean rhythm', es: 'Ritmo andino' },
         description: {
             en: 'A vibrant city full of innovation, nightlife, and contemporary culture.',
@@ -24,6 +25,7 @@ export const cities: City[] = [
     {
         id: 'cali',
         name: 'Cali',
+        status: 'under-review',
         region: { en: 'Salsa and energy', es: 'Salsa y energía' },
         description: {
             en: 'A city of movement, music, and strong local identity with a deep cultural pulse.',
@@ -42,6 +44,7 @@ export const cities: City[] = [
     {
         id: 'cartagena',
         name: 'Cartagena',
+        status: 'under-review',
         region: { en: 'Historic coast', es: 'Costa histórica' },
         description: {
             en: 'Colorful colonial streets, Caribbean breeze, and unforgettable sunsets.',
@@ -60,6 +63,7 @@ export const cities: City[] = [
     {
         id: 'guatape',
         name: 'Guatapé',
+        status: 'launching',
         region: { en: 'Lake & mountain views', es: 'Lago y montaña' },
         description: {
             en: 'A scenic getaway with lakes, colorful houses, and outdoor adventure.',
@@ -76,6 +80,11 @@ export const cities: City[] = [
         ],
     },
 ]
+
+const rolloutOrder: Record<City['status'], number> = { launching: 0, 'under-review': 1 }
+
+/** Cities with launching destinations first, keeping the original order within each group. */
+export const citiesByRollout = [...cities].sort((a, b) => rolloutOrder[a.status] - rolloutOrder[b.status])
 
 export function getCityById(id: string | undefined) {
     return cities.find((city) => city.id === id)

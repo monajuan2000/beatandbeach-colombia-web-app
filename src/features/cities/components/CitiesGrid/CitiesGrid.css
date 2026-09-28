@@ -81,6 +81,29 @@
   margin: 0;
 }
 
+/* Launching destinations stand out with the brand green edge and glow. */
+.city-card.city-card-launching {
+  border-color: rgba(52, 211, 153, 0.55);
+  box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.18), 0 18px 40px rgba(16, 185, 129, 0.16);
+}
+
+.city-card.city-card-launching:hover {
+  border-color: rgba(52, 211, 153, 0.85);
+}
+
+.city-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.city-card-notice {
+  margin-top: 0.8rem;
+  color: #fde68a;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
 .city-card-cta {
   margin-top: 1rem;
   color: #7dd3fc;

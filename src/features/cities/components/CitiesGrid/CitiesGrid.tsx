@@ -4,6 +4,7 @@ import { SectionHeader } from '@/components/ui/SectionHeader/SectionHeader'
 import { getEventsByCity } from '@/features/events/data/events'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import { cities } from '../../data/cities'
+import { CityStatusBadge } from '../CityStatusBadge/CityStatusBadge'
 import './CitiesGrid.css'
 
 export function CitiesGrid() {
@@ -19,7 +20,7 @@ export function CitiesGrid() {
                     <Link
                         key={city.id}
                         to={`/cities/${city.id}`}
-                        className="city-card"
+                        className={`city-card city-card-${city.status}`}
                         style={
                             city.image
                                 ? {
@@ -32,9 +33,15 @@ export function CitiesGrid() {
                     >
                         <div className="city-card-overlay" />
                         <div className="city-card-content">
-                            <Badge tone="sky">{localize(city.region)}</Badge>
+                            <div className="city-card-badges">
+                                <Badge tone="sky">{localize(city.region)}</Badge>
+                                <CityStatusBadge status={city.status} />
+                            </div>
                             <h3>{city.name}</h3>
                             <p>{localize(city.description)}</p>
+                            {city.status === 'under-review' ? (
+                                <span className="city-card-notice">{t.cities.status.cardNotice}</span>
+                            ) : null}
                             <span className="city-card-cta">{copy.eventCount(getEventsByCity(city.id).length)}</span>
                         </div>
                     </Link>

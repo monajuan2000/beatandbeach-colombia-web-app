@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Badge } from '@/components/ui/Badge/Badge'
 import { Modal } from '@/components/ui/Modal/Modal'
+import { CityStatusNotice } from '@/features/cities/components/CityStatusNotice/CityStatusNotice'
 import { getCityById } from '@/features/cities/data/cities'
 import { useTrip } from '@/features/trip/context/TripContext'
 import { useTranslation } from '@/i18n/context/LanguageContext'
@@ -40,6 +41,8 @@ export function EventDetailsModal({ event, onClose, showCityLink = true }: Event
                     {city?.name} · {localize(event.location)}
                 </p>
                 <p className="event-details-summary">{localize(event.summary)}</p>
+
+                {city ? <CityStatusNotice city={city} /> : null}
 
                 <div className="meta-pill-row">
                     <span>{localize(event.date)}</span>

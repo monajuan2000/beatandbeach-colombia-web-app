@@ -40,6 +40,23 @@
   gap: 12px;
 }
 
+.city-page-banner-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.city-page-banner-meta .eyebrow {
+  margin-bottom: 0;
+}
+
+.city-page-notice {
+  max-width: 760px;
+  margin-top: 1.2rem;
+}
+
 .city-page-back {
   white-space: nowrap;
 }

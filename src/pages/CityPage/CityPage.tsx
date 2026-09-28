@@ -2,7 +2,10 @@ import { useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { SiteHeader } from '@/components/layout/SiteHeader/SiteHeader'
 import { FilterChips, type FilterOption } from '@/components/ui/FilterChips/FilterChips'
-import { cities, getCityById } from '@/features/cities/data/cities'
+import { CityPill } from '@/features/cities/components/CityPill/CityPill'
+import { CityStatusBadge } from '@/features/cities/components/CityStatusBadge/CityStatusBadge'
+import { CityStatusNotice } from '@/features/cities/components/CityStatusNotice/CityStatusNotice'
+import { citiesByRollout, getCityById } from '@/features/cities/data/cities'
 import type { City } from '@/features/cities/types'
 import { EventCard } from '@/features/events/components/EventCard/EventCard'
 import { EventDetailsModal } from '@/features/events/components/EventDetailsModal/EventDetailsModal'
@@ -43,17 +46,21 @@ function CityPageContent({ city }: { city: City }) {
     ]
     const visibleEvents =
         categoryFilter === ALL ? cityEvents : cityEvents.filter((event) => event.category === categoryFilter)
-    const otherCities = cities.filter((item) => item.id !== city.id)
+    const otherCities = citiesByRollout.filter((item) => item.id !== city.id)
 
     return (
         <div className="city-page">
             <SiteHeader />
 
             <header className="city-page-banner">
-                <div>
-                    <span className="eyebrow">{copy.eyebrow}</span>
+                <div className="city-page-banner-copy">
+                    <div className="city-page-banner-meta">
+                        <span className="eyebrow">{copy.eyebrow}</span>
+                        <CityStatusBadge status={city.status} />
+                    </div>
                     <h1>{copy.title(city.name)}</h1>
                     <p>{localize(city.description)}</p>
+                    <CityStatusNotice city={city} className="city-page-notice" />
                 </div>
                 <div className="city-page-actions">
                     <button type="button" className="primary-button" onClick={() => openPlanner(city.id)}>
@@ -102,11 +109,9 @@ function CityPageContent({ city }: { city: City }) {
 
             <section className="city-page-more" aria-label={copy.otherDestinationsAriaLabel}>
                 <span className="eyebrow">{copy.keepExploring}</span>
-                <nav className="pill-row">
+                <nav className="city-pill-row">
                     {otherCities.map((item) => (
-                        <Link key={item.id} to={`/cities/${item.id}`}>
-                            {item.name}
-                        </Link>
+                        <CityPill key={item.id} city={item} />
                     ))}
                 </nav>
             </section>

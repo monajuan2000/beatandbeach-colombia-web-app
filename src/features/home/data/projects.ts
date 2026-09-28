@@ -10,6 +10,7 @@ export const projects: Project[] = [
             es: 'Una experiencia digital que muestra eventos, destinos y relatos de viaje por toda Colombia.',
         },
         status: { en: 'Active', es: 'Activo' },
+        stage: 'active',
         accent: 'green',
     },
     {
@@ -21,6 +22,7 @@ export const projects: Project[] = [
             es: 'Una futura app para reservar experiencias, consultar guías de ciudad y planear itinerarios a la medida.',
         },
         status: { en: 'In progress', es: 'En progreso' },
+        stage: 'in-progress',
         accent: 'blue',
     },
     {
@@ -32,6 +34,7 @@ export const projects: Project[] = [
             es: 'Un sistema de identidad visual para marcas de turismo, cultura y estilo de vida en Latinoamérica.',
         },
         status: { en: 'Planning', es: 'En planeación' },
+        stage: 'planning',
         accent: 'purple',
     },
 ]

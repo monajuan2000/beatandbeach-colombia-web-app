@@ -62,7 +62,8 @@
   color: var(--color-text);
 }
 
-.surface-light :is(h1, h2, h3) {
+/* :where() keeps specificity low so component heading styles (e.g. .accent-heading) can override it. */
+.surface-light :where(h1, h2, h3) {
   color: var(--color-heading);
 }
 

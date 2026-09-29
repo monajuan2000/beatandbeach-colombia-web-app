@@ -1,4 +1,5 @@
 import { Navigate, useParams } from 'react-router-dom'
+import { SiteFooter } from '@/components/layout/SiteFooter/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader/SiteHeader'
 import { SurveyForm } from '@/features/survey/components/SurveyForm/SurveyForm'
 import { SurveyNavActions } from '@/features/survey/components/SurveyNavActions/SurveyNavActions'
@@ -31,6 +32,8 @@ export function SurveyPage() {
 
             {/* Keyed by survey so switching surveys starts from a clean form. */}
             <SurveyForm key={survey.id} survey={survey} />
+
+            <SiteFooter />
         </div>
     )
 }

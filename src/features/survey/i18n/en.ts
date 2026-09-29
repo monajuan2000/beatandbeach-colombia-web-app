@@ -7,8 +7,6 @@ export const surveyEn = {
     page: {
         eyebrow: 'Academic research',
         researchLabel: 'Research:',
-        portfolio: 'View my portfolio',
-        portfolioAriaLabel: 'View my portfolio (opens in a new tab)',
     },
     form: {
         participantTitle: 'About you',

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
+import { SiteFooter } from '@/components/layout/SiteFooter/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader/SiteHeader'
 import { SectionHeader } from '@/components/ui/SectionHeader/SectionHeader'
 import { FilterChips, type FilterOption } from '@/components/ui/FilterChips/FilterChips'
@@ -140,6 +141,8 @@ function CityPageContent({ city }: { city: City }) {
                 onClose={() => setSelectedEvent(null)}
                 showCityLink={false}
             />
+
+            <SiteFooter />
         </div>
     )
 }

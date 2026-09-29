@@ -21,6 +21,11 @@ export const commonEn = {
         planTrip: 'Plan my trip',
         savedEvents: (count: number) => `${count} saved ${count === 1 ? 'event' : 'events'}`,
     },
+    footer: {
+        rights: 'All rights reserved.',
+        madeBy: 'Made by',
+        authorAriaLabel: (author: string) => `Made by ${author}, view portfolio (opens in a new tab)`,
+    },
 }
 
 export type CommonMessages = typeof commonEn

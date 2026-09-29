@@ -1,4 +1,5 @@
 import { PageSection } from '@/components/layout/PageSection/PageSection'
+import { SiteFooter } from '@/components/layout/SiteFooter/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader/SiteHeader'
 import { CitiesGrid } from '@/features/cities/components/CitiesGrid/CitiesGrid'
 import { EventsList } from '@/features/events/components/EventsList/EventsList'
@@ -42,6 +43,7 @@ export function HomePage() {
                     <HighlightsSection />
                 </PageSection>
             </main>
+            <SiteFooter />
         </div>
     )
 }

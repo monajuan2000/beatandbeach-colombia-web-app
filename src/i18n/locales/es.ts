@@ -22,4 +22,9 @@ export const commonEs: CommonMessages = {
         planTrip: 'Planear mi viaje',
         savedEvents: (count: number) => `${count} ${count === 1 ? 'evento guardado' : 'eventos guardados'}`,
     },
+    footer: {
+        rights: 'Todos los derechos reservados.',
+        madeBy: 'Hecho por',
+        authorAriaLabel: (author: string) => `Hecho por ${author}, ver portafolio (se abre en una nueva pestaña)`,
+    },
 }

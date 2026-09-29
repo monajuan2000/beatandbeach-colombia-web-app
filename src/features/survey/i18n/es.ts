@@ -9,8 +9,6 @@ export const surveyEs: SurveyMessages = {
     page: {
         eyebrow: 'Investigación académica',
         researchLabel: 'Investigación:',
-        portfolio: 'Ver mi portafolio',
-        portfolioAriaLabel: 'Ver mi portafolio (se abre en una nueva pestaña)',
     },
     form: {
         participantTitle: 'Datos del participante',

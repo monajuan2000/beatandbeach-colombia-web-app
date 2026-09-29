@@ -68,6 +68,7 @@ export type SurveyAnswers = Record<string, SurveyAnswer>
 
 export type SurveyParticipant = {
     fullName: string
+    email: string
     profession: string
     consent: boolean
 }

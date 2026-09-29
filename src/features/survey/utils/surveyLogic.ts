@@ -4,10 +4,17 @@ import type { Survey, SurveyAnswers, SurveyParticipant, SurveyQuestion, SurveySe
 /** Option id used for the free-text "Other" choice. */
 export const OTHER_OPTION_ID = 'other'
 
-export type SurveyErrorKey = 'required' | 'other' | 'fullName' | 'profession' | 'consent'
+export type SurveyErrorKey =
+    | 'required'
+    | 'other'
+    | 'fullName'
+    | 'email'
+    | 'duplicateEmail'
+    | 'profession'
+    | 'consent'
 
 /** Field ids for participant data; question fields use the question id. */
-export const PARTICIPANT_FIELDS = ['fullName', 'profession', 'consent'] as const
+export const PARTICIPANT_FIELDS = ['fullName', 'email', 'profession', 'consent'] as const
 
 export type NumberedQuestion = SurveyQuestion & { number: number }
 
@@ -54,6 +61,9 @@ export function validateSurvey(
     const errors: Record<string, SurveyErrorKey> = {}
 
     if (!participant.fullName.trim()) errors.fullName = 'fullName'
+    if (!participant.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(participant.email.trim())) {
+        errors.email = 'email'
+    }
     if (!participant.profession.trim()) errors.profession = 'profession'
     if (!participant.consent) errors.consent = 'consent'
 
@@ -112,7 +122,9 @@ export function buildSubmission(
         _subject: survey.emailSubject,
         _template: 'table',
         _captcha: 'false',
+        _replyto: participant.email.trim(),
         'Nombre completo': participant.fullName.trim(),
+        'Correo electrónico': participant.email.trim(),
         'Profesión u ocupación': participant.profession.trim(),
         'Autorización de datos': participant.consent ? 'Sí' : 'No',
         'Idioma del formulario': language === 'es' ? 'Español' : 'Inglés',

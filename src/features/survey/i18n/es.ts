@@ -16,6 +16,7 @@ export const surveyEs: SurveyMessages = {
         participantTitle: 'Datos del participante',
         participantDescription: 'Sus datos personales serán tratados de forma confidencial.',
         fullName: 'Nombre completo',
+        email: 'Correo electrónico',
         profession: 'Profesión u ocupación',
         consent:
             'Autorizo el tratamiento de mis datos personales con fines exclusivamente académicos, de acuerdo con la Ley 1581 de 2012, y confirmo que soy mayor de edad o cuento con la autorización de mi acudiente.',
@@ -34,6 +35,8 @@ export const surveyEs: SurveyMessages = {
         required: 'Por favor responda esta pregunta.',
         other: 'Por favor especifique su respuesta.',
         fullName: 'Por favor escriba su nombre completo.',
+        email: 'Por favor escriba un correo electrónico válido.',
+        duplicateEmail: 'Este correo ya envió esta encuesta desde este navegador.',
         profession: 'Por favor escriba su profesión u ocupación.',
         consent: 'Debe aceptar la política de datos para continuar.',
         summary: (count: number) =>

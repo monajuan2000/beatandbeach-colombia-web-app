@@ -2,6 +2,7 @@ import { useMemo, useState, type FormEvent } from 'react'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import type { Survey, SurveyAnswer, SurveyAnswers, SurveyParticipant } from '../../types'
 import { submitSurvey } from '../../utils/submitSurvey'
+import { hasSubmittedEmail, rememberSubmittedEmail } from '../../utils/submissionGuard'
 import {
     buildSubmission,
     countAnswered,
@@ -17,7 +18,7 @@ import './SurveyForm.css'
 
 type SubmitStatus = 'idle' | 'sending' | 'error' | 'sent'
 
-const emptyParticipant: SurveyParticipant = { fullName: '', profession: '', consent: false }
+const emptyParticipant: SurveyParticipant = { fullName: '', email: '', profession: '', consent: false }
 
 function focusField(fieldId: string) {
     const element = document.getElementById(fieldDomId(fieldId))
@@ -81,9 +82,16 @@ export function SurveyForm({ survey }: { survey: Survey }) {
             return
         }
 
+        if (hasSubmittedEmail(survey.id, participant.email)) {
+            setErrors((current) => ({ ...current, email: 'duplicateEmail' }))
+            focusField('email')
+            return
+        }
+
         setStatus('sending')
         try {
             await submitSurvey(buildSubmission(survey, questions, answers, otherTexts, participant, language), honeypot)
+            rememberSubmittedEmail(survey.id, participant.email)
             setStatus('sent')
             window.scrollTo({ top: 0, behavior: 'smooth' })
         } catch (error) {
@@ -138,6 +146,24 @@ export function SurveyForm({ survey }: { survey: Survey }) {
                         {errors.fullName ? <p className="survey-error">{copy.errors.fullName}</p> : null}
                     </div>
 
+                    <div id={fieldDomId('email')} className="survey-field">
+                        <label htmlFor="survey-email">{copy.form.email}</label>
+                        <input
+                            id="survey-email"
+                            type="email"
+                            className="survey-text-input"
+                            autoComplete="email"
+                            value={participant.email}
+                            aria-invalid={Boolean(errors.email)}
+                            onChange={(event) => updateParticipant('email', event.target.value)}
+                        />
+                        {errors.email ? (
+                            <p className="survey-error">
+                                {errors.email === 'duplicateEmail' ? copy.errors.duplicateEmail : copy.errors.email}
+                            </p>
+                        ) : null}
+                    </div>
+
                     <div id={fieldDomId('profession')} className="survey-field">
                         <label htmlFor="survey-profession">{copy.form.profession}</label>
                         <input
@@ -168,26 +194,26 @@ export function SurveyForm({ survey }: { survey: Survey }) {
             </section>
 
             {sections.map((section, sectionIndex) => (
-                    <section key={section.id} className="survey-section surface-light">
-                        <header className="survey-section-header">
-                            <span className="eyebrow eyebrow-pill">{copy.form.sectionLabel(sectionIndex + 1)}</span>
-                            <h2>{localize(section.title)}</h2>
-                            {section.description ? <p>{localize(section.description)}</p> : null}
-                        </header>
+                <section key={section.id} className="survey-section surface-light">
+                    <header className="survey-section-header">
+                        <span className="eyebrow eyebrow-pill">{copy.form.sectionLabel(sectionIndex + 1)}</span>
+                        <h2>{localize(section.title)}</h2>
+                        {section.description ? <p>{localize(section.description)}</p> : null}
+                    </header>
 
-                        {section.questions.map((question) => (
-                            <SurveyQuestionField
-                                key={question.id}
-                                question={question}
-                                value={answers[question.id]}
-                                otherText={otherTexts[question.id] ?? ''}
-                                error={errors[question.id]}
-                                likertScale={survey.likertScale}
-                                onChange={(value) => updateAnswer(question.id, value)}
-                                onOtherTextChange={(text) => updateOtherText(question.id, text)}
-                            />
-                        ))}
-                    </section>
+                    {section.questions.map((question) => (
+                        <SurveyQuestionField
+                            key={question.id}
+                            question={question}
+                            value={answers[question.id]}
+                            otherText={otherTexts[question.id] ?? ''}
+                            error={errors[question.id]}
+                            likertScale={survey.likertScale}
+                            onChange={(value) => updateAnswer(question.id, value)}
+                            onOtherTextChange={(text) => updateOtherText(question.id, text)}
+                        />
+                    ))}
+                </section>
             ))}
 
             <div className="survey-submit-bar">

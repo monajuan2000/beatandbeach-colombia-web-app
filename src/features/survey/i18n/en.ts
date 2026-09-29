@@ -14,6 +14,7 @@ export const surveyEn = {
         participantTitle: 'About you',
         participantDescription: 'Your personal data will be kept confidential.',
         fullName: 'Full name',
+        email: 'Email address',
         profession: 'Profession or occupation',
         consent:
             'I authorize the processing of my personal data for academic purposes only, in accordance with Colombian Law 1581 of 2012, and I confirm that I am of legal age or have my guardian’s permission.',
@@ -32,6 +33,8 @@ export const surveyEn = {
         required: 'Please answer this question.',
         other: 'Please specify your answer.',
         fullName: 'Please enter your full name.',
+        email: 'Please enter a valid email address.',
+        duplicateEmail: 'This email address has already submitted this survey from this browser.',
         profession: 'Please enter your profession or occupation.',
         consent: 'Please accept the data policy to continue.',
         summary: (count: number) =>

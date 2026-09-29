@@ -1,0 +1,9 @@
+/* Disabled "Available very soon" action for events in destinations under review. */
+.save-event-soon:disabled {
+  background: rgba(251, 191, 36, 0.14);
+  color: #fde68a;
+  border: 1px dashed rgba(251, 191, 36, 0.5);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}

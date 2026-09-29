@@ -22,6 +22,20 @@
   transform: scale(1.02);
 }
 
+/* Destinations under review fade to a muted, desaturated photo; hover brings the color back. */
+.city-cover-under-review {
+  border-color: rgba(251, 191, 36, 0.28);
+}
+
+.city-cover-under-review img {
+  filter: grayscale(0.75) brightness(0.8);
+  transition: transform 1.2s ease, filter 0.5s ease;
+}
+
+.city-cover-under-review:hover img {
+  filter: grayscale(0.2) brightness(0.9);
+}
+
 /* Soft inner edge so the photo blends into the dark page without covering it. */
 .city-cover::after {
   content: "";
@@ -55,7 +69,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .city-cover img {
+  .city-cover img,
+  .city-cover-under-review img {
     animation: none;
     transition: none;
   }

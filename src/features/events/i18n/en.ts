@@ -10,11 +10,14 @@ export const eventsEn = {
     },
     card: {
         saved: '✓ Saved',
+        comingSoon: 'Coming soon · Bookings not open yet',
     },
     details: {
         bestFor: 'Best for:',
         addToTrip: 'Add to my trip',
         savedToTrip: '✓ Saved to my trip',
+        bookingSoon: '⏳ Available very soon',
+        bookingSoonHint: (city: string) => `You'll be able to add this event to your trip once ${city} opens as a destination.`,
         planTrip: 'Plan my trip',
         explore: (city: string) => `Explore ${city}`,
     },

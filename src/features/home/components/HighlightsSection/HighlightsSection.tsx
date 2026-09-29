@@ -16,7 +16,7 @@ export function HighlightsSection() {
 
             <div ref={ref} className={`highlights-grid reveal-group ${inView ? 'is-revealed' : ''}`}>
                 {experienceHighlights.map((item, index) => (
-                    <article key={item.id} className="highlight-card accent-card reveal-item" style={revealDelay(index)}>
+                    <article key={item.id} className="highlight-card dark-card accent-card reveal-item" style={revealDelay(index)}>
                         <div className="highlight-card-top">
                             <div className="highlight-icon" aria-hidden="true">
                                 {item.icon}

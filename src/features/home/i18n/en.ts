@@ -1,7 +1,19 @@
 export const homeEn = {
+    sections: {
+        discover: 'Discover',
+        featured: 'Featured',
+        about: 'About us',
+        destinations: 'Destinations',
+        events: 'Events',
+        whyUs: 'Why us',
+    },
     hero: {
         eyebrow: 'Live unforgettable experiences',
-        title: 'Discover the best events across Colombia’s most iconic destinations.',
+        title: {
+            lead: 'Discover the best events across the most iconic destinations of ',
+            highlight: 'Colombia',
+            end: '.',
+        },
         description:
             'Explore the energy of Medellín, the charm of Cartagena, and the scenic beauty of Guatapé through curated experiences designed for travelers and locals alike.',
         exploreEvents: 'Explore events',
@@ -16,10 +28,18 @@ export const homeEn = {
         destinationTitle: 'Colombia',
         destinationDescription: 'Urban energy, Caribbean charm, and mountain escapes.',
         destinationsAriaLabel: 'Featured destination list',
+        chooseDestination: 'Choose your destination',
+        nextEvent: {
+            label: 'Next up',
+            startsIn: (days: number) => (days === 0 ? 'starts today' : `in ${days} ${days === 1 ? 'day' : 'days'}`),
+        },
+        scrollCue: 'Scroll to discover',
     },
     highlightedHeading: {
         ariaLabel: 'Popular events heading',
+        eyebrow: '2026 season',
         title: 'Colombia’s most unforgettable events',
+        subtitle: 'Festivals, culture, and landscapes worth living at least once.',
     },
     wonders: {
         ariaLabel: 'Colombia highlights banner',
@@ -27,6 +47,8 @@ export const homeEn = {
         title: 'Wonders of Colombia',
         description:
             'From the Caribbean coast to the Andes and the Pacific, Colombia offers a rich mix of culture, color, and unforgettable landscapes in every region.',
+        regionsAriaLabel: 'Colombian regions',
+        regions: ['Caribbean coast', 'Andes', 'Pacific', 'Amazon'],
     },
     spotlight: {
         ariaLabel: 'Featured event spotlight',
@@ -34,6 +56,18 @@ export const homeEn = {
         description: (city: string) =>
             `Experience the city’s most electrifying festival weekend with world-class electronic acts, immersive stages, and a late-night atmosphere unlike any other in ${city}.`,
         moreIn: (city: string) => `More in ${city}`,
+        countdown: {
+            label: 'Starts in',
+            ended: 'Happening now 🎉',
+            units: { days: 'Days', hours: 'Hours', minutes: 'Min', seconds: 'Sec' },
+        },
+        factsAriaLabel: 'Event details',
+        facts: {
+            date: 'Date',
+            venue: 'Venue',
+            tickets: 'Tickets',
+            genre: 'Genre',
+        },
     },
     projects: {
         ariaLabel: 'Current projects',

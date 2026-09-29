@@ -171,8 +171,8 @@ main section[id] {
 }
 
 /*
- * Accent treatments for light surfaces (`surface-light`).
- * Shared by the home sections so they highlight titles and cards the same way.
+ * Accent treatments shared by the home sections so they highlight titles and cards the same way.
+ * `.eyebrow-pill` reads its colors from tokens, so it works on dark and light surfaces.
  */
 .eyebrow-pill {
   display: inline-flex;
@@ -182,8 +182,8 @@ main section[id] {
   width: fit-content;
   padding: 0.45rem 0.9rem;
   border-radius: 999px;
-  border: 1px solid rgba(3, 105, 161, 0.18);
-  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--color-pill-border);
+  background: var(--color-pill-bg);
   box-shadow: var(--shadow-soft);
 }
 
@@ -279,6 +279,39 @@ main section[id] {
   opacity: 1;
   transform: translateY(-2px) scale(1.06);
   filter: drop-shadow(0 6px 14px rgba(59, 130, 246, 0.32));
+}
+
+/*
+ * Dark navy card for light bands, matching the About logo panel.
+ * It restores the dark palette tokens so text, chips and tags inside read on it.
+ * Set `--dark-card-glow` to tint the top corner glow.
+ */
+.dark-card {
+  --color-text: #e2e8f0;
+  --color-heading: #f8fafc;
+  --color-text-muted: #cbd5e1;
+  --color-text-subtle: #94a3b8;
+  --color-accent: #7dd3fc;
+  --color-chip: rgba(255, 255, 255, 0.08);
+  --color-border: rgba(148, 163, 184, 0.18);
+  --color-tag-bg: rgba(52, 211, 153, 0.14);
+  --color-tag-text: #a7f3d0;
+
+  background:
+    radial-gradient(circle at 100% 0%, var(--dark-card-glow, rgba(59, 130, 246, 0.22)), transparent 55%),
+    radial-gradient(circle at 0% 100%, rgba(52, 211, 153, 0.12), transparent 50%),
+    linear-gradient(160deg, var(--color-navy), var(--color-page));
+  border: 1px solid var(--color-border);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.22);
+}
+
+.dark-card:hover {
+  border-color: rgba(125, 211, 252, 0.35);
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.3), 0 0 0 1px rgba(52, 211, 153, 0.2);
+}
+
+.dark-card .card-number {
+  opacity: 0.7;
 }
 
 /* Scroll reveal: add `is-revealed` to a `.reveal-group` (see useInView) to rise its items in. */

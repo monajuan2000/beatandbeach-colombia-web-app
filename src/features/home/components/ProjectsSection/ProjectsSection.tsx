@@ -18,7 +18,7 @@ export function ProjectsSection() {
                 {projects.map((project, index) => (
                     <article
                         key={project.id}
-                        className={`project-card project-${project.accent} accent-card reveal-item`}
+                        className={`project-card project-${project.accent} dark-card accent-card reveal-item`}
                         style={revealDelay(index)}
                     >
                         <div className="project-topline">

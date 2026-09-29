@@ -26,27 +26,25 @@
   min-height: 220px;
   border-radius: 24px;
   padding: 22px;
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-card);
 }
 
-/* Each accent sets the card tint plus the color used by its bar, number and status dot. */
+/* Each accent sets the card glow plus the color used by its bar, number and status dot. */
 .project-green {
   --project-accent: #10b981;
   --accent-bar: linear-gradient(90deg, #10b981, #34d399);
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), var(--color-surface-strong));
+  --dark-card-glow: rgba(16, 185, 129, 0.28);
 }
 
 .project-blue {
   --project-accent: #3b82f6;
   --accent-bar: linear-gradient(90deg, #3b82f6, #60a5fa);
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.18), var(--color-surface-strong));
+  --dark-card-glow: rgba(59, 130, 246, 0.28);
 }
 
 .project-purple {
   --project-accent: #a855f7;
   --accent-bar: linear-gradient(90deg, #a855f7, #c084fc);
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), var(--color-surface-strong));
+  --dark-card-glow: rgba(168, 85, 247, 0.28);
 }
 
 .project-topline {

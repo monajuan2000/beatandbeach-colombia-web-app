@@ -2,9 +2,16 @@
   width: min(100%, 1200px);
   margin-top: 8px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 14px;
   text-align: center;
+}
+
+.highlighted-events-eyebrow {
+  align-self: center;
+  margin: 0;
 }
 
 .highlighted-events-header h2 {
@@ -33,4 +40,12 @@
   background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.9), transparent);
   box-shadow: 0 0 12px rgba(125, 211, 252, 0.7);
   animation: linePulse 5s ease-in-out infinite alternate;
+}
+
+.highlighted-events-header p {
+  max-width: 560px;
+  margin: 12px 0 0;
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+  line-height: 1.7;
 }

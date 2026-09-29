@@ -1,4 +1,5 @@
 import edcColombiaImage from '@/assets/images/events/edc-colombia-2026.jpeg'
+import { getCityById } from '@/features/cities/data/cities'
 import type { EventItem } from '../types'
 
 export const events: EventItem[] = [
@@ -8,6 +9,8 @@ export const events: EventItem[] = [
         cityId: 'medellin',
         category: 'electronic-music',
         date: { en: '10–11 Oct 2026', es: '10–11 oct 2026' },
+        startsAt: '2026-10-10T00:00:00-05:00',
+        endsAt: '2026-10-11T23:59:00-05:00',
         location: { en: 'Festival grounds', es: 'Recinto del festival' },
         summary: {
             en: 'The city’s biggest electronic celebration with immersive stages, iconic DJs, and a full weekend of music, lights, and atmosphere.',
@@ -221,4 +224,9 @@ export function getEventById(id: string) {
 
 export function getEventsByCity(cityId: string) {
     return events.filter((event) => event.cityId === cityId)
+}
+
+/** Destinations under review can be browsed, but their events cannot be added to a trip yet. */
+export function isEventBookable(event: EventItem) {
+    return getCityById(event.cityId)?.status !== 'under-review'
 }

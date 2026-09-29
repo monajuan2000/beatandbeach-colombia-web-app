@@ -9,7 +9,7 @@ export function CityCoverImage({ city }: { city: City }) {
     if (!city.image) return null
 
     return (
-        <figure className="city-cover">
+        <figure className={`city-cover city-cover-${city.status}`}>
             <img src={city.image} alt={t.cities.page.coverAlt(city.name)} />
         </figure>
     )

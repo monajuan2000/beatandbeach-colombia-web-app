@@ -1,0 +1,62 @@
+.page-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.page-section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+}
+
+/* Numbered divider: a gradient rule on both sides of a "02 · Label" marker. */
+.page-section-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.page-section-divider::before,
+.page-section-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+}
+
+.page-section-divider::before {
+  background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.4));
+}
+
+.page-section-divider::after {
+  background: linear-gradient(90deg, rgba(52, 211, 153, 0.4), transparent);
+}
+
+.page-section-marker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.4rem 0.95rem 0.4rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-pill-border);
+  background: var(--color-pill-bg);
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.page-section-number {
+  display: grid;
+  place-items: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--gradient-brand);
+  color: #04111d;
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+}

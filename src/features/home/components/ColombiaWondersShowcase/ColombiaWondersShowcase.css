@@ -3,19 +3,41 @@
   grid-template-columns: 1.2fr 0.8fr;
   gap: 24px;
   width: min(100%, 1200px);
-  height: 240px;
+  min-height: 280px;
   border-radius: 28px;
   overflow: hidden;
   border: 1px solid rgba(148, 163, 184, 0.18);
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
-  background: rgba(15, 23, 42, 0.78);
+  background:
+    radial-gradient(circle at 100% 100%, rgba(52, 211, 153, 0.14), transparent 45%),
+    rgba(15, 23, 42, 0.78);
 }
 
 .wonders-showcase-visual {
-  min-height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Fades the photo into the card so image and copy read as one surface. */
+.wonders-showcase-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 55%, rgba(15, 23, 42, 0.78) 100%);
+  pointer-events: none;
+}
+
+.wonders-showcase-image {
+  position: absolute;
+  inset: 0;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  transition: transform 1.2s ease;
+}
+
+.wonders-showcase:hover .wonders-showcase-image {
+  transform: scale(1.04);
 }
 
 .wonders-showcase-copy {
@@ -38,17 +60,38 @@
   line-height: 1.7;
 }
 
+.wonders-showcase-regions {
+  gap: 8px;
+  margin-top: 1.2rem;
+}
+
+.wonders-showcase-regions span {
+  background: rgba(52, 211, 153, 0.1);
+  border-color: rgba(52, 211, 153, 0.3);
+  color: #a7f3d0;
+  font-size: 0.72rem;
+}
+
 @media (max-width: 960px) {
   .wonders-showcase {
     grid-template-columns: 1fr;
-    height: auto;
   }
 
   .wonders-showcase-visual {
     min-height: 200px;
   }
 
+  .wonders-showcase-visual::after {
+    background: linear-gradient(180deg, transparent 55%, rgba(15, 23, 42, 0.78) 100%);
+  }
+
   .wonders-showcase-copy {
     padding: 0 24px 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wonders-showcase-image {
+    transition: none;
   }
 }

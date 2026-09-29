@@ -7,6 +7,7 @@ export const citiesEs: CitiesMessages = {
             'under-review': 'Muy pronto',
         },
         pillTag: 'Pronto',
+        soonTitle: 'Disponible muy pronto',
         cardNotice: 'En revisión técnica, legal y logística',
         reviewNotice: (city: string) =>
             `${city} está en revisión técnica, legal y logística para abrirse como destino muy pronto. Mientras tanto, puedes explorar sus eventos y planear tu viaje con anticipación.`,
@@ -15,7 +16,8 @@ export const citiesEs: CitiesMessages = {
     grid: {
         eyebrow: 'Destinos principales',
         title: 'Explora Colombia a través de cuatro ciudades inolvidables.',
-        eventCount: (count: number) => `${count} ${count === 1 ? 'evento' : 'eventos'} · Explorar →`,
+        eventCount: (count: number) => `${count} ${count === 1 ? 'evento' : 'eventos'}`,
+        explore: 'Explorar',
     },
     page: {
         eyebrow: 'Experiencia de ciudad',
@@ -25,6 +27,9 @@ export const citiesEs: CitiesMessages = {
         filterAriaLabel: (city: string) => `Filtrar eventos de ${city} por categoría`,
         eventsAriaLabel: (city: string) => `Lista de eventos de ${city}`,
         coverAlt: (city: string) => `Paisaje de ${city}`,
+        previewEyebrow: 'Vista previa de eventos',
+        previewTitle: (city: string) => `Eventos que llegan pronto a ${city}`,
+        previewText: 'Explora lo que viene. Las reservas se habilitarán en cuanto el destino abra.',
         keepExploring: 'Sigue explorando',
         otherDestinationsAriaLabel: 'Otros destinos',
     },

@@ -19,6 +19,9 @@ export type EventItem = {
     cityId: string
     category: EventCategory
     date: LocalizedText
+    /** ISO start/end, used for the calendar tile and countdown. */
+    startsAt?: string
+    endsAt?: string
     location: LocalizedText
     summary: LocalizedText
     price: LocalizedText

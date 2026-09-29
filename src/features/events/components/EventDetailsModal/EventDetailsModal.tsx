@@ -5,7 +5,9 @@ import { CityStatusNotice } from '@/features/cities/components/CityStatusNotice/
 import { getCityById } from '@/features/cities/data/cities'
 import { useTrip } from '@/features/trip/context/TripContext'
 import { useTranslation } from '@/i18n/context/LanguageContext'
+import { isEventBookable } from '../../data/events'
 import type { EventItem } from '../../types'
+import { SaveEventButton } from '../SaveEventButton/SaveEventButton'
 import './EventDetailsModal.css'
 
 type EventDetailsModalProps = {
@@ -15,7 +17,7 @@ type EventDetailsModalProps = {
 }
 
 export function EventDetailsModal({ event, onClose, showCityLink = true }: EventDetailsModalProps) {
-    const { isEventSaved, toggleSavedEvent, openPlanner } = useTrip()
+    const { isEventSaved, openPlanner } = useTrip()
     const { t, localize } = useTranslation()
     const copy = t.events.details
 
@@ -23,6 +25,7 @@ export function EventDetailsModal({ event, onClose, showCityLink = true }: Event
 
     const city = getCityById(event.cityId)
     const saved = isEventSaved(event.id)
+    const bookingOpen = isEventBookable(event)
 
     return (
         <Modal isOpen onClose={onClose} labelledBy="event-details-title" closeLabel={t.common.close}>
@@ -54,14 +57,7 @@ export function EventDetailsModal({ event, onClose, showCityLink = true }: Event
                 </p>
 
                 <div className="action-row modal-actions">
-                    <button
-                        type="button"
-                        className={saved ? 'secondary-button is-saved' : 'primary-button'}
-                        onClick={() => toggleSavedEvent(event.id)}
-                        aria-pressed={saved}
-                    >
-                        {saved ? copy.savedToTrip : copy.addToTrip}
-                    </button>
+                    <SaveEventButton event={event} describedBy="event-details-soon-hint" />
 
                     {saved ? (
                         <button
@@ -82,6 +78,12 @@ export function EventDetailsModal({ event, onClose, showCityLink = true }: Event
                         </Link>
                     ) : null}
                 </div>
+
+                {!bookingOpen && !saved && city ? (
+                    <p id="event-details-soon-hint" className="event-details-soon-hint">
+                        {copy.bookingSoonHint(city.name)}
+                    </p>
+                ) : null}
             </div>
         </Modal>
     )

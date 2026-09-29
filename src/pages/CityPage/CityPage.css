@@ -20,6 +20,15 @@
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.2);
 }
 
+/* Destinations under review get the same amber edge and glow as their home card. */
+.city-page-banner-under-review {
+  border-color: rgba(251, 191, 36, 0.35);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(251, 191, 36, 0.12), transparent 45%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 64, 175, 0.3));
+  box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.1), 0 18px 40px rgba(15, 23, 42, 0.2);
+}
+
 .city-page-banner h1 {
   margin: 0;
   font-size: clamp(2.8rem, 5vw, 4.5rem);
@@ -121,6 +130,16 @@
 .city-page-toolbar .chip-group {
   justify-content: flex-start;
   margin-top: 0;
+}
+
+.city-page-events-header {
+  margin-top: 48px;
+}
+
+.city-page-events-header p {
+  margin: 0.6rem 0 0;
+  color: #cbd5e1;
+  line-height: 1.7;
 }
 
 .city-page-events {

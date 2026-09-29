@@ -16,3 +16,69 @@
   flex-shrink: 0;
   font-weight: 800;
 }
+
+/* Prominent amber notice for city cards and the city page banner. */
+.city-status-notice-highlight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  text-align: left;
+  border-radius: 16px;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  background: rgba(120, 53, 15, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 0 24px rgba(251, 191, 36, 0.12);
+}
+
+.city-status-notice-highlight-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(251, 191, 36, 0.18);
+  font-size: 1rem;
+  animation: cityNoticePulse 2.4s ease-out infinite;
+}
+
+.city-status-notice-highlight-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.city-status-notice-highlight-text strong {
+  color: #fde68a;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+
+.city-status-notice-highlight-text span {
+  color: #fef3c7;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+@keyframes cityNoticePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.45);
+  }
+
+  70% {
+    box-shadow: 0 0 0 8px rgba(251, 191, 36, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .city-status-notice-highlight-icon {
+    animation: none;
+  }
+}

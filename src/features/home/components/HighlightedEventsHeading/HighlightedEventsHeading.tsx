@@ -6,8 +6,10 @@ export function HighlightedEventsHeading() {
     const copy = t.home.highlightedHeading
 
     return (
-        <section className="highlighted-events-header" aria-label={copy.ariaLabel}>
+        <section className="highlighted-events-header" id="featured-events" aria-label={copy.ariaLabel}>
+            <span className="eyebrow eyebrow-pill highlighted-events-eyebrow">{copy.eyebrow}</span>
             <h2>{copy.title}</h2>
+            <p>{copy.subtitle}</p>
         </section>
     )
 }

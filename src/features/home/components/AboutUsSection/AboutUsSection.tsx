@@ -27,7 +27,7 @@ export function AboutUsSection() {
                     {copy.points.map((point, index) => (
                         <div
                             key={point.title}
-                            className="about-point accent-card reveal-item"
+                            className="about-point dark-card accent-card reveal-item"
                             style={revealDelay(index)}
                         >
                             <span className="card-number about-point-number" aria-hidden="true">

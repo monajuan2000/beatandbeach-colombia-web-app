@@ -10,11 +10,8 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
   border-radius: 24px;
   padding: 22px;
-  box-shadow: var(--shadow-soft);
 }
 
 .highlight-card-top {

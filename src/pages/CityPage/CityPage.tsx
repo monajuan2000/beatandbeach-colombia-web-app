@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { SiteHeader } from '@/components/layout/SiteHeader/SiteHeader'
+import { SectionHeader } from '@/components/ui/SectionHeader/SectionHeader'
 import { FilterChips, type FilterOption } from '@/components/ui/FilterChips/FilterChips'
 import { CityCoverImage } from '@/features/cities/components/CityCoverImage/CityCoverImage'
 import { CityPill } from '@/features/cities/components/CityPill/CityPill'
@@ -56,7 +57,7 @@ function CityPageContent({ city }: { city: City }) {
         <div className="city-page">
             <SiteHeader />
 
-            <header className="city-page-banner">
+            <header className={`city-page-banner city-page-banner-${city.status}`}>
                 <div className="city-page-banner-copy">
                     <div className="city-page-banner-meta">
                         <span className="eyebrow">{copy.eyebrow}</span>
@@ -64,7 +65,7 @@ function CityPageContent({ city }: { city: City }) {
                     </div>
                     <h1>{copy.title(city.name)}</h1>
                     <p>{localize(city.description)}</p>
-                    <CityStatusNotice city={city} className="city-page-notice" />
+                    <CityStatusNotice city={city} variant="highlight" className="city-page-notice" />
                 </div>
                 <div className="city-page-actions">
                     <button type="button" className="primary-button" onClick={() => openPlanner(city.id)}>
@@ -96,6 +97,16 @@ function CityPageContent({ city }: { city: City }) {
                     ))}
                 </div>
             </section>
+
+            {city.status === 'under-review' ? (
+                <SectionHeader
+                    eyebrow={copy.previewEyebrow}
+                    title={copy.previewTitle(city.name)}
+                    className="city-page-events-header"
+                >
+                    <p>{copy.previewText}</p>
+                </SectionHeader>
+            ) : null}
 
             {/* Only worth filtering when some category actually groups several events. */}
             {categories.length > 1 && categories.length < cityEvents.length ? (

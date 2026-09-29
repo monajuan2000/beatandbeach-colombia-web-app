@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/Badge/Badge'
 import { getCityById } from '@/features/cities/data/cities'
 import { useTrip } from '@/features/trip/context/TripContext'
 import { useTranslation } from '@/i18n/context/LanguageContext'
+import { isEventBookable } from '../../data/events'
 import type { EventItem } from '../../types'
 import './EventCard.css'
 
@@ -35,11 +36,15 @@ export function EventCard({ event, onViewDetails, variant = 'standard' }: EventC
     )
 
     if (variant === 'city') {
+        const comingSoon = !isEventBookable(event)
+
         return (
             <article
-                className="event-card event-card-city"
+                className={`event-card event-card-city ${comingSoon ? 'is-coming-soon' : ''}`.trim()}
                 style={event.image ? imageBackground(event.image) : undefined}
             >
+                {comingSoon ? <div className="event-card-soon">{t.events.card.comingSoon}</div> : null}
+
                 <div className="event-card-row">
                     <Badge tone="blue">{categoryLabel}</Badge>
                     <span className="event-card-date">{localize(event.date)}</span>

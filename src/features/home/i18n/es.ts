@@ -1,9 +1,21 @@
 import type { HomeMessages } from './en'
 
 export const homeEs: HomeMessages = {
+    sections: {
+        discover: 'Descubre',
+        featured: 'Destacados',
+        about: 'Nosotros',
+        destinations: 'Destinos',
+        events: 'Eventos',
+        whyUs: 'Por qué elegirnos',
+    },
     hero: {
         eyebrow: 'Vive experiencias inolvidables',
-        title: 'Descubre los mejores eventos en los destinos más icónicos de Colombia.',
+        title: {
+            lead: 'Descubre los mejores eventos en los destinos más icónicos de ',
+            highlight: 'Colombia',
+            end: '.',
+        },
         description:
             'Vive la energía de Medellín, el encanto de Cartagena y la belleza natural de Guatapé con experiencias seleccionadas para viajeros y locales.',
         exploreEvents: 'Explorar eventos',
@@ -18,10 +30,18 @@ export const homeEs: HomeMessages = {
         destinationTitle: 'Colombia',
         destinationDescription: 'Energía urbana, encanto caribeño y escapadas de montaña.',
         destinationsAriaLabel: 'Lista de destinos destacados',
+        chooseDestination: 'Elige tu destino',
+        nextEvent: {
+            label: 'Próximo',
+            startsIn: (days: number) => (days === 0 ? 'empieza hoy' : `en ${days} ${days === 1 ? 'día' : 'días'}`),
+        },
+        scrollCue: 'Desliza para descubrir',
     },
     highlightedHeading: {
         ariaLabel: 'Encabezado de eventos populares',
+        eyebrow: 'Temporada 2026',
         title: 'Los eventos más inolvidables de Colombia',
+        subtitle: 'Festivales, cultura y paisajes que vale la pena vivir al menos una vez.',
     },
     wonders: {
         ariaLabel: 'Banner de lo mejor de Colombia',
@@ -29,6 +49,8 @@ export const homeEs: HomeMessages = {
         title: 'Maravillas de Colombia',
         description:
             'Desde la costa Caribe hasta los Andes y el Pacífico, Colombia ofrece una rica mezcla de cultura, color y paisajes inolvidables en cada región.',
+        regionsAriaLabel: 'Regiones de Colombia',
+        regions: ['Costa Caribe', 'Andes', 'Pacífico', 'Amazonía'],
     },
     spotlight: {
         ariaLabel: 'Evento destacado',
@@ -36,6 +58,18 @@ export const homeEs: HomeMessages = {
         description: (city: string) =>
             `Vive el fin de semana de festival más electrizante de la ciudad, con artistas electrónicos de talla mundial, escenarios inmersivos y un ambiente nocturno único en ${city}.`,
         moreIn: (city: string) => `Más en ${city}`,
+        countdown: {
+            label: 'Comienza en',
+            ended: 'Está pasando ahora 🎉',
+            units: { days: 'Días', hours: 'Horas', minutes: 'Min', seconds: 'Seg' },
+        },
+        factsAriaLabel: 'Datos del evento',
+        facts: {
+            date: 'Fecha',
+            venue: 'Lugar',
+            tickets: 'Boletas',
+            genre: 'Género',
+        },
     },
     projects: {
         ariaLabel: 'Proyectos actuales',

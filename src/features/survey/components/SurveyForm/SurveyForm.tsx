@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from 'react'
+import { useMemo, useState, type FocusEvent, type FormEvent } from 'react'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import type { Survey, SurveyAnswer, SurveyAnswers, SurveyParticipant } from '../../types'
 import { submitSurvey } from '../../utils/submitSurvey'
@@ -7,6 +7,7 @@ import {
     buildSubmission,
     countAnswered,
     fieldDomId,
+    isValidEmail,
     numberSections,
     PARTICIPANT_FIELDS,
     validateSurvey,
@@ -67,6 +68,15 @@ export function SurveyForm({ survey }: { survey: Survey }) {
         clearError(questionId)
     }
 
+    // Warn right away instead of after the whole survey is filled in.
+    const handleEmailBlur = async (event: FocusEvent<HTMLInputElement>) => {
+        const input = event.currentTarget
+        const email = input.value
+        if (!isValidEmail(email) || !(await hasSubmittedEmail(survey.id, email))) return
+        // Ignore the result if the email was edited while the check ran.
+        if (input.value === email) setErrors((current) => ({ ...current, email: 'duplicateEmail' }))
+    }
+
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
@@ -82,16 +92,18 @@ export function SurveyForm({ survey }: { survey: Survey }) {
             return
         }
 
-        if (hasSubmittedEmail(survey.id, participant.email)) {
+        // Mark as sending before the async duplicate check so a double click cannot submit twice.
+        setStatus('sending')
+        if (await hasSubmittedEmail(survey.id, participant.email)) {
+            setStatus('idle')
             setErrors((current) => ({ ...current, email: 'duplicateEmail' }))
             focusField('email')
             return
         }
 
-        setStatus('sending')
         try {
             await submitSurvey(buildSubmission(survey, questions, answers, otherTexts, participant, language), honeypot)
-            rememberSubmittedEmail(survey.id, participant.email)
+            await rememberSubmittedEmail(survey.id, participant.email)
             setStatus('sent')
             window.scrollTo({ top: 0, behavior: 'smooth' })
         } catch (error) {
@@ -156,6 +168,7 @@ export function SurveyForm({ survey }: { survey: Survey }) {
                             value={participant.email}
                             aria-invalid={Boolean(errors.email)}
                             onChange={(event) => updateParticipant('email', event.target.value)}
+                            onBlur={handleEmailBlur}
                         />
                         {errors.email ? (
                             <p className="survey-error">

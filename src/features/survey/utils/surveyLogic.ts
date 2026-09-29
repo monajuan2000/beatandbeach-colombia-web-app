@@ -16,6 +16,12 @@ export type SurveyErrorKey =
 /** Field ids for participant data; question fields use the question id. */
 export const PARTICIPANT_FIELDS = ['fullName', 'email', 'profession', 'consent'] as const
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+export function isValidEmail(email: string) {
+    return EMAIL_PATTERN.test(email.trim())
+}
+
 export type NumberedQuestion = SurveyQuestion & { number: number }
 
 export type NumberedSection = Omit<SurveySection, 'questions'> & { questions: NumberedQuestion[] }
@@ -61,9 +67,7 @@ export function validateSurvey(
     const errors: Record<string, SurveyErrorKey> = {}
 
     if (!participant.fullName.trim()) errors.fullName = 'fullName'
-    if (!participant.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(participant.email.trim())) {
-        errors.email = 'email'
-    }
+    if (!isValidEmail(participant.email)) errors.email = 'email'
     if (!participant.profession.trim()) errors.profession = 'profession'
     if (!participant.consent) errors.consent = 'consent'
 

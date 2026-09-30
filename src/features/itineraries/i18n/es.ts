@@ -4,7 +4,7 @@ export const itinerariesEs: ItinerariesMessages = {
     section: {
         eyebrow: 'Itinerarios',
         title: (city: string) => `Planes básicos para vivir ${city}`,
-        intro: 'Elige cuántos días tienes. Todos los planes incluyen transporte, póliza de accidentes, desayuno, almuerzo y comida, los atractivos principales y, en los viajes de varios días, hospedaje.',
+        intro: 'Elige cuántos días tienes. Los planes básicos incluyen transporte, póliza de accidentes, desayuno, almuerzo y comida, los atractivos principales y, en los viajes de varios días, hospedaje.',
         durationAriaLabel: 'Elige la duración de tu viaje',
         duration: (days: number) => `${days} ${days === 1 ? 'día' : 'días'}`,
         show: (count: number) => `Ver los ${count} planes`,
@@ -15,11 +15,14 @@ export const itinerariesEs: ItinerariesMessages = {
         ariaLabel: (plan: string) => `Cronograma de ${plan}`,
         day: (day: number) => `Día ${day}`,
         free: 'Gratis',
+        tentative: 'Por confirmar',
+        specialPlan: 'Plan especial',
         kinds: {
             transport: 'Transporte',
             meal: 'Comida',
             attraction: 'Atractivo',
             lodging: 'Hospedaje',
+            activity: 'Actividad',
         },
     },
     costs: {

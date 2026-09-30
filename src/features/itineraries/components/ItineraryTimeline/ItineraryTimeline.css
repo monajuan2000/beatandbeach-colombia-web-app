@@ -154,3 +154,23 @@
     justify-self: start;
   }
 }
+
+.itinerary-timeline-intro .itinerary-special-tag {
+  margin-bottom: 10px;
+  background: rgba(245, 158, 11, 0.16);
+  color: #b45309;
+}
+
+.itinerary-stop.is-activity {
+  --stop-color: #ec4899;
+}
+
+.itinerary-stop-tentative {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  border: 1px dashed var(--color-border-strong);
+  color: var(--color-text-subtle);
+  letter-spacing: 0.06em;
+}

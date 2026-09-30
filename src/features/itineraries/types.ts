@@ -12,7 +12,8 @@ export type PriceItem = {
     unitPrice: number
 }
 
-export type StopKind = 'transport' | 'meal' | 'attraction' | 'lodging'
+/** `activity` covers group moments such as a feedback session. */
+export type StopKind = 'transport' | 'meal' | 'attraction' | 'lodging' | 'activity'
 
 export type ItineraryStop = {
     /** 24h local time, e.g. "07:00". */
@@ -22,6 +23,8 @@ export type ItineraryStop = {
     description: LocalizedText
     /** Priced service this stop consumes once. Attractions without it are free. */
     priceId?: string
+    /** Proposed stop still to be confirmed; shown with a "to be confirmed" tag. */
+    isTentative?: boolean
 }
 
 export type ItineraryDay = {
@@ -34,9 +37,14 @@ export type ItineraryPlan = {
     name: LocalizedText
     summary: LocalizedText
     days: ItineraryDay[]
+    /**
+     * Marks a plan made for a specific group (e.g. SENA). It is shown as the selector label instead
+     * of the duration, and the plan is left out of the public "from" price.
+     */
+    specialLabel?: LocalizedText
 }
 
-/** Every basic plan offered for one city, with the price list its stops refer to. */
+/** Every plan (basic and special) offered for one city, with the price list its stops refer to. */
 export type CityItineraries = {
     cityId: string
     prices: PriceItem[]

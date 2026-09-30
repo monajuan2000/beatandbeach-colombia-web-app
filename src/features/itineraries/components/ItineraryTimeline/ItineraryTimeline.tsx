@@ -9,6 +9,7 @@ const KIND_ICONS: Record<StopKind, string> = {
     meal: '🍽',
     attraction: '⛰',
     lodging: '🛏',
+    activity: '💬',
 }
 
 type ItineraryTimelineProps = {
@@ -30,6 +31,7 @@ export function ItineraryTimeline({ plan, catalog }: ItineraryTimelineProps) {
     return (
         <section className="itinerary-timeline" aria-label={copy.ariaLabel(localize(plan.name))}>
             <div className="itinerary-timeline-intro">
+                {plan.specialLabel ? <span className="card-tag itinerary-special-tag">{copy.specialPlan}</span> : null}
                 <h3>{localize(plan.name)}</h3>
                 <p>{localize(plan.summary)}</p>
             </div>
@@ -52,7 +54,12 @@ export function ItineraryTimeline({ plan, catalog }: ItineraryTimelineProps) {
                                         {KIND_ICONS[stop.kind]}
                                     </span>
                                     <div className="itinerary-stop-copy">
-                                        <span className="itinerary-stop-kind">{copy.kinds[stop.kind]}</span>
+                                        <span className="itinerary-stop-kind">
+                                            {copy.kinds[stop.kind]}
+                                            {stop.isTentative ? (
+                                                <span className="itinerary-stop-tentative">{copy.tentative}</span>
+                                            ) : null}
+                                        </span>
                                         <strong>{localize(stop.title)}</strong>
                                         <p>{localize(stop.description)}</p>
                                     </div>

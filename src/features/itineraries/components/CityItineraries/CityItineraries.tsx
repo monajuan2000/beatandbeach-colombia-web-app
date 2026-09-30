@@ -17,20 +17,28 @@ import './CityItineraries.css'
  */
 export function CityItineraries({ city }: { city: City }) {
     const catalog = getItinerariesForCity(city.id)
-    const [selectedPlanId, setSelectedPlanId] = useState(catalog?.plans[0]?.id)
+    // Opens on the first basic plan; special plans are for specific groups.
+    const [selectedPlanId, setSelectedPlanId] = useState(
+        () => (catalog?.plans.find((item) => !item.specialLabel) ?? catalog?.plans[0])?.id,
+    )
     const [isOpen, setIsOpen] = useState(false)
     const sectionRef = useRef<HTMLElement>(null)
-    const { t, locale } = useTranslation()
+    const { t, localize, locale } = useTranslation()
     const copy = t.itineraries.section
 
     const plan = catalog?.plans.find((item) => item.id === selectedPlanId)
     if (!catalog || !plan) return null
 
-    const durationOptions: FilterOption[] = catalog.plans.map((item) => ({
-        value: item.id,
-        label: copy.duration(item.days.length),
-    }))
-    const lowestTotal = Math.min(...catalog.plans.map((item) => getPlanCostBreakdown(item, catalog).total))
+    // Special plans lead the selector in lime; they are priced for a specific group, so the
+    // public teaser only considers the basic ones.
+    const basicPlans = catalog.plans.filter((item) => !item.specialLabel)
+    const planOptions: FilterOption[] = [
+        ...catalog.plans.flatMap((item) =>
+            item.specialLabel ? [{ value: item.id, label: localize(item.specialLabel), tone: 'lime' as const }] : [],
+        ),
+        ...basicPlans.map((item) => ({ value: item.id, label: copy.duration(item.days.length) })),
+    ]
+    const lowestTotal = Math.min(...basicPlans.map((item) => getPlanCostBreakdown(item, catalog).total))
     const contentId = `${city.id}-itineraries-content`
 
     const toggle = () => {
@@ -69,7 +77,7 @@ export function CityItineraries({ city }: { city: City }) {
             <Collapsible id={contentId} isOpen={isOpen}>
                 <FilterChips
                     label={copy.durationAriaLabel}
-                    options={durationOptions}
+                    options={planOptions}
                     value={plan.id}
                     onChange={setSelectedPlanId}
                 />

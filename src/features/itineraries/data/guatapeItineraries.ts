@@ -18,6 +18,15 @@ const prices: CityItineraries['prices'] = [
         unitPrice: 10000,
     },
     {
+        id: 'private-transport',
+        category: 'transport',
+        label: {
+            en: 'Private vehicle Medellín ⇄ Guatapé, group rate (one way)',
+            es: 'Carro privado Medellín ⇄ Guatapé, tarifa de grupo (trayecto)',
+        },
+        unitPrice: 40000,
+    },
+    {
         id: 'accident-insurance',
         category: 'insurance',
         label: { en: 'Travel accident insurance (per day)', es: 'Póliza de accidentes y asistencia (por día)' },
@@ -40,6 +49,12 @@ const prices: CityItineraries['prices'] = [
         category: 'meals',
         label: { en: 'Dinner', es: 'Comida' },
         unitPrice: 32000,
+    },
+    {
+        id: 'snack',
+        category: 'meals',
+        label: { en: 'Snack', es: 'Refrigerio' },
+        unitPrice: 12000,
     },
     {
         id: 'basic-lodging',
@@ -71,6 +86,11 @@ const prices: CityItineraries['prices'] = [
 ]
 
 /* Stops shared by several plans; the time is set by each plan. */
+
+/** Proposed interpretive stop of the SENA plan, pending the final route. */
+function interpretiveStop(time: string, title: ItineraryStop['title'], description: ItineraryStop['description']): ItineraryStop {
+    return { time, kind: 'attraction', title, description, isTentative: true }
+}
 
 function busToGuatape(time: string): ItineraryStop {
     return {
@@ -344,6 +364,94 @@ export const guatapeItineraries: CityItineraries = {
                         lunch('12:30'),
                         dinner('17:00'),
                         busToMedellin('18:00'),
+                    ],
+                },
+            ],
+        },
+        {
+            id: 'guatape-sena',
+            name: { en: 'SENA special plan', es: 'Plan especial SENA' },
+            specialLabel: { en: 'SENA plan', es: 'Plan SENA' },
+            summary: {
+                en: 'A 6-hour interpretive tour in Guatapé, plus the ride from and back to Medellín. Includes round-trip transport, accident insurance, a snack and lunch.',
+                es: 'Un recorrido interpretativo de 6 horas en Guatapé, más el trayecto desde y hacia Medellín. Incluye transporte de ida y regreso, póliza de accidentes, refrigerio y almuerzo.',
+            },
+            days: [
+                {
+                    title: { en: 'Interpretive tour', es: 'Recorrido interpretativo' },
+                    stops: [
+                        {
+                            time: '06:00',
+                            kind: 'transport',
+                            title: { en: 'Departure from Medellín', es: 'Salida desde Medellín' },
+                            description: {
+                                en: 'The group leaves in a private vehicle; arrival in Guatapé by 8:00 at the latest.',
+                                es: 'El grupo sale en carro privado; llegada a Guatapé a más tardar a las 8:00.',
+                            },
+                            priceId: 'private-transport',
+                        },
+                        {
+                            time: '08:00',
+                            kind: 'meal',
+                            title: { en: 'Welcome snack', es: 'Refrigerio de bienvenida' },
+                            description: {
+                                en: 'A short break on arrival before starting the tour.',
+                                es: 'Una pausa corta al llegar, antes de iniciar el recorrido.',
+                            },
+                            priceId: 'snack',
+                        },
+                        interpretiveStop(
+                            '08:30',
+                            { en: 'El Peñol rock viewpoint', es: 'Mirador de la Piedra del Peñol' },
+                            {
+                                en: 'The geology of the monolith and its place in the region’s history, from its base.',
+                                es: 'La geología del monolito y su lugar en la historia de la región, desde su base.',
+                            },
+                        ),
+                        interpretiveStop(
+                            '09:45',
+                            { en: 'Reservoir pier', es: 'Malecón del embalse' },
+                            {
+                                en: 'How the hydroelectric reservoir was built and how it flooded the old town of El Peñol.',
+                                es: 'Cómo se construyó el embalse hidroeléctrico y cómo inundó el antiguo pueblo de El Peñol.',
+                            },
+                        ),
+                        interpretiveStop(
+                            '10:45',
+                            { en: 'Calle del Recuerdo and the zócalos', es: 'Calle del Recuerdo y zócalos' },
+                            {
+                                en: 'The colorful skirting boards that tell the town’s stories and trades.',
+                                es: 'Los zócalos de colores que cuentan las historias y los oficios del pueblo.',
+                            },
+                        ),
+                        interpretiveStop(
+                            '11:30',
+                            { en: 'Main square and church', es: 'Parque principal e iglesia' },
+                            {
+                                en: 'Our Lady of Carmen church and the heart of local life. The tour closes here.',
+                                es: 'La Iglesia Nuestra Señora del Carmen y el corazón de la vida local. Aquí cierra el recorrido.',
+                            },
+                        ),
+                        {
+                            time: '12:00',
+                            kind: 'activity',
+                            title: { en: 'Feedback session', es: 'Retroalimentación y feedback' },
+                            description: {
+                                en: 'The group shares what they learned and evaluates the tour.',
+                                es: 'El grupo comparte lo aprendido y evalúa el recorrido.',
+                            },
+                        },
+                        lunch('12:30'),
+                        {
+                            time: '13:00',
+                            kind: 'transport',
+                            title: { en: 'Pickup and return to Medellín', es: 'Recogida y regreso a Medellín' },
+                            description: {
+                                en: 'The vehicle picks the group up; arrival in Medellín around 15:00.',
+                                es: 'El carro recoge al grupo; llegada a Medellín hacia las 15:00.',
+                            },
+                            priceId: 'private-transport',
+                        },
                     ],
                 },
             ],

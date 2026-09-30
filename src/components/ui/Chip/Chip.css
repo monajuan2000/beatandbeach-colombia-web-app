@@ -50,3 +50,23 @@
   background: var(--gradient-brand);
   box-shadow: 0 10px 24px rgba(59, 130, 246, 0.25);
 }
+
+/* Lime tone: always lit so the option stands out; the active state adds a ring. */
+.chip.chip-lime {
+  color: #1a2e05;
+  border-color: #84cc16;
+  background: #a3e635;
+  box-shadow: 0 8px 20px rgba(132, 204, 22, 0.28);
+}
+
+.chip.chip-lime:hover {
+  border-color: #65a30d;
+}
+
+.chip.chip-lime.is-active,
+.surface-light .chip.chip-lime.is-active {
+  color: #1a2e05;
+  border-color: #65a30d;
+  background: #bef264;
+  box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.35), 0 10px 24px rgba(132, 204, 22, 0.35);
+}

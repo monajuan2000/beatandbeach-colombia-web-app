@@ -1,9 +1,10 @@
-import { Chip } from '../Chip/Chip'
+import { Chip, type ChipTone } from '../Chip/Chip'
 
 export type FilterOption = {
     value: string
     label: string
     count?: number
+    tone?: ChipTone
 }
 
 type FilterChipsProps = {
@@ -22,6 +23,7 @@ export function FilterChips({ label, options, value, onChange }: FilterChipsProp
                     key={option.value}
                     isActive={option.value === value}
                     count={option.count}
+                    tone={option.tone}
                     onClick={() => onChange(option.value)}
                 >
                     {option.label}

@@ -4,7 +4,7 @@ export const itinerariesEn = {
     section: {
         eyebrow: 'Itineraries',
         title: (city: string) => `Basic plans to experience ${city}`,
-        intro: 'Pick how many days you have. Every plan includes transport, accident insurance, breakfast, lunch and dinner, the main attractions and, for multi-day trips, lodging.',
+        intro: 'Pick how many days you have. Basic plans include transport, accident insurance, breakfast, lunch and dinner, the main attractions and, for multi-day trips, lodging.',
         durationAriaLabel: 'Choose the length of your trip',
         duration: (days: number) => `${days} ${days === 1 ? 'day' : 'days'}`,
         show: (count: number) => `See the ${count} plans`,
@@ -15,11 +15,14 @@ export const itinerariesEn = {
         ariaLabel: (plan: string) => `Schedule for ${plan}`,
         day: (day: number) => `Day ${day}`,
         free: 'Free',
+        tentative: 'To be confirmed',
+        specialPlan: 'Special plan',
         kinds: {
             transport: 'Transport',
             meal: 'Meal',
             attraction: 'Attraction',
             lodging: 'Lodging',
+            activity: 'Activity',
         } satisfies Record<StopKind, string>,
     },
     costs: {

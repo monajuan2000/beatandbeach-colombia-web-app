@@ -1,0 +1,156 @@
+.itinerary-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.itinerary-timeline-intro h3 {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+  letter-spacing: -0.03em;
+}
+
+.itinerary-timeline-intro p {
+  margin: 0.4rem 0 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.itinerary-day {
+  padding: clamp(18px, 3vw, 24px);
+  border-radius: 24px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.itinerary-day-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.itinerary-day-header h4 {
+  margin: 0;
+  color: var(--color-heading);
+  font-size: 1.15rem;
+}
+
+.itinerary-stops {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Time · icon on a vertical line · text · price. */
+.itinerary-stop {
+  --stop-color: #3b82f6;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: 3.2rem 2.4rem minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  padding-bottom: 16px;
+}
+
+.itinerary-stop:last-child {
+  padding-bottom: 0;
+}
+
+.itinerary-stop.is-meal {
+  --stop-color: #f59e0b;
+}
+
+.itinerary-stop.is-attraction {
+  --stop-color: #10b981;
+}
+
+.itinerary-stop.is-lodging {
+  --stop-color: #8b5cf6;
+}
+
+.itinerary-stop:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: 2.4rem;
+  bottom: 0;
+  left: calc(3.2rem + 12px + 1.2rem - 1px);
+  width: 2px;
+  background: var(--color-border);
+}
+
+.itinerary-stop-time {
+  padding-top: 0.55rem;
+  color: var(--color-text-subtle);
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.itinerary-stop-icon {
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--stop-color) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stop-color) 40%, transparent);
+  font-size: 1.05rem;
+}
+
+.itinerary-stop-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 0.15rem;
+}
+
+.itinerary-stop-kind {
+  color: var(--stop-color);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.itinerary-stop-copy strong {
+  color: var(--color-heading);
+}
+
+.itinerary-stop-copy p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.itinerary-stop-price {
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: var(--color-chip);
+  color: var(--color-text);
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  /* Price drops under the text so the description keeps its width. */
+  .itinerary-stop {
+    grid-template-columns: 2.9rem 2.4rem minmax(0, 1fr);
+  }
+
+  .itinerary-stop:not(:last-child)::before {
+    left: calc(2.9rem + 12px + 1.2rem - 1px);
+  }
+
+  .itinerary-stop-price {
+    grid-column: 3;
+    justify-self: start;
+  }
+}

@@ -1,0 +1,97 @@
+/* Stays in view while the (longer) schedule scrolls past it on wide screens. */
+.itinerary-cost-summary {
+  position: sticky;
+  /* Clears the sticky site header. */
+  top: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: clamp(20px, 3vw, 28px);
+  border-radius: 24px;
+  color: var(--color-text);
+}
+
+.itinerary-cost-summary .eyebrow {
+  margin-bottom: 0;
+}
+
+.itinerary-cost-group {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.itinerary-cost-group header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.itinerary-cost-group h4 {
+  margin: 0;
+  color: var(--color-heading);
+  font-size: 0.98rem;
+}
+
+.itinerary-cost-group header span {
+  color: var(--color-heading);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.itinerary-cost-group ul {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.itinerary-cost-group li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--color-text-muted);
+  font-size: 0.86rem;
+}
+
+.itinerary-cost-group small {
+  color: var(--color-text-subtle);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.itinerary-cost-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.itinerary-cost-total span {
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.itinerary-cost-total strong {
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  letter-spacing: -0.03em;
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.itinerary-cost-disclaimer {
+  margin: 0;
+  color: var(--color-text-subtle);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 960px) {
+  .itinerary-cost-summary {
+    position: static;
+  }
+}

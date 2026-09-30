@@ -4,6 +4,8 @@ import { eventsEn } from '@/features/events/i18n/en'
 import { eventsEs } from '@/features/events/i18n/es'
 import { homeEn } from '@/features/home/i18n/en'
 import { homeEs } from '@/features/home/i18n/es'
+import { itinerariesEn } from '@/features/itineraries/i18n/en'
+import { itinerariesEs } from '@/features/itineraries/i18n/es'
 import { surveyEn } from '@/features/survey/i18n/en'
 import { surveyEs } from '@/features/survey/i18n/es'
 import { tripEn } from '@/features/trip/i18n/en'
@@ -22,6 +24,7 @@ const en = {
     home: homeEn,
     cities: citiesEn,
     events: eventsEn,
+    itineraries: itinerariesEn,
     trip: tripEn,
     survey: surveyEn,
 }
@@ -33,6 +36,7 @@ const es: Messages = {
     home: homeEs,
     cities: citiesEs,
     events: eventsEs,
+    itineraries: itinerariesEs,
     trip: tripEs,
     survey: surveyEs,
 }

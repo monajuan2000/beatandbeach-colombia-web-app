@@ -1,0 +1,32 @@
+/* Animating the row from 0fr to 1fr slides the content to its natural height. */
+.collapsible {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.5s ease, opacity 0.35s ease;
+}
+
+.collapsible.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.collapsible-content {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.collapsible.is-settled > .collapsible-content {
+  overflow: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collapsible {
+    transition: none;
+  }
+
+  /* Without a transition there is no transitionend to settle on. */
+  .collapsible.is-open > .collapsible-content {
+    overflow: visible;
+  }
+}

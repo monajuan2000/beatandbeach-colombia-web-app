@@ -14,6 +14,7 @@ import { EventCard } from '@/features/events/components/EventCard/EventCard'
 import { EventDetailsModal } from '@/features/events/components/EventDetailsModal/EventDetailsModal'
 import { getEventsByCity } from '@/features/events/data/events'
 import type { EventItem } from '@/features/events/types'
+import { CityItineraries } from '@/features/itineraries/components/CityItineraries/CityItineraries'
 import { SurveyCallout } from '@/features/survey/components/SurveyCallout/SurveyCallout'
 import { getSurveyForCity } from '@/features/survey/data/surveys'
 import { useTrip } from '@/features/trip/context/TripContext'
@@ -98,6 +99,8 @@ function CityPageContent({ city }: { city: City }) {
                     ))}
                 </div>
             </section>
+
+            <CityItineraries city={city} />
 
             {city.status === 'under-review' ? (
                 <SectionHeader

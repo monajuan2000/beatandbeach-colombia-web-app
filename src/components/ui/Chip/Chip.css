@@ -42,3 +42,11 @@
   border-color: rgba(52, 211, 153, 0.45);
   background: linear-gradient(135deg, rgba(52, 211, 153, 0.18), rgba(59, 130, 246, 0.18));
 }
+
+/* On light bands the translucent active gradient washes out; use the solid brand gradient instead. */
+.surface-light .chip.is-active {
+  color: #04111d;
+  border-color: transparent;
+  background: var(--gradient-brand);
+  box-shadow: 0 10px 24px rgba(59, 130, 246, 0.25);
+}

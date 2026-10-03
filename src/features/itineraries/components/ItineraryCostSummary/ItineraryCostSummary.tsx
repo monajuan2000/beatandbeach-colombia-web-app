@@ -8,7 +8,7 @@ import { getPlanCostBreakdown } from '../../utils/planCosts'
 import './ItineraryCostSummary.css'
 
 const COPY_EMAIL = 'monajuan236@gmail.com'
-const ITINERARY_SUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/monajuan236@gmail.com'
+const ITINERARY_SUBMIT_ENDPOINT = '/api/send-itinerary'
 
 type ItineraryCostSummaryProps = {
     plan: ItineraryPlan
@@ -92,30 +92,24 @@ export function ItineraryCostSummary({ plan, catalog, cityId }: ItineraryCostSum
         setSendQuoteMessage('')
 
         try {
-            const payload = {
-                _subject: subject,
-                _template: 'table',
-                _captcha: 'false',
-                _replyto: normalizedEmail,
-                _cc: COPY_EMAIL,
-                'Plan turístico': localize(plan.name),
-                'Correo del cliente': normalizedEmail,
-                'Itinerario': body,
-                'Resumen de costos': groups.map((group) => `${copy.categories[group.category]}: ${money(group.subtotal)}`).join('\n'),
-                'Total estimado': money(total),
-                'Mensaje': 'Este itinerario fue solicitado desde Beat & Beach Colombia.',
-            }
-
             const response = await fetch(ITINERARY_SUBMIT_ENDPOINT, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-                body: JSON.stringify({ ...payload, _honey: '' }),
+                body: JSON.stringify({
+                    to: normalizedEmail,
+                    cc: COPY_EMAIL,
+                    subject,
+                    text: body,
+                    html: `<pre style="font-family: Arial, sans-serif; white-space: pre-wrap;">${body
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')}</pre>`,
+                }),
             })
 
-            const result = (await response.json().catch(() => ({}))) as { success?: string | boolean; message?: string }
-            const accepted = response.ok && (result.success === true || result.success === 'true')
+            const result = (await response.json().catch(() => ({}))) as { message?: string }
 
-            if (!accepted) {
+            if (!response.ok) {
                 throw new Error(result.message ?? `Itinerary submission failed with status ${response.status}`)
             }
 

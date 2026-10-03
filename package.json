@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:server": "node server.mjs",
     "build": "tsc -b && vite build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist --user \"Juan Esteban Mona <87776740+monajuan2000@users.noreply.github.com>\"",

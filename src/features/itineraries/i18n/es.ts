@@ -10,6 +10,7 @@ export const itinerariesEs: ItinerariesMessages = {
         show: (count: number) => `Ver los ${count} planes`,
         hide: 'Ocultar planes',
         fromPrice: (price: string) => `Desde ${price} por persona`,
+        comingSoon: 'Los planes turísticos de 2 y 3 días aún no están disponibles; estamos realizando los preparativos logísticos y técnicos para tener una experiencia que impacte en los viajes de nuestros clientes.',
     },
     timeline: {
         ariaLabel: (plan: string) => `Cronograma de ${plan}`,
@@ -36,6 +37,17 @@ export const itinerariesEs: ItinerariesMessages = {
         },
         quantity: (quantity: number, unitPrice: string) => `${quantity} × ${unitPrice}`,
         total: 'Total estimado',
+        quotePlan: 'Quiero cotizar este plan turístico',
+        confirmPlan: 'Confirmar',
+        reviewMessage: 'Estos planes están en revisión y estarán abiertos muy pronto.',
+        quoteModal: {
+            eyebrow: 'Cotización',
+            title: 'Quiero cotizar este plan turístico',
+            planLabel: 'Plan turístico',
+            itinerary: 'Itinerario',
+            costSummary: 'Resumen de costos',
+            confirm: 'Confirmar',
+        },
         disclaimer: 'Precios de referencia en pesos colombianos (COP) para 2026. Pueden variar según la temporada y cada proveedor; confirmamos el valor final al reservar.',
     },
 }

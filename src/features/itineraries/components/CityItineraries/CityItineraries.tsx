@@ -17,20 +17,21 @@ import './CityItineraries.css'
  */
 export function CityItineraries({ city }: { city: City }) {
     const catalog = getItinerariesForCity(city.id)
-    // Opens on the first basic plan; special plans are for specific groups.
-    const [selectedPlanId, setSelectedPlanId] = useState(
-        () => (catalog?.plans.find((item) => !item.specialLabel) ?? catalog?.plans[0])?.id,
-    )
+    const unavailablePlanIds = city.id === 'guatape' ? ['guatape-2-days', 'guatape-3-days'] : []
+    const firstAvailablePlan =
+        catalog?.plans.find((item) => !item.specialLabel && !unavailablePlanIds.includes(item.id)) ?? catalog?.plans[0]
+
+    // Opens on the first basic plan; under-review plans remain selectable but their actions are disabled.
+    const [selectedPlanId, setSelectedPlanId] = useState(() => firstAvailablePlan?.id ?? '')
     const [isOpen, setIsOpen] = useState(false)
     const sectionRef = useRef<HTMLElement>(null)
     const { t, localize, locale } = useTranslation()
     const copy = t.itineraries.section
 
-    const plan = catalog?.plans.find((item) => item.id === selectedPlanId)
+    const plan = catalog?.plans.find((item) => item.id === selectedPlanId) ?? firstAvailablePlan
     if (!catalog || !plan) return null
 
-    // Special plans lead the selector in lime; they are priced for a specific group, so the
-    // public teaser only considers the basic ones.
+    // Special plans lead the selector in lime; basic plans stay visible even when their booking actions are paused.
     const basicPlans = catalog.plans.filter((item) => !item.specialLabel)
     const planOptions: FilterOption[] = [
         ...catalog.plans.flatMap((item) =>
@@ -73,6 +74,10 @@ export function CityItineraries({ city }: { city: City }) {
                     )}
                 </div>
             </SectionHeader>
+
+            {unavailablePlanIds.length > 0 ? (
+                <p className="city-itineraries-construction-note">{copy.comingSoon}</p>
+            ) : null}
 
             <Collapsible id={contentId} isOpen={isOpen}>
                 <FilterChips

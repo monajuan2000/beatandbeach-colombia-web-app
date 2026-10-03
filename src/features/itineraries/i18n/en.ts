@@ -10,6 +10,7 @@ export const itinerariesEn = {
         show: (count: number) => `See the ${count} plans`,
         hide: 'Hide plans',
         fromPrice: (price: string) => `From ${price} per person`,
+        comingSoon: 'The 2-day and 3-day tourist plans are not yet available; they are still under construction.',
     },
     timeline: {
         ariaLabel: (plan: string) => `Schedule for ${plan}`,
@@ -36,6 +37,17 @@ export const itinerariesEn = {
         } satisfies Record<CostCategory, string>,
         quantity: (quantity: number, unitPrice: string) => `${quantity} × ${unitPrice}`,
         total: 'Estimated total',
+        quotePlan: 'I want to quote this tourist plan',
+        confirmPlan: 'Confirm',
+        reviewMessage: 'These plans are under review and will open very soon.',
+        quoteModal: {
+            eyebrow: 'Quote',
+            title: 'I want to quote this tourist plan',
+            planLabel: 'Tourist plan',
+            itinerary: 'Itinerary',
+            costSummary: 'Cost summary',
+            confirm: 'Confirm',
+        },
         disclaimer: 'Reference prices in Colombian pesos (COP) for 2026. They may change with the season and each provider; we confirm the final price when you book.',
     },
 }

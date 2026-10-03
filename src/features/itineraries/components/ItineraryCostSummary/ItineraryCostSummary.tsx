@@ -7,6 +7,9 @@ import type { CityItineraries, ItineraryPlan } from '../../types'
 import { getPlanCostBreakdown } from '../../utils/planCosts'
 import './ItineraryCostSummary.css'
 
+const COPY_EMAIL = 'monajuan236@gmail.com'
+const ITINERARY_SUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/monajuan236@gmail.com'
+
 type ItineraryCostSummaryProps = {
     plan: ItineraryPlan
     catalog: CityItineraries
@@ -19,17 +22,114 @@ export function ItineraryCostSummary({ plan, catalog, cityId }: ItineraryCostSum
     const { t, localize, locale } = useTranslation()
     const copy = t.itineraries.costs
     const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false)
+    const [quoteEmail, setQuoteEmail] = useState('')
+    const [showQuoteEmailForm, setShowQuoteEmailForm] = useState(false)
+    const [quoteEmailError, setQuoteEmailError] = useState('')
+    const [isSendingQuote, setIsSendingQuote] = useState(false)
+    const [sendQuoteMessage, setSendQuoteMessage] = useState('')
     const { groups, total } = getPlanCostBreakdown(plan, catalog)
     const money = (amount: number) => formatCop(amount, locale)
     const isGuatapePlan = cityId === 'guatape'
     const isPlanUnderReview = isGuatapePlan && ['guatape-2-days', 'guatape-3-days'].includes(plan.id)
 
-    const handleQuotePlan = () => {
-        if (!isPlanUnderReview) setIsQuoteModalOpen(true)
+    const buildQuoteEmailTemplate = (recipientEmail: string) => {
+        const itineraryBody = [
+            'Beat & Beach Colombia',
+            '---------------------',
+            `Plan turístico: ${localize(plan.name)}`,
+            `Correo del cliente: ${recipientEmail}`,
+            `Copia del equipo: ${COPY_EMAIL}`,
+            '',
+            'Itinerario:',
+            ...plan.days.flatMap((day, dayIndex) => [
+                `${t.itineraries.timeline.day(dayIndex + 1)} · ${localize(day.title)}`,
+                ...day.stops.map((stop) => `- ${stop.time} · ${localize(stop.title)}`),
+                '',
+            ]),
+            'Resumen de costos:',
+            ...groups.map((group) => `- ${copy.categories[group.category]}: ${money(group.subtotal)}`),
+            `Total estimado: ${money(total)}`,
+            '',
+            'Gracias por tu interés en esta experiencia de Beat & Beach Colombia.',
+        ].join('\n')
+
+        return {
+            subject: `${localize(plan.name)} · Itinerario solicitado`,
+            body: itineraryBody,
+        }
     }
 
-    const handleConfirmPlan = () => {
-        if (!isPlanUnderReview) setIsQuoteModalOpen(false)
+    const handleQuotePlan = () => {
+        if (!isPlanUnderReview) {
+            setQuoteEmail('')
+            setShowQuoteEmailForm(false)
+            setQuoteEmailError('')
+            setIsSendingQuote(false)
+            setSendQuoteMessage('')
+            setIsQuoteModalOpen(true)
+        }
+    }
+
+    const handleConfirmPlan = async () => {
+        if (isPlanUnderReview) return
+
+        if (!showQuoteEmailForm) {
+            setShowQuoteEmailForm(true)
+            setQuoteEmailError('')
+            setSendQuoteMessage('')
+            return
+        }
+
+        const normalizedEmail = quoteEmail.trim()
+        if (!/^\S+@\S+\.\S+$/.test(normalizedEmail)) {
+            setQuoteEmailError(copy.quoteModal.emailError)
+            return
+        }
+
+        const { subject, body } = buildQuoteEmailTemplate(normalizedEmail)
+        setIsSendingQuote(true)
+        setQuoteEmailError('')
+        setSendQuoteMessage('')
+
+        try {
+            const payload = {
+                _subject: subject,
+                _template: 'table',
+                _captcha: 'false',
+                _replyto: normalizedEmail,
+                _cc: COPY_EMAIL,
+                'Plan turístico': localize(plan.name),
+                'Correo del cliente': normalizedEmail,
+                'Itinerario': body,
+                'Resumen de costos': groups.map((group) => `${copy.categories[group.category]}: ${money(group.subtotal)}`).join('\n'),
+                'Total estimado': money(total),
+                'Mensaje': 'Este itinerario fue solicitado desde Beat & Beach Colombia.',
+            }
+
+            const response = await fetch(ITINERARY_SUBMIT_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                body: JSON.stringify({ ...payload, _honey: '' }),
+            })
+
+            const result = (await response.json().catch(() => ({}))) as { success?: string | boolean; message?: string }
+            const accepted = response.ok && (result.success === true || result.success === 'true')
+
+            if (!accepted) {
+                throw new Error(result.message ?? `Itinerary submission failed with status ${response.status}`)
+            }
+
+            setQuoteEmail('')
+            setShowQuoteEmailForm(false)
+            setSendQuoteMessage(copy.quoteModal.sentSuccess)
+            setIsQuoteModalOpen(false)
+        } catch (error) {
+            const message = error instanceof Error ? error.message : 'Unable to send email.'
+            setSendQuoteMessage(message)
+            setShowQuoteEmailForm(true)
+        } finally {
+            setIsSendingQuote(false)
+        }
     }
 
     return (
@@ -141,15 +241,50 @@ export function ItineraryCostSummary({ plan, catalog, cityId }: ItineraryCostSum
                             </div>
                         </section>
 
-                        <div className="action-row modal-actions">
-                            <button
-                                type="button"
-                                className="primary-button"
-                                onClick={handleConfirmPlan}
-                                disabled={isPlanUnderReview}
-                            >
-                                {copy.quoteModal.confirm}
-                            </button>
+                        <div className="action-row modal-actions itinerary-quote-actions">
+                            {!showQuoteEmailForm ? (
+                                <button
+                                    type="button"
+                                    className="primary-button"
+                                    onClick={handleConfirmPlan}
+                                    disabled={isPlanUnderReview || isSendingQuote}
+                                >
+                                    {isSendingQuote ? copy.quoteModal.sending : copy.quoteModal.confirm}
+                                </button>
+                            ) : null}
+
+                            {showQuoteEmailForm ? (
+                                <div className="itinerary-quote-email-form">
+                                    <label className="itinerary-quote-email-field">
+                                        <span>{copy.quoteModal.emailLabel}</span>
+                                        <input
+                                            type="email"
+                                            required
+                                            autoComplete="email"
+                                            value={quoteEmail}
+                                            onChange={(event) => {
+                                                setQuoteEmail(event.target.value)
+                                                if (quoteEmailError) setQuoteEmailError('')
+                                            }}
+                                            placeholder={copy.quoteModal.emailPlaceholder}
+                                        />
+                                    </label>
+                                    {quoteEmailError ? (
+                                        <small className="itinerary-quote-email-error">{quoteEmailError}</small>
+                                    ) : null}
+                                    {sendQuoteMessage ? (
+                                        <small className="itinerary-quote-email-status">{sendQuoteMessage}</small>
+                                    ) : null}
+                                    <button
+                                        type="button"
+                                        className="primary-button"
+                                        onClick={handleConfirmPlan}
+                                        disabled={isSendingQuote}
+                                    >
+                                        {isSendingQuote ? copy.quoteModal.sending : copy.quoteModal.send}
+                                    </button>
+                                </div>
+                            ) : null}
                         </div>
                     </div>
                 </Modal>

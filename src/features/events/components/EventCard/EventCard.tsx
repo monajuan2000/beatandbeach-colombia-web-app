@@ -28,6 +28,7 @@ export function EventCard({ event, onViewDetails, variant = 'standard' }: EventC
     const { isEventSaved } = useTrip()
     const { t, localize } = useTranslation()
     const categoryLabel = t.events.categories[event.category]
+    const hasPrice = Boolean(event.price && (event.price.en || event.price.es))
 
     const detailsButton = (
         <button type="button" className="text-button" onClick={() => onViewDetails(event)}>
@@ -56,7 +57,7 @@ export function EventCard({ event, onViewDetails, variant = 'standard' }: EventC
 
                 <div className="event-card-row event-card-footer">
                     <small>
-                        {localize(event.price)}
+                        {hasPrice ? localize(event.price!) : null}
                         {isEventSaved(event.id) ? ` · ${t.events.card.saved}` : ''}
                     </small>
                     {detailsButton}
@@ -78,7 +79,7 @@ export function EventCard({ event, onViewDetails, variant = 'standard' }: EventC
             <p className="event-card-summary">{localize(event.summary)}</p>
             <div className="event-card-row event-card-meta">
                 <span>{localize(event.date)}</span>
-                <span>{localize(event.price)}</span>
+                {hasPrice ? <span>{localize(event.price!)}</span> : null}
             </div>
             <div className="event-card-row event-card-footer">
                 <small>{localize(event.audience)}</small>

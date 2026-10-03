@@ -27,7 +27,9 @@ export function FeaturedEventSpotlight() {
     const facts = [
         { id: 'date', icon: '📅', label: copy.facts.date, value: localize(event.date) },
         { id: 'venue', icon: '📍', label: copy.facts.venue, value: `${localize(event.location)} · ${cityName}` },
-        { id: 'tickets', icon: '🎟️', label: copy.facts.tickets, value: localize(event.price) },
+        ...(event.price && (event.price.en || event.price.es)
+            ? [{ id: 'tickets', icon: '🎟️', label: copy.facts.tickets, value: localize(event.price) }]
+            : []),
         { id: 'genre', icon: '🎧', label: copy.facts.genre, value: t.events.categories[event.category] },
     ]
 

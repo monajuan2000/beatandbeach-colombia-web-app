@@ -16,7 +16,6 @@ export const events: EventItem[] = [
             en: 'The city’s biggest electronic celebration with immersive stages, iconic DJs, and a full weekend of music, lights, and atmosphere.',
             es: 'La mayor celebración electrónica de la ciudad, con escenarios inmersivos, DJs icónicos y un fin de semana completo de música, luces y ambiente.',
         },
-        price: { en: 'Tickets on sale', es: 'Boletas a la venta' },
         featured: true,
         audience: { en: 'Electronic music fans', es: 'Fans de la música electrónica' },
         image: edcColombiaImage,

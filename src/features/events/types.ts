@@ -24,7 +24,7 @@ export type EventItem = {
     endsAt?: string
     location: LocalizedText
     summary: LocalizedText
-    price: LocalizedText
+    price?: LocalizedText
     featured: boolean
     audience: LocalizedText
     image?: string

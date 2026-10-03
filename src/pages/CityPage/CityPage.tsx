@@ -41,6 +41,7 @@ function CityPageContent({ city }: { city: City }) {
     const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null)
 
     const cityEvents = getEventsByCity(city.id)
+    const isUnderReview = city.status === 'under-review'
     const categories = [...new Set(cityEvents.map((event) => event.category))]
     const categoryFilters: FilterOption[] = [
         { value: ALL, label: t.common.all, count: cityEvents.length },
@@ -70,7 +71,12 @@ function CityPageContent({ city }: { city: City }) {
                     <CityStatusNotice city={city} variant="highlight" className="city-page-notice" />
                 </div>
                 <div className="city-page-actions">
-                    <button type="button" className="primary-button" onClick={() => openPlanner(city.id)}>
+                    <button
+                        type="button"
+                        className="primary-button"
+                        onClick={() => !isUnderReview && openPlanner(city.id)}
+                        disabled={isUnderReview}
+                    >
                         {copy.planTrip(city.name)}
                     </button>
                     <Link to="/" className="inverse-button city-page-back">

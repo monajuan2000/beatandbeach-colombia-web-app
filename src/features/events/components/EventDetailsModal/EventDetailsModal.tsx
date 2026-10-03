@@ -26,6 +26,7 @@ export function EventDetailsModal({ event, onClose, showCityLink = true }: Event
     const city = getCityById(event.cityId)
     const saved = isEventSaved(event.id)
     const bookingOpen = isEventBookable(event)
+    const hasPrice = Boolean(event.price && (event.price.en || event.price.es))
 
     return (
         <Modal isOpen onClose={onClose} labelledBy="event-details-title" closeLabel={t.common.close}>
@@ -49,7 +50,7 @@ export function EventDetailsModal({ event, onClose, showCityLink = true }: Event
 
                 <div className="meta-pill-row">
                     <span>{localize(event.date)}</span>
-                    <span>{localize(event.price)}</span>
+                    {hasPrice ? <span>{localize(event.price!)}</span> : null}
                 </div>
 
                 <p className="event-details-audience">

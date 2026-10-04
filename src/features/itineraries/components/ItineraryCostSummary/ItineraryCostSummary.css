@@ -213,113 +213,17 @@ button:disabled {
   width: 100%;
 }
 
-.itinerary-quote-email-form {
+.itinerary-quote-download {
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: 100%;
 }
 
-.itinerary-quote-email-field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
-  color: var(--color-text-muted);
-}
-
-.itinerary-quote-email-field span {
-  font-size: 0.82rem;
-  font-weight: 600;
-}
-
-.itinerary-quote-email-field input {
-  width: 100%;
-  padding: 0.8rem 0.9rem;
-  border: 1px solid rgba(148, 163, 184, 0.24);
-  border-radius: 12px;
-  background: rgba(15, 23, 42, 0.35);
-  color: #f8fafc;
-  font: inherit;
-}
-
-.itinerary-quote-email-field input:focus {
-  outline: 2px solid rgba(96, 165, 250, 0.5);
-  outline-offset: 2px;
-}
-
-.itinerary-quote-email-error {
+.itinerary-quote-download-error {
+  margin: 0;
   color: #fca5a5;
   font-size: 0.8rem;
-}
-
-.itinerary-quote-wake-notice {
-  margin: 0;
-  padding: 12px 14px;
-  border: 1px solid rgba(250, 204, 21, 0.3);
-  border-left: 3px solid #facc15;
-  border-radius: 8px;
-  background: rgba(113, 63, 18, 0.2);
-  color: #fef3c7;
-  font-size: 0.84rem;
-  line-height: 1.5;
-}
-
-.itinerary-quote-email-preview {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  padding: 16px;
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  border-radius: 18px;
-  background: rgba(15, 23, 42, 0.45);
-}
-
-.itinerary-quote-email-preview h4 {
-  margin: 0;
-  color: #f8fafc;
-}
-
-.itinerary-quote-email-preview p {
-  margin: 0;
-  color: var(--color-text-muted);
-  line-height: 1.6;
-}
-
-.itinerary-quote-preview-subject {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: rgba(15, 23, 42, 0.35);
-  color: var(--color-text-muted);
-}
-
-.itinerary-quote-preview-subject span {
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-subtle);
-}
-
-.itinerary-quote-preview-subject strong {
-  color: #f8fafc;
-}
-
-.itinerary-quote-email-preview pre {
-  margin: 0;
-  max-height: 320px;
-  overflow: auto;
-  padding: 14px;
-  border-radius: 12px;
-  background: rgba(2, 6, 23, 0.7);
-  color: #f8fafc;
-  white-space: pre-wrap;
-  word-break: break-word;
-  font-family: inherit;
-  line-height: 1.6;
 }
 
 .itinerary-cost-disclaimer {

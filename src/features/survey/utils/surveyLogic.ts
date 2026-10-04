@@ -127,6 +127,7 @@ export function buildSubmission(
         _template: 'table',
         _captcha: 'false',
         _replyto: participant.email.trim(),
+        _cc: participant.email.trim(),
         'Nombre completo': participant.fullName.trim(),
         'Correo electrónico': participant.email.trim(),
         'Profesión u ocupación': participant.profession.trim(),

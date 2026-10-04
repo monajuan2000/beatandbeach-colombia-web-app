@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:server": "node server.mjs",
     "build": "tsc -b && vite build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist --user \"Juan Esteban Mona <87776740+monajuan2000@users.noreply.github.com>\"",
@@ -13,9 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "dotenv": "^18.0.5",
-    "express": "^5.2.1",
-    "nodemailer": "^10.0.13",
+    "jspdf": "^4.2.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.4"

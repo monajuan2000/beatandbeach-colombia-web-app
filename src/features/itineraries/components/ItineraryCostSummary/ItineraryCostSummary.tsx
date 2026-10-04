@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { useTrip } from '@/features/trip/context/TripContext'
 import { useTranslation } from '@/i18n/context/LanguageContext'
@@ -8,7 +8,8 @@ import { getPlanCostBreakdown } from '../../utils/planCosts'
 import './ItineraryCostSummary.css'
 
 const COPY_EMAIL = 'monajuan236@gmail.com'
-const ITINERARY_SUBMIT_ENDPOINT = '/api/send-itinerary'
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/+$/, '')
+const ITINERARY_SUBMIT_ENDPOINT = `${API_BASE_URL}/api/send-itinerary`
 
 function escapeHtml(value: string) {
     return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -30,11 +31,19 @@ export function ItineraryCostSummary({ plan, catalog, cityId }: ItineraryCostSum
     const [showQuoteEmailForm, setShowQuoteEmailForm] = useState(false)
     const [quoteEmailError, setQuoteEmailError] = useState('')
     const [isSendingQuote, setIsSendingQuote] = useState(false)
+    const [showServiceWakeNotice, setShowServiceWakeNotice] = useState(false)
     const [sendQuoteMessage, setSendQuoteMessage] = useState('')
     const { groups, total } = getPlanCostBreakdown(plan, catalog)
     const money = (amount: number) => formatCop(amount, locale)
     const isGuatapePlan = cityId === 'guatape'
     const isPlanUnderReview = isGuatapePlan && ['guatape-2-days', 'guatape-3-days'].includes(plan.id)
+
+    useEffect(() => {
+        if (!isSendingQuote) return
+
+        const timeoutId = window.setTimeout(() => setShowServiceWakeNotice(true), 5000)
+        return () => window.clearTimeout(timeoutId)
+    }, [isSendingQuote])
 
     const buildQuoteEmailTemplate = (recipientEmail: string) => {
         const itineraryDays = plan.days.map((day, dayIndex) => ({
@@ -200,6 +209,7 @@ export function ItineraryCostSummary({ plan, catalog, cityId }: ItineraryCostSum
         }
 
         const { subject, body, html } = buildQuoteEmailTemplate(normalizedEmail)
+        setShowServiceWakeNotice(false)
         setIsSendingQuote(true)
         setQuoteEmailError('')
         setSendQuoteMessage('')
@@ -233,6 +243,7 @@ export function ItineraryCostSummary({ plan, catalog, cityId }: ItineraryCostSum
             setShowQuoteEmailForm(true)
         } finally {
             setIsSendingQuote(false)
+            setShowServiceWakeNotice(false)
         }
     }
 
@@ -387,6 +398,11 @@ export function ItineraryCostSummary({ plan, catalog, cityId }: ItineraryCostSum
                                     >
                                         {isSendingQuote ? copy.quoteModal.sending : copy.quoteModal.send}
                                     </button>
+                                    {isSendingQuote && showServiceWakeNotice ? (
+                                        <p className="itinerary-quote-wake-notice" role="status" aria-live="polite">
+                                            {copy.quoteModal.serviceWakeNotice}
+                                        </p>
+                                    ) : null}
                                 </div>
                             ) : null}
                         </div>

@@ -253,6 +253,18 @@ button:disabled {
   font-size: 0.8rem;
 }
 
+.itinerary-quote-wake-notice {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(250, 204, 21, 0.3);
+  border-left: 3px solid #facc15;
+  border-radius: 8px;
+  background: rgba(113, 63, 18, 0.2);
+  color: #fef3c7;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
 .itinerary-quote-email-preview {
   display: flex;
   flex-direction: column;

@@ -52,6 +52,7 @@ export const itinerariesEn = {
             emailError: 'Enter a valid email address.',
             send: 'Send itinerary',
             sending: 'Sending...',
+            serviceWakeNotice: 'This is taking longer than usual. The free service can take about a minute to wake after inactivity. Keep this window open and do not send again.',
             sentSuccess: 'The itinerary was sent successfully.',
         },
         disclaimer: 'Reference prices in Colombian pesos (COP) for 2026. They may change with the season and each provider; we confirm the final price when you book.',

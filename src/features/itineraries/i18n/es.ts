@@ -52,6 +52,7 @@ export const itinerariesEs: ItinerariesMessages = {
             emailError: 'Ingresa un correo electrónico válido.',
             send: 'Enviar itinerario',
             sending: 'Enviando...',
+            serviceWakeNotice: 'El envío está tardando más de lo habitual. El servicio gratuito puede tardar cerca de un minuto en activarse después de un tiempo sin uso. Mantén esta ventana abierta y no vuelvas a enviar.',
             sentSuccess: 'El itinerario se envió correctamente.',
         },
         disclaimer: 'Precios de referencia en pesos colombianos (COP) para 2026. Pueden variar según la temporada y cada proveedor; confirmamos el valor final al reservar.',

@@ -15,6 +15,12 @@ Built with React 19, TypeScript, Vite, and React Router (`HashRouter`, for GitHu
 | `npm run lint` | Run ESLint |
 | `npm run deploy` | Build and publish `dist/` to GitHub Pages |
 
+## Local API integration
+
+The Vite development server proxies `/api` requests to Spring Boot at `http://localhost:8080` by default. Set `VITE_API_PROXY_TARGET` in `.env` to override the backend URL. The itinerary email request can be tested locally with the API's Mailpit Compose setup; messages appear at `http://localhost:8025` instead of being sent to real recipients.
+
+For GitHub Pages, build with `VITE_API_BASE_URL` set to the HTTPS origin of the deployed API. For example: `VITE_API_BASE_URL=https://api.example.com npm run deploy`. The API must allow the GitHub Pages origin `https://monajuan2000.github.io` through `CORS_ALLOWED_ORIGINS`.
+
 ## Project structure
 
 ```

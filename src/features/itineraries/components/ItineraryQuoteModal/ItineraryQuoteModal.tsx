@@ -124,8 +124,8 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
             labelledBy={confirmation
                 ? `itinerary-${confirmation.kind}-confirmation-title`
                 : emailError
-                  ? 'itinerary-email-error-title'
-                  : 'itinerary-quote-title'}
+                    ? 'itinerary-email-error-title'
+                    : 'itinerary-quote-title'}
             closeLabel={t.common.close}
             wide
         >
@@ -198,7 +198,6 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
                     <ItineraryQuoteEmailForm
                         quote={quote}
                         onError={setEmailError}
-                        onSuccess={() => setConfirmation({ kind: 'email', message: copy.emailSent })}
                     />
                 </div>
             )}

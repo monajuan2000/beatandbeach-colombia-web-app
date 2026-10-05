@@ -21,9 +21,9 @@ The Vite development server proxies `/api` requests to Spring Boot at `http://lo
 
 For GitHub Pages, the optional backend sender requires `VITE_API_BASE_URL` to be set to the HTTPS origin of the deployed API. For example: `VITE_API_BASE_URL=https://api.example.com npm run deploy`. The API must allow the GitHub Pages origin `https://monajuan2000.github.io` through `CORS_ALLOWED_ORIGINS`.
 
-The Guatapé quote is available for the one-day and SENA special plans; two- and three-day plans remain disabled. Itinerary details are sent through the same FormSubmit AJAX service used by the survey, to `monajuan236@gmail.com` with a copy to the customer's email. The email uses the language selected on the page. The PDF is available separately for download in that language and is not attached to the email.
+The Guatapé quote is available for the one-day and SENA special plans; two- and three-day plans remain disabled. Itinerary email requests use FormSubmit's AJAX endpoint to send the localized itinerary and cost summary to `monajuan236@gmail.com`, with a copy to the customer's captured email. The PDF is available separately for download and WhatsApp; it is not attached to this text-only email flow. The FormSubmit-specific itinerary sender is isolated in `src/features/itineraries/services/sendQuoteEmailWithFormSubmit.ts` so another provider can be added or FormSubmit re-enabled independently of the survey. The API-based sender remains available in `src/features/itineraries/services/sendQuoteEmailApi.ts` for future backend use.
 
-FormSubmit diagnostics are enabled in development. On the deployed site, set `sessionStorage.debugFormSubmit` to `true` in the browser console to enable diagnostics for the current session. The API-based sender remains available in `src/features/itineraries/services/sendQuoteEmailApi.ts` for future backend use.
+FormSubmit diagnostics for survey JSON submissions are enabled in development. On the deployed site, set `sessionStorage.debugFormSubmit` to `true` in the browser console to enable diagnostics for the current session.
 
 ## Project structure
 

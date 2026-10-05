@@ -55,8 +55,6 @@ export type Survey = {
         title: LocalizedText
         description: LocalizedText
     }
-    /** Subject of the email that delivers each response. */
-    emailSubject: string
     likertScale: SurveyOption[]
     sections: SurveySection[]
 }

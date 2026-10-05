@@ -1,4 +1,19 @@
 export const surveyEn = {
+    emailSubmission: {
+        subject: 'New response · Guatapé cultural interpretation',
+        other: 'Other',
+        yes: 'Yes',
+        no: 'No',
+        languageValue: 'English',
+        fields: {
+            fullName: 'Participant name',
+            email: 'Participant email',
+            profession: 'Profession or occupation',
+            consent: 'Data processing authorization',
+            language: 'Form language',
+            submittedAt: 'Submitted at',
+        },
+    },
     callout: {
         eyebrow: 'Academic survey',
         duration: '8–10 min',

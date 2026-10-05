@@ -4,6 +4,7 @@ import { Modal } from '@/components/ui/Modal/Modal'
 import { CityStatusNotice } from '@/features/cities/components/CityStatusNotice/CityStatusNotice'
 import { getCityById } from '@/features/cities/data/cities'
 import { useTrip } from '@/features/trip/context/TripContext'
+import { isTripPlannerAvailable } from '@/features/trip/config'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import { isEventBookable } from '../../data/events'
 import type { EventItem } from '../../types'
@@ -64,6 +65,7 @@ export function EventDetailsModal({ event, onClose, showCityLink = true }: Event
                         <button
                             type="button"
                             className="primary-button"
+                            disabled={!isTripPlannerAvailable(event.cityId)}
                             onClick={() => {
                                 onClose()
                                 openPlanner(event.cityId)

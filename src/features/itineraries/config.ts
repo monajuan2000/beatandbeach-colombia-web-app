@@ -8,7 +8,6 @@ export const ITINERARY_RULES = {
     },
 } as const
 
-export const MAX_QUOTE_PDF_SIZE_BYTES = 10 * 1024 * 1024
 const UNAVAILABLE_PLAN_IDS: readonly string[] = ITINERARY_RULES.guatape.unavailablePlanIds
 const QUOTEABLE_PLAN_IDS: readonly string[] = ITINERARY_RULES.guatape.quoteablePlanIds
 

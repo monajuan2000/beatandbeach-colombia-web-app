@@ -34,6 +34,38 @@
   font-size: 0.9rem;
 }
 
+.planner-tour-select {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.planner-tour-select span {
+  color: #bef264;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.planner-tour-select select {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(190, 242, 100, 0.38);
+  border-radius: 12px;
+  background: rgba(2, 8, 23, 0.75);
+  color: #f8fafc;
+  font: inherit;
+  color-scheme: dark;
+}
+
+.planner-tour-select select:focus {
+  outline: none;
+  border-color: #bef264;
+  box-shadow: 0 0 0 3px rgba(190, 242, 100, 0.15);
+}
+
 .planner-saved-list {
   list-style: none;
   margin: 12px 0 0;
@@ -50,6 +82,35 @@
   gap: 12px;
   padding-top: 10px;
   border-top: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.planner-saved-list li.planner-saved-tour {
+  padding: 12px 14px;
+  border: 1px solid rgba(190, 242, 100, 0.42);
+  border-left: 4px solid #bef264;
+  border-radius: 12px;
+  background: linear-gradient(110deg, rgba(190, 242, 100, 0.14), rgba(15, 23, 42, 0.45));
+}
+
+.planner-saved-tour strong {
+  color: #ecfccb;
+}
+
+.planner-saved-tour small {
+  color: #bef264;
+}
+
+.planner-saved-tour-code {
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 3px 8px;
+  border: 1px solid rgba(190, 242, 100, 0.28);
+  border-radius: 999px;
+  background: rgba(190, 242, 100, 0.1);
+  color: #ecfccb;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
 }
 
 .planner-saved-list li div {

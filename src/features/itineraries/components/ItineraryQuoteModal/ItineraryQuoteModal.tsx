@@ -44,8 +44,10 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
         error: string
     } | null>(null)
     const [downloadActionError, setDownloadActionError] = useState('')
-    const [downloadMessage, setDownloadMessage] = useState('')
-    const [isDownloadConfirmationOpen, setIsDownloadConfirmationOpen] = useState(false)
+    const [confirmation, setConfirmation] = useState<{
+        kind: 'download' | 'email'
+        message: string
+    } | null>(null)
     const [emailError, setEmailError] = useState('')
     const [shareMessage, setShareMessage] = useState('')
     const quoteKey = JSON.stringify(quote)
@@ -79,15 +81,16 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
         try {
             downloadQuoteFile(pdfFile, fileName)
             setDownloadActionError('')
-            setDownloadMessage(copy.downloadSuccess(
-                fileName,
-                quote.planName,
-                formatCalendarDate(downloadDate, locale),
-            ))
-            setIsDownloadConfirmationOpen(true)
+            setConfirmation({
+                kind: 'download',
+                message: copy.downloadSuccess(
+                    fileName,
+                    quote.planName,
+                    formatCalendarDate(downloadDate, locale),
+                ),
+            })
         } catch {
-            setDownloadMessage('')
-            setIsDownloadConfirmationOpen(false)
+            setConfirmation(null)
             setDownloadActionError(copy.downloadError)
         }
     }
@@ -108,8 +111,7 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
 
     const handleClose = () => {
         setDownloadActionError('')
-        setDownloadMessage('')
-        setIsDownloadConfirmationOpen(false)
+        setConfirmation(null)
         setEmailError('')
         setShareMessage('')
         onClose()
@@ -119,23 +121,27 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
         <Modal
             isOpen={isOpen}
             onClose={handleClose}
-            labelledBy={isDownloadConfirmationOpen
-                ? 'itinerary-download-confirmation-title'
+            labelledBy={confirmation
+                ? `itinerary-${confirmation.kind}-confirmation-title`
                 : emailError
                   ? 'itinerary-email-error-title'
                   : 'itinerary-quote-title'}
             closeLabel={t.common.close}
             wide
         >
-            {isDownloadConfirmationOpen ? (
+            {confirmation ? (
                 <div className="modal-body itinerary-download-confirmation">
                     <span className="itinerary-download-confirmation-icon" aria-hidden="true">✓</span>
-                    <h3 id="itinerary-download-confirmation-title">{copy.downloadConfirmationTitle}</h3>
-                    <p>{downloadMessage}</p>
+                    <h3 id={`itinerary-${confirmation.kind}-confirmation-title`}>
+                        {confirmation.kind === 'download'
+                            ? copy.downloadConfirmationTitle
+                            : copy.emailConfirmationTitle}
+                    </h3>
+                    <p>{confirmation.message}</p>
                     <button
                         type="button"
                         className="primary-button"
-                        onClick={() => setIsDownloadConfirmationOpen(false)}
+                        onClick={() => setConfirmation(null)}
                     >
                         {copy.acceptAndReturn}
                     </button>
@@ -191,9 +197,8 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
 
                     <ItineraryQuoteEmailForm
                         quote={quote}
-                        pdfFile={pdfFile}
-                        isPreparing={isPreparing}
                         onError={setEmailError}
+                        onSuccess={() => setConfirmation({ kind: 'email', message: copy.emailSent })}
                     />
                 </div>
             )}

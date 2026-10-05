@@ -1,4 +1,6 @@
-import type { Language } from '@/i18n/config'
+import { LANGUAGE_DETAILS, type Language } from '@/i18n/config'
+import { surveyEn } from '../i18n/en'
+import { surveyEs } from '../i18n/es'
 import type { Survey, SurveyAnswers, SurveyParticipant, SurveyQuestion, SurveySection } from '../types'
 
 /** Option id used for the free-text "Other" choice. */
@@ -84,13 +86,13 @@ export function validateSurvey(
     return errors
 }
 
-const SPANISH_OTHER_LABEL = 'Otro'
-
 function describeAnswer(
     survey: Survey,
     question: SurveyQuestion,
     answers: SurveyAnswers,
     otherTexts: Record<string, string>,
+    language: Language,
+    otherLabel: string,
 ) {
     const answer = answers[question.id]
 
@@ -98,22 +100,19 @@ function describeAnswer(
 
     if (question.type === 'likert') {
         const point = survey.likertScale.find((option) => option.id === answer)
-        return point ? `${point.id} - ${point.label.es}` : '—'
+        return point ? `${point.id} - ${point.label[language]}` : '—'
     }
 
     const ids = Array.isArray(answer) ? answer : answer ? [answer] : []
     const labels = ids.map((id) => {
-        if (id === OTHER_OPTION_ID) return `${SPANISH_OTHER_LABEL}: ${otherTexts[question.id]?.trim() ?? ''}`
-        return question.options.find((option) => option.id === id)?.label.es ?? id
+        if (id === OTHER_OPTION_ID) return `${otherLabel}: ${otherTexts[question.id]?.trim() ?? ''}`
+        return question.options.find((option) => option.id === id)?.label[language] ?? id
     })
 
     return labels.length > 0 ? labels.join(', ') : '—'
 }
 
-/**
- * Builds the email payload. Answers are always written in Spanish (the research language),
- * whatever language the visitor used, so every response reads the same.
- */
+/** Builds a localized email payload using the language selected by the visitor. */
 export function buildSubmission(
     survey: Survey,
     questions: NumberedQuestion[],
@@ -122,23 +121,24 @@ export function buildSubmission(
     participant: SurveyParticipant,
     language: Language,
 ): Record<string, string> {
+    const emailCopy = language === 'es' ? surveyEs.emailSubmission : surveyEn.emailSubmission
     const payload: Record<string, string> = {
-        _subject: survey.emailSubject,
+        _subject: emailCopy.subject,
         _template: 'table',
         _captcha: 'false',
         _replyto: participant.email.trim(),
         _cc: participant.email.trim(),
-        'Nombre completo': participant.fullName.trim(),
-        'Correo electrónico': participant.email.trim(),
-        'Profesión u ocupación': participant.profession.trim(),
-        'Autorización de datos': participant.consent ? 'Sí' : 'No',
-        'Idioma del formulario': language === 'es' ? 'Español' : 'Inglés',
-        'Fecha de envío': new Date().toLocaleString('es-CO'),
+        [emailCopy.fields.fullName]: participant.fullName.trim(),
+        [emailCopy.fields.email]: participant.email.trim(),
+        [emailCopy.fields.profession]: participant.profession.trim(),
+        [emailCopy.fields.consent]: participant.consent ? emailCopy.yes : emailCopy.no,
+        [emailCopy.fields.language]: emailCopy.languageValue,
+        [emailCopy.fields.submittedAt]: new Date().toLocaleString(LANGUAGE_DETAILS[language].locale),
     }
 
     for (const question of questions) {
-        const key = `P${formatQuestionNumber(question.number)}. ${question.label.es}`
-        payload[key] = describeAnswer(survey, question, answers, otherTexts)
+        const key = `P${formatQuestionNumber(question.number)}. ${question.label[language]}`
+        payload[key] = describeAnswer(survey, question, answers, otherTexts, language, emailCopy.other)
     }
 
     return payload

@@ -34,6 +34,8 @@ export type ItineraryDay = {
 
 export type ItineraryPlan = {
     id: string
+    /** Short destination and plan identifier shown with selected tours. */
+    code: string
     name: LocalizedText
     summary: LocalizedText
     days: ItineraryDay[]

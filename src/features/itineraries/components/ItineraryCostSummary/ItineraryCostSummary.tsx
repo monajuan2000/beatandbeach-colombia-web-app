@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useTrip } from '@/features/trip/context/TripContext'
+import { isTripPlannerAvailable } from '@/features/trip/config'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import { formatCop } from '@/utils/currency'
 import { ITINERARY_RULES, isPlanUnderReview, isQuoteablePlan } from '../../config'
@@ -55,10 +56,10 @@ export function ItineraryCostSummary({ plan, catalog, cityId }: ItineraryCostSum
                 <button
                     type="button"
                     className="primary-button"
-                    onClick={() => openPlanner(cityId)}
-                    disabled={planUnderReview}
+                    onClick={() => openPlanner(cityId, canQuotePlan ? plan.id : undefined)}
+                    disabled={planUnderReview || !isTripPlannerAvailable(cityId)}
                 >
-                    {t.common.header.planTrip}
+                    {canQuotePlan ? copy.registerTour : t.common.header.planTrip}
                 </button>
 
                 {isQuoteCity ? (

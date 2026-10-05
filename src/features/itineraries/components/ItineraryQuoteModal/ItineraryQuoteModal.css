@@ -226,13 +226,6 @@
   cursor: progress;
 }
 
-.itinerary-quote-email-success {
-  margin: 0;
-  color: #86efac;
-  font-size: 0.82rem;
-  font-weight: 600;
-}
-
 @media (max-width: 560px) {
   .itinerary-quote-email-row {
     flex-direction: column;

@@ -5,43 +5,33 @@ import {
     WHATSAPP_BUSINESS_PHONE,
 } from '@/config/externalLinks'
 import { useTranslation } from '@/i18n/context/LanguageContext'
-import { MAX_QUOTE_PDF_SIZE_BYTES } from '../../config'
 import type { QuotePdfContent } from '../../utils/downloadQuotePdf'
 import { sendQuoteEmailWithFormSubmit } from '../../services/sendQuoteEmailWithFormSubmit'
 
 type ItineraryQuoteEmailFormProps = {
     quote: QuotePdfContent
-    pdfFile: File | null
-    isPreparing: boolean
     onError: (message: string) => void
+    onSuccess: () => void
 }
 
-export function ItineraryQuoteEmailForm({ quote, pdfFile, isPreparing, onError }: ItineraryQuoteEmailFormProps) {
+export function ItineraryQuoteEmailForm({ quote, onError, onSuccess }: ItineraryQuoteEmailFormProps) {
     const { t } = useTranslation()
     const copy = t.itineraries.costs.quoteModal
     const emailInputId = useId()
     const [customerEmail, setCustomerEmail] = useState('')
     const [isSending, setIsSending] = useState(false)
-    const [isSent, setIsSent] = useState(false)
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        if (isSending || !pdfFile) return
-
-        if (pdfFile.size > MAX_QUOTE_PDF_SIZE_BYTES) {
-            onError(copy.fileTooLarge)
-            return
-        }
+        if (isSending) return
 
         setIsSending(true)
-        setIsSent(false)
         try {
             const whatsappUrl = new URL(`https://wa.me/${WHATSAPP_BUSINESS_PHONE}`)
             whatsappUrl.searchParams.set('text', copy.whatsappMessage(quote.planName, INSTAGRAM_PROFILE_URL))
             await sendQuoteEmailWithFormSubmit({
                 quote,
                 customerEmail,
-                pdfFile,
                 message: copy.emailMessage(
                     quote.planName,
                     BUSINESS_EMAIL,
@@ -52,9 +42,8 @@ export function ItineraryQuoteEmailForm({ quote, pdfFile, isPreparing, onError }
                 customerEmailFieldLabel: copy.submissionFields.customerEmail,
                 messageFieldLabel: copy.submissionFields.message,
             })
-            setIsSent(true)
-        } catch (error) {
-            console.error('Could not send itinerary quote email:', error)
+            onSuccess()
+        } catch {
             onError(copy.emailSendError)
         } finally {
             setIsSending(false)
@@ -77,14 +66,11 @@ export function ItineraryQuoteEmailForm({ quote, pdfFile, isPreparing, onError }
                 <button
                     type="submit"
                     className="primary-button"
-                    disabled={isSending || isPreparing || !pdfFile}
+                    disabled={isSending}
                 >
                     {isSending ? copy.sendingQuote : copy.sendQuote}
                 </button>
             </div>
-            {isSent ? (
-                <p className="itinerary-quote-email-success" role="status">{copy.emailSent}</p>
-            ) : null}
         </form>
     )
 }

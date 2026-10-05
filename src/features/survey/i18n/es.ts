@@ -1,6 +1,21 @@
 import type { SurveyMessages } from './en'
 
 export const surveyEs: SurveyMessages = {
+    emailSubmission: {
+        subject: 'Nueva respuesta · Interpretación turística de Guatapé',
+        other: 'Otro',
+        yes: 'Sí',
+        no: 'No',
+        languageValue: 'Español',
+        fields: {
+            fullName: 'Nombre del participante',
+            email: 'Correo del participante',
+            profession: 'Profesión u ocupación',
+            consent: 'Autorización del tratamiento de datos',
+            language: 'Idioma del formulario',
+            submittedAt: 'Fecha de envío',
+        },
+    },
     callout: {
         eyebrow: 'Encuesta académica',
         duration: '8–10 min',

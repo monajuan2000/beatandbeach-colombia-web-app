@@ -246,6 +246,7 @@ export const guatapeItineraries: CityItineraries = {
     plans: [
         {
             id: 'guatape-1-day',
+            code: 'GUA-1D',
             name: { en: 'Guatapé in one day', es: 'Guatapé en un día' },
             summary: {
                 en: 'The essentials in a round trip from Medellín: the rock, the reservoir and the colorful town.',
@@ -271,6 +272,7 @@ export const guatapeItineraries: CityItineraries = {
         },
         {
             id: 'guatape-2-days',
+            code: 'GUA-2D',
             name: { en: 'Guatapé in two days', es: 'Guatapé en dos días' },
             summary: {
                 en: 'A calmer pace with a night by the lake to enjoy the sunset and climb the rock early.',
@@ -306,6 +308,7 @@ export const guatapeItineraries: CityItineraries = {
         },
         {
             id: 'guatape-3-days',
+            code: 'GUA-3D',
             name: { en: 'Guatapé in three days', es: 'Guatapé en tres días' },
             summary: {
                 en: 'The full experience: town, rock, the Old Peñol replica and a morning on the water.',
@@ -370,6 +373,7 @@ export const guatapeItineraries: CityItineraries = {
         },
         {
             id: 'guatape-sena',
+            code: 'GUA-SENA',
             name: { en: 'SENA special plan', es: 'Plan especial SENA' },
             specialLabel: { en: 'SENA plan', es: 'Plan SENA' },
             summary: {

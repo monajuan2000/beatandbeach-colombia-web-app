@@ -1,23 +1,25 @@
-import { useState, type FormEvent } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Chip } from '@/components/ui/Chip/Chip'
 import { Modal } from '@/components/ui/Modal/Modal'
-import { CityStatusNotice } from '@/features/cities/components/CityStatusNotice/CityStatusNotice'
-import { citiesByRollout, getCityById } from '@/features/cities/data/cities'
+import { getCityById } from '@/features/cities/data/cities'
 import { getEventById } from '@/features/events/data/events'
 import type { EventItem } from '@/features/events/types'
+import { isQuoteablePlan } from '@/features/itineraries/config'
+import { getItinerariesForCity } from '@/features/itineraries/data/itineraries'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import { useTrip } from '../../context/TripContext'
-import { tripInterests } from '../../data/interests'
-import type { TripInterest } from '../../types'
+import { TRIP_PLANNER_CONFIG } from '../../config'
+import type { TripPlannerFormValues } from '../../types'
+import { getAvailableTourDates, getTodayDateInputValue } from '../../utils/tripDates'
+import { TripPlannerRequestForm } from './TripPlannerRequestForm'
+import {
+    TripPlannerSavedItems,
+    type TripPlannerSavedEvent,
+    type TripPlannerSavedTour,
+    type TripPlannerTourOption,
+} from './TripPlannerSavedItems'
+import { TripPlannerSuccess } from './TripPlannerSuccess'
 import './TripPlannerModal.css'
-
-function todayIso() {
-    const now = new Date()
-    const month = String(now.getMonth() + 1).padStart(2, '0')
-    const day = String(now.getDate()).padStart(2, '0')
-    return `${now.getFullYear()}-${month}-${day}`
-}
 
 export function TripPlannerModal() {
     const { isPlannerOpen, closePlanner } = useTrip()
@@ -39,32 +41,77 @@ export function TripPlannerModal() {
 // Lives inside the Modal so its form state resets every time the planner is reopened.
 function TripPlannerContent() {
     const navigate = useNavigate()
-    const { savedEventIds, toggleSavedEvent, plannerCityId, closePlanner } = useTrip()
-    const { t, localize, locale } = useTranslation()
+    const {
+        savedEventIds,
+        toggleSavedEvent,
+        plannerCityId,
+        plannerPlanId,
+        savedTour,
+        clearSavedTour,
+        selectSavedTour,
+        closePlanner,
+    } = useTrip()
+    const { t, localize } = useTranslation()
     const copy = t.trip
+    const selectableTourCityId = plannerCityId ?? TRIP_PLANNER_CONFIG.defaultCityId
 
-    const savedEvents = savedEventIds
-        .map((id) => getEventById(id))
-        .filter((event): event is EventItem => Boolean(event))
+    const savedEvents = useMemo(
+        () => savedEventIds
+            .map((id) => getEventById(id))
+            .filter((event): event is EventItem => Boolean(event)),
+        [savedEventIds],
+    )
+    const selectedTour = useMemo(() => {
+        if (!savedTour || !isQuoteablePlan(savedTour.cityId, savedTour.planId)) return undefined
+        return getItinerariesForCity(savedTour.cityId)?.plans.find((plan) => plan.id === savedTour.planId)
+    }, [savedTour])
+    const availableTourDates = useMemo(() => getAvailableTourDates(), [])
+    const selectableTours = useMemo(
+        () => (getItinerariesForCity(selectableTourCityId)?.plans ?? [])
+            .filter((plan) => isQuoteablePlan(selectableTourCityId, plan.id)),
+        [selectableTourCityId],
+    )
+    const savedEventItems = useMemo<TripPlannerSavedEvent[]>(() => savedEvents.map((event) => ({
+        id: event.id,
+        title: localize(event.title),
+        cityName: getCityById(event.cityId)?.name ?? '',
+        date: localize(event.date),
+    })), [localize, savedEvents])
+    const selectedTourItem = useMemo<TripPlannerSavedTour | undefined>(() => {
+        if (!selectedTour || !savedTour) return undefined
+        return {
+            planId: selectedTour.id,
+            title: localize(selectedTour.name),
+            cityName: getCityById(savedTour.cityId)?.name ?? '',
+            code: selectedTour.code,
+        }
+    }, [localize, savedTour, selectedTour])
+    const availableTourOptions = useMemo<TripPlannerTourOption[]>(() => selectableTours.map((tour) => ({
+        id: tour.id,
+        title: localize(tour.name),
+        code: tour.code,
+    })), [localize, selectableTours])
 
-    const [cityId, setCityId] = useState(plannerCityId ?? savedEvents[0]?.cityId ?? citiesByRollout[0].id)
-    const [arrivalDate, setArrivalDate] = useState('')
-    const [travelers, setTravelers] = useState(2)
-    const [interests, setInterests] = useState<TripInterest[]>([])
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
+    const [formValues, setFormValues] = useState<TripPlannerFormValues>(() => ({
+        cityId: plannerCityId ?? TRIP_PLANNER_CONFIG.defaultCityId,
+        arrivalDate: selectedTour ? availableTourDates[0] ?? '' : '',
+        departureDate: selectedTour ? availableTourDates[0] ?? '' : '',
+        travelers: 2,
+        interests: [],
+        name: '',
+        email: '',
+    }))
     const [submitted, setSubmitted] = useState(false)
 
-    const selectedCity = getCityById(cityId)
+    const selectedCity = getCityById(formValues.cityId)
+    const savedItemCount = savedEvents.length + Number(Boolean(selectedTour))
+    const todayDate = getTodayDateInputValue()
 
-    const toggleInterest = (interest: TripInterest) => {
-        setInterests((current) =>
-            current.includes(interest) ? current.filter((item) => item !== interest) : [...current, interest],
-        )
+    const updateFormValues = (changes: Partial<TripPlannerFormValues>) => {
+        setFormValues((current) => ({ ...current, ...changes }))
     }
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
+    const handleSubmit = () => {
         setSubmitted(true)
     }
 
@@ -73,35 +120,27 @@ function TripPlannerContent() {
         navigate('/', { state: { scrollTo: 'events' } })
     }
 
-    if (submitted) {
-        const formattedDate = new Date(`${arrivalDate}T00:00:00`).toLocaleDateString(locale, {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-        })
+    const handleSelectTour = (planId: string) => {
+        selectSavedTour(selectableTourCityId, planId)
+        const firstAvailableDate = availableTourDates[0] ?? ''
+        updateFormValues({ arrivalDate: firstAvailableDate, departureDate: firstAvailableDate })
+    }
 
+    if (submitted) {
         return (
-            <div className="modal-body planner-success">
-                <span className="card-tag">{copy.success.tag}</span>
-                <h3 id="trip-planner-title">{copy.success.title(name.split(' ')[0])}</h3>
-                <p>
-                    {copy.success.summary({
-                        city: selectedCity?.name ?? '',
-                        travelers,
-                        date: formattedDate,
-                        savedCount: savedEvents.length,
-                    })}{' '}
-                    {copy.success.contact} <strong>{email}</strong>.
-                </p>
-                <div className="action-row modal-actions">
-                    <button type="button" className="primary-button" onClick={closePlanner}>
-                        {copy.success.done}
-                    </button>
-                    <button type="button" className="secondary-button" onClick={() => setSubmitted(false)}>
-                        {copy.success.edit}
-                    </button>
-                </div>
-            </div>
+            <TripPlannerSuccess
+                firstName={formValues.name.trim().split(/\s+/)[0] ?? ''}
+                email={formValues.email}
+                summary={{
+                    city: selectedCity?.name ?? '',
+                    travelers: formValues.travelers,
+                    arrivalDate: formValues.arrivalDate,
+                    departureDate: formValues.departureDate,
+                    savedCount: savedItemCount,
+                }}
+                onDone={closePlanner}
+                onEdit={() => setSubmitted(false)}
+            />
         )
     }
 
@@ -111,122 +150,26 @@ function TripPlannerContent() {
             <h3 id="trip-planner-title">{copy.title}</h3>
             <p className="planner-intro">{copy.intro}</p>
 
-            <div className="planner-saved">
-                <div className="planner-saved-header">
-                    <strong>{copy.savedEvents}</strong>
-                    <span>{savedEvents.length}</span>
-                </div>
+            <TripPlannerSavedItems
+                events={savedEventItems}
+                selectedTour={selectedTourItem}
+                availableTours={availableTourOptions}
+                selectedPlanId={savedTour?.planId}
+                isTourSelectionLocked={Boolean(plannerPlanId)}
+                onBrowseEvents={browseEvents}
+                onSelectTour={handleSelectTour}
+                onRemoveTour={clearSavedTour}
+                onRemoveEvent={toggleSavedEvent}
+            />
 
-                {savedEvents.length === 0 ? (
-                    <p className="planner-empty">
-                        {copy.noSavedEvents}{' '}
-                        <button type="button" className="text-button" onClick={browseEvents}>
-                            {copy.browseEvents}
-                        </button>
-                    </p>
-                ) : (
-                    <ul className="planner-saved-list">
-                        {savedEvents.map((event) => (
-                            <li key={event.id}>
-                                <div>
-                                    <strong>{localize(event.title)}</strong>
-                                    <small>
-                                        {getCityById(event.cityId)?.name} · {localize(event.date)}
-                                    </small>
-                                </div>
-                                <button
-                                    type="button"
-                                    className="text-button"
-                                    onClick={() => toggleSavedEvent(event.id)}
-                                >
-                                    {copy.remove}
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
-
-            <form className="planner-form" onSubmit={handleSubmit}>
-                <label className="form-field">
-                    <span>{copy.fields.destination}</span>
-                    <select value={cityId} onChange={(event) => setCityId(event.target.value)}>
-                        {citiesByRollout.map((city) => (
-                            <option key={city.id} value={city.id}>
-                                {t.cities.status.withStatus(city.name, t.cities.status.labels[city.status])}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-
-                <label className="form-field">
-                    <span>{copy.fields.arrivalDate}</span>
-                    <input
-                        type="date"
-                        required
-                        min={todayIso()}
-                        value={arrivalDate}
-                        onChange={(event) => setArrivalDate(event.target.value)}
-                    />
-                </label>
-
-                {selectedCity ? <CityStatusNotice city={selectedCity} className="form-field-full" /> : null}
-
-                <label className="form-field">
-                    <span>{copy.fields.travelers}</span>
-                    <input
-                        type="number"
-                        required
-                        min={1}
-                        max={20}
-                        value={travelers}
-                        onChange={(event) => setTravelers(Number(event.target.value))}
-                    />
-                </label>
-
-                <fieldset className="form-field form-field-full">
-                    <legend>{copy.fields.interests}</legend>
-                    <div className="chip-group">
-                        {tripInterests.map((interest) => (
-                            <Chip
-                                key={interest}
-                                isActive={interests.includes(interest)}
-                                onClick={() => toggleInterest(interest)}
-                            >
-                                {copy.interests[interest]}
-                            </Chip>
-                        ))}
-                    </div>
-                </fieldset>
-
-                <label className="form-field">
-                    <span>{copy.fields.fullName}</span>
-                    <input
-                        type="text"
-                        required
-                        autoComplete="name"
-                        value={name}
-                        onChange={(event) => setName(event.target.value)}
-                    />
-                </label>
-
-                <label className="form-field">
-                    <span>{copy.fields.email}</span>
-                    <input
-                        type="email"
-                        required
-                        autoComplete="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                    />
-                </label>
-
-                <div className="form-field-full planner-submit">
-                    <button type="submit" className="primary-button">
-                        {copy.submit}
-                    </button>
-                </div>
-            </form>
+            <TripPlannerRequestForm
+                values={formValues}
+                isTourSelected={Boolean(selectedTour)}
+                availableTourDates={availableTourDates}
+                minimumDate={todayDate}
+                onChange={updateFormValues}
+                onSubmit={handleSubmit}
+            />
         </div>
     )
 }

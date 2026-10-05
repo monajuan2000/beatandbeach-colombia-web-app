@@ -21,7 +21,9 @@ The Vite development server proxies `/api` requests to Spring Boot at `http://lo
 
 For GitHub Pages, the optional backend sender requires `VITE_API_BASE_URL` to be set to the HTTPS origin of the deployed API. For example: `VITE_API_BASE_URL=https://api.example.com npm run deploy`. The API must allow the GitHub Pages origin `https://monajuan2000.github.io` through `CORS_ALLOWED_ORIGINS`.
 
-The Guatapé quote is available for the one-day and SENA special plans; two- and three-day plans remain disabled. It sends the generated PDF through FormSubmit as a multipart attachment to `monajuan236@gmail.com`, with a copy to the customer's email. The PDF is regenerated in the active page language. FormSubmit's attachment limit is 10 MB. The deployed site must include `public/formsubmit-quote-success.html` so the browser can confirm FormSubmit's redirect. The API-based sender remains available in `src/features/itineraries/services/sendQuoteEmailApi.ts`; it posts `to`, `cc`, `subject`, `text`, and `html` to `POST /api/send-itinerary`.
+The Guatapé quote is available for the one-day and SENA special plans; two- and three-day plans remain disabled. Itinerary details are sent through the same FormSubmit AJAX service used by the survey, to `monajuan236@gmail.com` with a copy to the customer's email. The email uses the language selected on the page. The PDF is available separately for download in that language and is not attached to the email.
+
+FormSubmit diagnostics are enabled in development. On the deployed site, set `sessionStorage.debugFormSubmit` to `true` in the browser console to enable diagnostics for the current session. The API-based sender remains available in `src/features/itineraries/services/sendQuoteEmailApi.ts` for future backend use.
 
 ## Project structure
 

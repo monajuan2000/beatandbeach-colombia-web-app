@@ -18,6 +18,7 @@ import { CityItineraries } from '@/features/itineraries/components/CityItinerari
 import { SurveyCallout } from '@/features/survey/components/SurveyCallout/SurveyCallout'
 import { getSurveyForCity } from '@/features/survey/data/surveys'
 import { useTrip } from '@/features/trip/context/TripContext'
+import { isTripPlannerAvailable } from '@/features/trip/config'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import './CityPage.css'
 
@@ -41,7 +42,7 @@ function CityPageContent({ city }: { city: City }) {
     const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null)
 
     const cityEvents = getEventsByCity(city.id)
-    const isUnderReview = city.status === 'under-review'
+    const canPlanTrip = isTripPlannerAvailable(city.id) && city.status !== 'under-review'
     const categories = [...new Set(cityEvents.map((event) => event.category))]
     const categoryFilters: FilterOption[] = [
         { value: ALL, label: t.common.all, count: cityEvents.length },
@@ -74,8 +75,8 @@ function CityPageContent({ city }: { city: City }) {
                     <button
                         type="button"
                         className="primary-button"
-                        onClick={() => !isUnderReview && openPlanner(city.id)}
-                        disabled={isUnderReview}
+                        onClick={() => canPlanTrip && openPlanner(city.id)}
+                        disabled={!canPlanTrip}
                     >
                         {copy.planTrip(city.name)}
                     </button>

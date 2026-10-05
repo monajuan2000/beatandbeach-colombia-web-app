@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react'
+import type { SavedTour } from '../types'
 
 export type TripContextValue = {
     savedEventIds: string[]
@@ -6,7 +7,11 @@ export type TripContextValue = {
     toggleSavedEvent: (eventId: string) => void
     isPlannerOpen: boolean
     plannerCityId: string | undefined
-    openPlanner: (cityId?: string) => void
+    plannerPlanId: string | undefined
+    savedTour: SavedTour | undefined
+    clearSavedTour: () => void
+    selectSavedTour: (cityId: string, planId: string) => void
+    openPlanner: (cityId: string, planId?: string) => void
     closePlanner: () => void
 }
 

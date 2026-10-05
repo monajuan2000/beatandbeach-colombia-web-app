@@ -31,7 +31,6 @@ export const guatapeCulturalSurvey: Survey = {
             es: 'Comparte tu experiencia en una breve encuesta académica sobre la historia, la cultura y la información que encontraste durante tu visita.',
         },
     },
-    emailSubject: 'Nueva respuesta · Interpretación turística de Guatapé',
     likertScale: [
         { id: '1', label: { en: 'Strongly disagree', es: 'Muy en desacuerdo' } },
         { id: '2', label: { en: 'Disagree', es: 'En desacuerdo' } },

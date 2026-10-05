@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react'
 import { Badge } from '@/components/ui/Badge/Badge'
+import { CityStatusBadge } from '@/features/cities/components/CityStatusBadge/CityStatusBadge'
 import { getCityById } from '@/features/cities/data/cities'
 import { useTrip } from '@/features/trip/context/TripContext'
 import { useTranslation } from '@/i18n/context/LanguageContext'
@@ -27,6 +28,7 @@ function imageBackground(image: string): CSSProperties {
 export function EventCard({ event, onViewDetails, variant = 'standard' }: EventCardProps) {
     const { isEventSaved } = useTrip()
     const { t, localize } = useTranslation()
+    const city = getCityById(event.cityId)
     const categoryLabel = t.events.categories[event.category]
     const hasPrice = Boolean(event.price && (event.price.en || event.price.es))
 
@@ -70,11 +72,14 @@ export function EventCard({ event, onViewDetails, variant = 'standard' }: EventC
         <article className={`event-card event-card-standard ${event.featured ? 'is-featured' : ''}`}>
             <div className="event-card-row">
                 <Badge tone="blue">{categoryLabel}</Badge>
-                {event.featured ? <Badge tone="green">{t.common.featured}</Badge> : null}
+                <div className="event-card-status-badges">
+                    {city?.status === 'under-review' ? <CityStatusBadge status={city.status} /> : null}
+                    {event.featured ? <Badge tone="green">{t.common.featured}</Badge> : null}
+                </div>
             </div>
             <h3>{localize(event.title)}</h3>
             <p className="event-card-location">
-                {getCityById(event.cityId)?.name} · {localize(event.location)}
+                {city?.name} · {localize(event.location)}
             </p>
             <p className="event-card-summary">{localize(event.summary)}</p>
             <div className="event-card-row event-card-meta">

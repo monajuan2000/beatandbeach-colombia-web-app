@@ -47,7 +47,7 @@ const COLORS = {
     page: [237, 243, 242] as const,
 }
 
-export async function downloadQuotePdf(quote: QuotePdfContent, fileName: string) {
+export async function createQuotePdfFile(quote: QuotePdfContent, fileName: string) {
     const { jsPDF } = await import('jspdf')
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true })
     let y = 10
@@ -275,5 +275,36 @@ export async function downloadQuotePdf(quote: QuotePdfContent, fileName: string)
         pdf.text(quote.labels.page(page, pageCount), PAGE_WIDTH - MARGIN, PAGE_HEIGHT - 7, { align: 'right' })
     }
 
-    pdf.save(fileName)
+    const pdfBlob = pdf.output('blob')
+    return new File([pdfBlob], fileName, { type: 'application/pdf' })
+}
+
+export function createQuoteDownloadFileName(planName: string, date: Date) {
+    const planSlug = planName
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+    const dateParts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'America/Bogota',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+    }).formatToParts(date)
+    const dateByPart = Object.fromEntries(dateParts.map(({ type, value }) => [type, value]))
+    const dateStamp = `${dateByPart.year}-${dateByPart.month}-${dateByPart.day}`
+
+    return `beat-and-beach-${planSlug}-${dateStamp}.pdf`
+}
+
+export function downloadQuoteFile(file: File, fileName = file.name) {
+    const fileUrl = URL.createObjectURL(file)
+    const link = document.createElement('a')
+    link.href = fileUrl
+    link.download = fileName
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    window.setTimeout(() => URL.revokeObjectURL(fileUrl), 1000)
 }

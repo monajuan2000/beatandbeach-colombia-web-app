@@ -4,14 +4,19 @@ import type { City } from '../../types'
 import './CityPill.css'
 
 /** Destination link styled by rollout status. Group several inside an element with `city-pill-row`. */
-export function CityPill({ city }: { city: City }) {
+export function CityPill({ city, isHighlighted = false }: { city: City; isHighlighted?: boolean }) {
     const { t } = useTranslation()
     const statusLabel = t.cities.status.labels[city.status]
+    const className = [
+        'city-pill',
+        `city-pill-${city.status}`,
+        isHighlighted && 'city-pill-highlighted',
+    ].filter(Boolean).join(' ')
 
     return (
         <Link
             to={`/cities/${city.id}`}
-            className={`city-pill city-pill-${city.status}`}
+            className={className}
             aria-label={t.cities.status.withStatus(city.name, statusLabel)}
             title={statusLabel}
         >

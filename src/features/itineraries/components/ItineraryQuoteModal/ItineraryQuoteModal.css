@@ -1,0 +1,240 @@
+.itinerary-quote-modal {
+  gap: 18px;
+}
+
+.itinerary-quote-modal button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.itinerary-quote-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 18px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.itinerary-quote-summary span {
+  color: var(--color-text-subtle);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.itinerary-quote-summary strong {
+  color: #f8fafc;
+  font-size: 1.2rem;
+}
+
+.itinerary-quote-summary p {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.itinerary-quote-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.itinerary-quote-section h4 {
+  margin: 0;
+  color: #f8fafc;
+}
+
+.itinerary-quote-list,
+.itinerary-quote-cost-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.itinerary-quote-day {
+  padding: 12px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.itinerary-quote-day strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #f8fafc;
+}
+
+.itinerary-quote-day ul {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding-left: 18px;
+  color: var(--color-text-muted);
+}
+
+.itinerary-quote-day li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.itinerary-quote-cost-item,
+.itinerary-quote-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-text-muted);
+}
+
+.itinerary-quote-total {
+  padding-top: 10px;
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.itinerary-quote-total strong {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.itinerary-quote-actions {
+  width: 100%;
+}
+
+.itinerary-quote-download {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.itinerary-quote-download-error {
+  margin: 0;
+  color: #fca5a5;
+  font-size: 0.8rem;
+}
+
+.itinerary-download-confirmation {
+  align-items: center;
+  min-height: 330px;
+  text-align: center;
+}
+
+.itinerary-download-confirmation-icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border: 1px solid rgba(134, 239, 172, 0.45);
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.16);
+  color: #86efac;
+  font-size: 1.8rem;
+  font-weight: 800;
+  box-shadow: 0 0 24px rgba(34, 197, 94, 0.2);
+}
+
+.itinerary-download-confirmation p {
+  max-width: 540px;
+  margin: 0;
+  color: #86efac;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.itinerary-download-confirmation button {
+  width: 100%;
+  max-width: 360px;
+}
+
+.itinerary-email-error-confirmation .itinerary-download-confirmation-icon {
+  border-color: rgba(252, 165, 165, 0.45);
+  background: rgba(239, 68, 68, 0.16);
+  color: #fca5a5;
+  box-shadow: 0 0 24px rgba(239, 68, 68, 0.2);
+}
+
+.itinerary-email-error-confirmation p {
+  color: #fca5a5;
+}
+
+.itinerary-quote-share {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itinerary-quote-share p {
+  margin: 0;
+  color: var(--color-text-subtle);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.itinerary-quote-share [role='status'] {
+  color: var(--color-accent);
+}
+
+.itinerary-quote-email-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.itinerary-quote-email-form label {
+  color: var(--color-text-subtle);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.itinerary-quote-email-row {
+  display: flex;
+  gap: 10px;
+}
+
+.itinerary-quote-email-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 14px;
+  background: rgba(2, 8, 23, 0.6);
+  color: #f8fafc;
+  font: inherit;
+}
+
+.itinerary-quote-email-row input:focus {
+  outline: none;
+  border-color: rgba(125, 211, 252, 0.6);
+  box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.15);
+}
+
+.itinerary-quote-email-row button:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.itinerary-quote-email-success {
+  margin: 0;
+  color: #86efac;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+@media (max-width: 560px) {
+  .itinerary-quote-email-row {
+    flex-direction: column;
+  }
+}

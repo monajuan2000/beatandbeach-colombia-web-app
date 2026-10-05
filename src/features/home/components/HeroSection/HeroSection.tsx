@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import featuredDestinationImage from '@/assets/images/destinations/colombia-featured-destination.jpeg'
 import { CityPill } from '@/features/cities/components/CityPill/CityPill'
+import { FEATURED_CITY_ID } from '@/features/cities/config'
 import { cities, citiesByRollout } from '@/features/cities/data/cities'
 import { useInView } from '@/hooks/useInView'
 import { useTranslation } from '@/i18n/context/LanguageContext'
@@ -80,7 +81,7 @@ export function HeroSection() {
                     <span className="hero-destinations-label">{copy.chooseDestination}</span>
                     <nav className="city-pill-row" aria-label={copy.destinationsAriaLabel}>
                         {citiesByRollout.map((city) => (
-                            <CityPill key={city.id} city={city} />
+                            <CityPill key={city.id} city={city} isHighlighted={city.id === FEATURED_CITY_ID} />
                         ))}
                     </nav>
                 </div>

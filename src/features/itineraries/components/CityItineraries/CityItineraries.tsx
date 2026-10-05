@@ -5,6 +5,7 @@ import { SectionHeader } from '@/components/ui/SectionHeader/SectionHeader'
 import type { City } from '@/features/cities/types'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import { formatCop } from '@/utils/currency'
+import { getUnavailablePlanIds, ITINERARY_RULES } from '../../config'
 import { getItinerariesForCity } from '../../data/itineraries'
 import { getPlanCostBreakdown } from '../../utils/planCosts'
 import { ItineraryCostSummary } from '../ItineraryCostSummary/ItineraryCostSummary'
@@ -17,7 +18,7 @@ import './CityItineraries.css'
  */
 export function CityItineraries({ city }: { city: City }) {
     const catalog = getItinerariesForCity(city.id)
-    const unavailablePlanIds = city.id === 'guatape' ? ['guatape-2-days', 'guatape-3-days'] : []
+    const unavailablePlanIds = getUnavailablePlanIds(city.id)
     const firstAvailablePlan =
         catalog?.plans.find((item) => !item.specialLabel && !unavailablePlanIds.includes(item.id)) ?? catalog?.plans[0]
 
@@ -75,7 +76,7 @@ export function CityItineraries({ city }: { city: City }) {
                 </div>
             </SectionHeader>
 
-            {unavailablePlanIds.length > 0 ? (
+            {city.id === ITINERARY_RULES.guatape.cityId && unavailablePlanIds.length > 0 ? (
                 <p className="city-itineraries-construction-note">{copy.comingSoon}</p>
             ) : null}
 
@@ -86,6 +87,12 @@ export function CityItineraries({ city }: { city: City }) {
                     value={plan.id}
                     onChange={setSelectedPlanId}
                 />
+
+                <p className="city-itineraries-selected-plan" aria-live="polite">
+                    <span className="city-itineraries-selected-plan-indicator" aria-hidden="true" />
+                    <span>{copy.selectedPlan}: </span>
+                    <strong>{localize(plan.name)}</strong>
+                </p>
 
                 <div className="city-itineraries-body">
                     <ItineraryTimeline plan={plan} catalog={catalog} />

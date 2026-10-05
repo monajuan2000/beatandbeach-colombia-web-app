@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { FilterChips, type FilterOption } from '@/components/ui/FilterChips/FilterChips'
 import { SectionHeader } from '@/components/ui/SectionHeader/SectionHeader'
-import { cities } from '@/features/cities/data/cities'
+import { CityStatusBadge } from '@/features/cities/components/CityStatusBadge/CityStatusBadge'
+import { citiesByRollout } from '@/features/cities/data/cities'
 import { useTranslation } from '@/i18n/context/LanguageContext'
-import { events } from '../../data/events'
+import { events, getEventsByCity } from '../../data/events'
 import type { EventItem } from '../../types'
 import { EventCard } from '../EventCard/EventCard'
 import { EventDetailsModal } from '../EventDetailsModal/EventDetailsModal'
@@ -21,10 +22,16 @@ export function EventsList() {
 
     const cityFilters: FilterOption[] = [
         { value: ALL, label: t.common.all, count: events.length },
-        ...cities.map((city) => ({
+        ...citiesByRollout.map((city) => ({
             value: city.id,
-            label: city.name,
-            count: events.filter((event) => event.cityId === city.id).length,
+            tone: city.status === 'launching' ? 'lime' as const : undefined,
+            label: (
+                <span className="events-list-city-filter-label">
+                    {city.name}
+                    {city.status === 'under-review' ? <CityStatusBadge status={city.status} /> : null}
+                </span>
+            ),
+            count: getEventsByCity(city.id).length,
         })),
     ]
     const filteredEvents =

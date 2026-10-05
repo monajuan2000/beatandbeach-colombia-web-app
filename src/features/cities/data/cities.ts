@@ -1,12 +1,13 @@
 import guatapeCardImage from '@/assets/images/cities/guatape-card.jpeg'
 import medellinCardImage from '@/assets/images/cities/medellin-card.jpeg'
+import { CITY_IDS } from '../config'
 import type { City } from '../types'
 
 export const cities: City[] = [
     {
         id: 'medellin',
         name: 'Medellín',
-        status: 'launching',
+        status: 'under-review',
         region: { en: 'Andean rhythm', es: 'Ritmo andino' },
         description: {
             en: 'A vibrant city full of innovation, nightlife, and contemporary culture.',
@@ -62,7 +63,7 @@ export const cities: City[] = [
         ],
     },
     {
-        id: 'guatape',
+        id: CITY_IDS.guatape,
         name: 'Guatapé',
         status: 'launching',
         region: { en: 'Lake & mountain views', es: 'Lago y montaña' },

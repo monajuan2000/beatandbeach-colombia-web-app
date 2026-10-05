@@ -24,6 +24,19 @@
   border-color: rgba(125, 211, 252, 0.42);
 }
 
+.city-pill.city-pill-highlighted {
+  border-color: #65a30d;
+  background: linear-gradient(135deg, #bef264, #84cc16);
+  box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.18), 0 8px 22px rgba(101, 163, 13, 0.3);
+  color: #1a2e05;
+  font-weight: 800;
+}
+
+.city-pill.city-pill-highlighted:hover {
+  border-color: #4d7c0f;
+  box-shadow: 0 0 0 4px rgba(163, 230, 53, 0.24), 0 10px 26px rgba(101, 163, 13, 0.38);
+}
+
 /* Launching destinations: brand gradient, green edge and a live dot. */
 .city-pill-launching {
   border-color: rgba(52, 211, 153, 0.55);
@@ -41,6 +54,10 @@
   border-radius: 50%;
   background: #34d399;
   animation: cityPillPulse 2s ease-out infinite;
+}
+
+.city-pill-highlighted .city-pill-dot {
+  background: #365314;
 }
 
 /* Destinations under review: quieter, with a "soon" tag. */

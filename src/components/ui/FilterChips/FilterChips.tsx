@@ -1,8 +1,9 @@
+import type { ReactNode } from 'react'
 import { Chip, type ChipTone } from '../Chip/Chip'
 
 export type FilterOption = {
     value: string
-    label: string
+    label: ReactNode
     count?: number
     tone?: ChipTone
 }

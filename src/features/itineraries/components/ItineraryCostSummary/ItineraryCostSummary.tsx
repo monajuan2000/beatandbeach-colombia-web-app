@@ -1,11 +1,11 @@
-import { useState } from 'react'
-import { Modal } from '@/components/ui/Modal/Modal'
+import { useMemo, useState } from 'react'
 import { useTrip } from '@/features/trip/context/TripContext'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import { formatCop } from '@/utils/currency'
+import { ITINERARY_RULES, isPlanUnderReview, isQuoteablePlan } from '../../config'
 import type { CityItineraries, ItineraryPlan } from '../../types'
 import { getPlanCostBreakdown } from '../../utils/planCosts'
-import { downloadQuotePdf, type QuotePdfContent } from '../../utils/downloadQuotePdf'
+import { ItineraryQuoteModal } from '../ItineraryQuoteModal/ItineraryQuoteModal'
 import './ItineraryCostSummary.css'
 
 type ItineraryCostSummaryProps = {
@@ -14,76 +14,33 @@ type ItineraryCostSummaryProps = {
     cityId: string
 }
 
-/** Per-person price of a plan, grouped by category, with a shortcut to the trip planner. */
+/** Shows a plan's cost breakdown and opens quote actions when the plan supports them. */
 export function ItineraryCostSummary({ plan, catalog, cityId }: ItineraryCostSummaryProps) {
     const { openPlanner } = useTrip()
     const { t, localize, locale } = useTranslation()
     const copy = t.itineraries.costs
     const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false)
-    const [isDownloadingQuote, setIsDownloadingQuote] = useState(false)
-    const [quoteDownloadError, setQuoteDownloadError] = useState('')
-    const { groups, total } = getPlanCostBreakdown(plan, catalog)
-    const money = (amount: number) => formatCop(amount, locale)
-    const isGuatapePlan = cityId === 'guatape'
-    const isPlanUnderReview = isGuatapePlan && ['guatape-2-days', 'guatape-3-days'].includes(plan.id)
-
-    const handleQuotePlan = () => {
-        if (!isPlanUnderReview) {
-            setIsDownloadingQuote(false)
-            setQuoteDownloadError('')
-            setIsQuoteModalOpen(true)
-        }
-    }
-
-    const handleDownloadQuote = async () => {
-        setIsDownloadingQuote(true)
-        setQuoteDownloadError('')
-        try {
-            const quote: QuotePdfContent = {
-                planName: localize(plan.name),
-                summary: localize(plan.summary),
-                days: plan.days.map((day) => ({
-                    title: localize(day.title),
-                    stops: day.stops.map((stop) => ({
-                        time: stop.time,
-                        title: localize(stop.title),
-                        description: localize(stop.description),
-                        isTentative: stop.isTentative,
-                    })),
-                })),
-                costs: groups.map((group) => ({
-                    label: copy.categories[group.category],
-                    value: money(group.subtotal),
-                })),
-                total: money(total),
-                disclaimer: copy.disclaimer,
-                labels: copy.quotePdf,
-            }
-            const fileName = `beat-and-beach-${plan.id}-quote.pdf`
-            await downloadQuotePdf(quote, fileName)
-        } catch {
-            setQuoteDownloadError(copy.quoteModal.downloadError)
-        } finally {
-            setIsDownloadingQuote(false)
-        }
-    }
+    const breakdown = useMemo(() => getPlanCostBreakdown(plan, catalog), [catalog, plan])
+    const isQuoteCity = cityId === ITINERARY_RULES.guatape.cityId
+    const canQuotePlan = isQuoteablePlan(cityId, plan.id)
+    const planUnderReview = isPlanUnderReview(cityId, plan.id)
 
     return (
         <>
             <aside className="itinerary-cost-summary dark-card" aria-label={copy.eyebrow}>
                 <span className="eyebrow">{copy.eyebrow}</span>
 
-                {groups.map((group) => (
+                {breakdown.groups.map((group) => (
                     <section key={group.category} className="itinerary-cost-group">
                         <header>
                             <h4>{copy.categories[group.category]}</h4>
-                            <span>{money(group.subtotal)}</span>
+                            <span>{formatCop(group.subtotal, locale)}</span>
                         </header>
                         <ul>
                             {group.lines.map((line) => (
                                 <li key={line.item.id}>
                                     <span>{localize(line.item.label)}</span>
-                                    <small>{copy.quantity(line.quantity, money(line.item.unitPrice))}</small>
+                                    <small>{copy.quantity(line.quantity, formatCop(line.item.unitPrice, locale))}</small>
                                 </li>
                             ))}
                         </ul>
@@ -92,112 +49,42 @@ export function ItineraryCostSummary({ plan, catalog, cityId }: ItineraryCostSum
 
                 <div className="itinerary-cost-total">
                     <span>{copy.total}</span>
-                    <strong>{money(total)}</strong>
+                    <strong>{formatCop(breakdown.total, locale)}</strong>
                 </div>
 
                 <button
                     type="button"
                     className="primary-button"
-                    onClick={() => !isPlanUnderReview && openPlanner(cityId)}
-                    disabled={isPlanUnderReview}
+                    onClick={() => openPlanner(cityId)}
+                    disabled={planUnderReview}
                 >
                     {t.common.header.planTrip}
                 </button>
 
-                {isGuatapePlan ? (
+                {isQuoteCity ? (
                     <div className="itinerary-cost-actions">
                         <button
                             type="button"
                             className="primary-button"
-                            onClick={handleQuotePlan}
-                            disabled={isPlanUnderReview}
+                            onClick={() => setIsQuoteModalOpen(true)}
+                            disabled={!canQuotePlan}
                         >
                             {copy.quotePlan}
                         </button>
                     </div>
                 ) : null}
 
-                {isPlanUnderReview ? <p className="itinerary-cost-review-note">{copy.reviewMessage}</p> : null}
-
+                {planUnderReview ? <p className="itinerary-cost-review-note">{copy.reviewMessage}</p> : null}
                 <p className="itinerary-cost-disclaimer">{copy.disclaimer}</p>
             </aside>
 
-            {isGuatapePlan ? (
-                <Modal
+            {isQuoteCity ? (
+                <ItineraryQuoteModal
+                    plan={plan}
+                    breakdown={breakdown}
                     isOpen={isQuoteModalOpen}
                     onClose={() => setIsQuoteModalOpen(false)}
-                    labelledBy="itinerary-quote-title"
-                    closeLabel={t.common.close}
-                    wide
-                >
-                    <div className="modal-body itinerary-quote-modal">
-                        <span className="eyebrow">{copy.quoteModal.eyebrow}</span>
-                        <h3 id="itinerary-quote-title">{copy.quoteModal.title}</h3>
-
-                        <div className="itinerary-quote-summary">
-                            <span>{copy.quoteModal.planLabel}</span>
-                            <strong>{localize(plan.name)}</strong>
-                            <p>{localize(plan.summary)}</p>
-                        </div>
-
-                        <section className="itinerary-quote-section">
-                            <h4>{copy.quoteModal.itinerary}</h4>
-                            <div className="itinerary-quote-list">
-                                {plan.days.map((day, dayIndex) => (
-                                    <div key={`${plan.id}-day-${dayIndex}`} className="itinerary-quote-day">
-                                        <strong>
-                                            {t.itineraries.timeline.day(dayIndex + 1)} · {localize(day.title)}
-                                        </strong>
-                                        <ul>
-                                            {day.stops.map((stop) => (
-                                                <li key={`${dayIndex}-${stop.title.en ?? stop.title.es}`}>
-                                                    <span>{stop.time}</span>
-                                                    <span>{localize(stop.title)}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
-
-                        <section className="itinerary-quote-section">
-                            <h4>{copy.quoteModal.costSummary}</h4>
-                            <div className="itinerary-quote-cost-list">
-                                {groups.map((group) => (
-                                    <div key={group.category} className="itinerary-quote-cost-item">
-                                        <span>{copy.categories[group.category]}</span>
-                                        <strong>{money(group.subtotal)}</strong>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="itinerary-quote-total">
-                                <span>{copy.total}</span>
-                                <strong>{money(total)}</strong>
-                            </div>
-                        </section>
-
-                        <div className="action-row modal-actions itinerary-quote-actions">
-                            <div className="itinerary-quote-download">
-                                <button
-                                    type="button"
-                                    className="primary-button"
-                                    onClick={handleDownloadQuote}
-                                    disabled={isDownloadingQuote}
-                                >
-                                    {isDownloadingQuote
-                                        ? copy.quoteModal.downloadingQuote
-                                        : copy.quoteModal.downloadQuote}
-                                </button>
-                                {quoteDownloadError ? (
-                                    <p className="itinerary-quote-download-error" role="alert">
-                                        {quoteDownloadError}
-                                    </p>
-                                ) : null}
-                            </div>
-                        </div>
-                    </div>
-                </Modal>
+                />
             ) : null}
         </>
     )

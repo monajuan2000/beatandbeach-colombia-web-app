@@ -1,5 +1,12 @@
 const COLOMBIA_TIME_ZONE = 'America/Bogota'
 
+export function formatCalendarDate(date: Date, locale: string) {
+    return new Intl.DateTimeFormat(locale, {
+        timeZone: COLOMBIA_TIME_ZONE,
+        dateStyle: 'long',
+    }).format(date)
+}
+
 /** Compact calendar parts for a date range, e.g. { days: '10–11', month: 'OCT', year: '2026' }. */
 export function formatDayRange(startIso: string, endIso: string | undefined, locale: string) {
     const start = new Date(startIso)

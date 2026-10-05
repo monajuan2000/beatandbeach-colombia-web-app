@@ -1,7 +1,10 @@
 import { PageSection } from '@/components/layout/PageSection/PageSection'
 import { SiteFooter } from '@/components/layout/SiteFooter/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader/SiteHeader'
+import { CityCard } from '@/features/cities/components/CityCard/CityCard'
+import { FEATURED_CITY_ID } from '@/features/cities/config'
 import { CitiesGrid } from '@/features/cities/components/CitiesGrid/CitiesGrid'
+import { getCityById } from '@/features/cities/data/cities'
 import { EventsList } from '@/features/events/components/EventsList/EventsList'
 import { AboutUsSection } from '@/features/home/components/AboutUsSection/AboutUsSection'
 import { ColombiaWondersShowcase } from '@/features/home/components/ColombiaWondersShowcase/ColombiaWondersShowcase'
@@ -16,6 +19,7 @@ import './HomePage.css'
 export function HomePage() {
     const { t } = useTranslation()
     const sections = t.home.sections
+    const featuredDestination = getCityById(FEATURED_CITY_ID)
 
     return (
         <div className="home-page">
@@ -26,6 +30,11 @@ export function HomePage() {
                 </PageSection>
                 <PageSection index={1} label={sections.featured} surface="dark">
                     <HighlightedEventsHeading />
+                    {featuredDestination ? (
+                        <div className="home-featured-destination-card">
+                            <CityCard city={featuredDestination} />
+                        </div>
+                    ) : null}
                     <ColombiaWondersShowcase />
                     <FeaturedEventSpotlight />
                 </PageSection>

@@ -54,6 +54,71 @@
   margin: 0 0 28px;
 }
 
+.city-itineraries.surface-light .chip-group .chip {
+  min-height: 44px;
+  border: 1px solid rgba(15, 23, 42, 0.18);
+  background: #fff;
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.city-itineraries.surface-light .chip-group .chip.chip-lime {
+  border-color: #65a30d;
+  background: #a3e635;
+  color: #1a2e05;
+  box-shadow: 0 6px 16px rgba(101, 163, 13, 0.22);
+}
+
+.city-itineraries.surface-light .chip-group .chip.is-active {
+  border: 2px solid #0e7490;
+  background: linear-gradient(120deg, #a5f3fc, #bbf7d0 58%, #d9f99d);
+  box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.16), 0 10px 24px rgba(8, 145, 178, 0.2);
+  color: #082f49;
+  transform: translateY(-2px);
+}
+
+.city-itineraries.surface-light .chip-group .chip.chip-lime.is-active {
+  border-color: #14532d;
+  background: linear-gradient(120deg, #15803d, #166534 58%, #14532d);
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18), 0 10px 24px rgba(22, 101, 52, 0.3);
+  color: #fff;
+}
+
+.city-itineraries .chip-group .chip:focus-visible {
+  outline: 3px solid #0e7490;
+  outline-offset: 3px;
+}
+
+.city-itineraries-selected-plan {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: fit-content;
+  max-width: 100%;
+  margin: -12px auto 24px;
+  padding: 9px 16px;
+  border: 1px solid rgba(8, 145, 178, 0.3);
+  border-radius: 999px;
+  background: linear-gradient(110deg, rgba(207, 250, 254, 0.85), rgba(220, 252, 231, 0.85));
+  color: #164e63;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.city-itineraries-selected-plan-indicator {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 9px;
+  border-radius: 50%;
+  background: #0891b2;
+  box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.15), 0 0 12px rgba(8, 145, 178, 0.45);
+}
+
+.city-itineraries-selected-plan strong {
+  color: #082f49;
+}
+
 .city-itineraries-body {
   display: grid;
   grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
@@ -65,7 +130,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .city-itineraries .section-header,
-  .city-itineraries-chevron {
+  .city-itineraries-chevron,
+  .city-itineraries .chip-group .chip {
     transition: none;
   }
 }

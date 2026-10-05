@@ -17,9 +17,11 @@ Built with React 19, TypeScript, Vite, and React Router (`HashRouter`, for GitHu
 
 ## Local API integration
 
-The Vite development server proxies `/api` requests to Spring Boot at `http://localhost:8080` by default. Set `VITE_API_PROXY_TARGET` in `.env` to override the backend URL. The itinerary email request can be tested locally with the API's Mailpit Compose setup; messages appear at `http://localhost:8025` instead of being sent to real recipients.
+The Vite development server proxies `/api` requests to Spring Boot at `http://localhost:8080` by default. Set `VITE_API_PROXY_TARGET` in `.env` to override the backend URL. The optional backend email sender can be tested locally with the API's Mailpit Compose setup; messages appear at `http://localhost:8025` instead of being sent to real recipients.
 
-For GitHub Pages, build with `VITE_API_BASE_URL` set to the HTTPS origin of the deployed API. For example: `VITE_API_BASE_URL=https://api.example.com npm run deploy`. The API must allow the GitHub Pages origin `https://monajuan2000.github.io` through `CORS_ALLOWED_ORIGINS`.
+For GitHub Pages, the optional backend sender requires `VITE_API_BASE_URL` to be set to the HTTPS origin of the deployed API. For example: `VITE_API_BASE_URL=https://api.example.com npm run deploy`. The API must allow the GitHub Pages origin `https://monajuan2000.github.io` through `CORS_ALLOWED_ORIGINS`.
+
+The Guatapé quote is available for the one-day and SENA special plans; two- and three-day plans remain disabled. It sends the generated PDF through FormSubmit as a multipart attachment to `monajuan236@gmail.com`, with a copy to the customer's email. The PDF is regenerated in the active page language. FormSubmit's attachment limit is 10 MB. The deployed site must include `public/formsubmit-quote-success.html` so the browser can confirm FormSubmit's redirect. The API-based sender remains available in `src/features/itineraries/services/sendQuoteEmailApi.ts`; it posts `to`, `cc`, `subject`, `text`, and `html` to `POST /api/send-itinerary`.
 
 ## Project structure
 
@@ -36,6 +38,7 @@ src/
 │   ├── cities/          # components/, data/, types.ts
 │   ├── events/          # components/, data/, types.ts
 │   ├── home/            # Home page sections, data/, types.ts
+│   ├── itineraries/     # City plans, cost summaries, quote/PDF flow, and email services
 │   ├── survey/          # Research surveys: data/, components/, utils/ (validation, email payload), config.ts
 │   └── trip/            # Saved events + trip planner (context/, components/)
 ├── hooks/               # Reusable React hooks (useInView for scroll reveals)

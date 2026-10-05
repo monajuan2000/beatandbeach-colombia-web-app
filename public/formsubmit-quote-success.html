@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Submission complete</title>
+  </head>
+  <body>
+    <script>
+      const token = new URLSearchParams(window.location.search).get('token')
+      if (token && window.parent !== window) {
+        // The parent verifies both this iframe and the one-time token.
+        window.parent.postMessage({ type: 'formsubmit-quote-complete', token }, '*')
+      }
+    </script>
+  </body>
+</html>

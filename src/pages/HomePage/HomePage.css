@@ -10,9 +10,22 @@
   gap: 64px;
 }
 
+.home-featured-destination-card {
+  width: min(100%, 1200px);
+  margin: -28px auto;
+}
+
+.home-featured-destination-card .city-card {
+  min-height: 280px;
+}
+
 @media (max-width: 640px) {
   .home-page {
     width: min(100% - 20px, 1200px);
     padding-top: 10px;
+  }
+
+  .home-featured-destination-card .city-card {
+    min-height: 340px;
   }
 }

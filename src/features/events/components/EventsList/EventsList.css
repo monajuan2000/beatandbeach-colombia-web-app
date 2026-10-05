@@ -5,6 +5,23 @@
   gap: 20px;
 }
 
+.events-list-city-filter-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.events-list-city-filter-label .city-status-badge-under-review {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+}
+
+.events-list-city-filter-label .city-status-badge-under-review::before {
+  width: 5px;
+  height: 5px;
+}
+
 .events-list {
   display: grid;
   gap: 20px;

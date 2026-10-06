@@ -2,25 +2,28 @@ import { useId, useState, type FormEvent } from 'react'
 import {
     BUSINESS_EMAIL,
     INSTAGRAM_PROFILE_URL,
+    PUBLIC_SITE_ORIGIN,
     WHATSAPP_BUSINESS_PHONE,
 } from '@/config/externalLinks'
 import { useTranslation } from '@/i18n/context/LanguageContext'
-import { sendQuoteEmailWithFormSubmit } from '../../services/sendQuoteEmailWithFormSubmit'
+import { ITINERARY_EMAIL_PROVIDER_NAME } from '@/config/itineraryEmail'
+import { EmailJsConfigurationError } from '../../services/sendQuoteEmailWithEmailJs'
+import { sendItineraryQuoteEmail } from '../../services/sendItineraryQuoteEmail'
 import { buildQuoteEmailBody } from '../../utils/buildQuoteEmailBody'
 import type { QuotePdfContent } from '../../utils/downloadQuotePdf'
 
 type ItineraryQuoteEmailFormProps = {
     quote: QuotePdfContent
     onError: (message: string) => void
+    onSuccess: (message: string) => void
 }
 
-export function ItineraryQuoteEmailForm({ quote, onError }: ItineraryQuoteEmailFormProps) {
+export function ItineraryQuoteEmailForm({ quote, onError, onSuccess }: ItineraryQuoteEmailFormProps) {
     const { t } = useTranslation()
     const copy = t.itineraries.costs.quoteModal
     const emailInputId = useId()
     const [customerEmail, setCustomerEmail] = useState('')
     const [isSending, setIsSending] = useState(false)
-    const [wasSubmitted, setWasSubmitted] = useState(false)
 
     const whatsappUrl = new URL(`https://wa.me/${WHATSAPP_BUSINESS_PHONE}`)
     whatsappUrl.searchParams.set('text', copy.whatsappMessage(quote.planName, INSTAGRAM_PROFILE_URL))
@@ -31,21 +34,27 @@ export function ItineraryQuoteEmailForm({ quote, onError }: ItineraryQuoteEmailF
         whatsappUrl.toString(),
         INSTAGRAM_PROFILE_URL,
     )
-    const message = `${buildQuoteEmailBody(quote).text}\n\n${contactMessage}`
+    const logoUrl = new URL(`${import.meta.env.BASE_URL}beat-and-beach-logo.png`, PUBLIC_SITE_ORIGIN).toString()
+    const emailBody = buildQuoteEmailBody(quote, contactMessage, logoUrl)
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        if (isSending || wasSubmitted) return
+        if (isSending) return
 
         const normalizedEmail = customerEmail.trim()
         setIsSending(true)
         try {
-            await sendQuoteEmailWithFormSubmit({ quote, customerEmail: normalizedEmail, message })
-            setWasSubmitted(true)
+            await sendItineraryQuoteEmail({ quote, customerEmail: normalizedEmail, body: emailBody })
+            onSuccess(copy.emailProviderSuccess(ITINERARY_EMAIL_PROVIDER_NAME))
         } catch (error) {
-            console.error('FormSubmit rejected the itinerary quote:', error)
-            const providerMessage = error instanceof Error ? error.message : ''
-            onError(/rate limit exceeded/i.test(providerMessage) ? copy.emailRateLimitError : copy.emailSendError)
+            console.error(`${ITINERARY_EMAIL_PROVIDER_NAME} rejected the itinerary quote:`, error)
+            const errorMessage = error instanceof Error ? error.message : ''
+            const message = error instanceof EmailJsConfigurationError
+                ? copy.emailJsNotConfigured
+                : /rate limit exceeded/i.test(errorMessage)
+                    ? copy.emailProviderRateLimitError(ITINERARY_EMAIL_PROVIDER_NAME)
+                    : copy.emailProviderError(ITINERARY_EMAIL_PROVIDER_NAME)
+            onError(message)
         } finally {
             setIsSending(false)
         }
@@ -62,17 +71,16 @@ export function ItineraryQuoteEmailForm({ quote, onError }: ItineraryQuoteEmailF
                     required
                     value={customerEmail}
                     onChange={(event) => setCustomerEmail(event.target.value)}
-                    disabled={isSending || wasSubmitted}
+                    disabled={isSending}
                 />
                 <button
                     type="submit"
                     className="primary-button"
-                    disabled={isSending || wasSubmitted}
+                    disabled={isSending}
                 >
-                    {isSending ? copy.sendingQuote : wasSubmitted ? copy.submittedToForm : copy.sendQuote}
+                    {isSending ? copy.sendingQuote : copy.sendQuote}
                 </button>
             </div>
-            {wasSubmitted ? <p role="status">{copy.externalSubmitNotice}</p> : null}
         </form>
     )
 }

@@ -13,7 +13,7 @@ function escapeHtml(value: string) {
     })
 }
 
-export function buildQuoteEmailBody(quote: QuotePdfContent) {
+export function buildQuoteEmailBody(quote: QuotePdfContent, contactMessage = '', logoUrl = '') {
     const daysText = quote.days.map((day, index) => [
         `${quote.labels.day(index + 1)} - ${day.title}`,
         ...day.stops.map((stop) => `  ${stop.time}  ${stop.title}${stop.description ? ` — ${stop.description}` : ''}${stop.isTentative ? ` (${quote.labels.tentative})` : ''}`),
@@ -34,6 +34,7 @@ export function buildQuoteEmailBody(quote: QuotePdfContent) {
         quote.disclaimer,
         quote.labels.closing,
         quote.labels.brandName,
+        ...(contactMessage ? ['', contactMessage] : []),
     ].join('\n')
 
     const daySections = quote.days.map((day, index) => `
@@ -53,8 +54,15 @@ export function buildQuoteEmailBody(quote: QuotePdfContent) {
     const costRows = quote.costs.map((cost) => `
         <tr><td style="padding:8px 10px;border-bottom:1px solid #dfe8e6">${escapeHtml(cost.label)}</td>
         <td style="padding:8px 10px;border-bottom:1px solid #dfe8e6;text-align:right"><strong>${escapeHtml(cost.value)}</strong></td></tr>`).join('')
+    const contactSection = contactMessage
+        ? `<p style="margin-top:24px;color:#52666f;line-height:1.5">${escapeHtml(contactMessage).replace(/\n/g, '<br>')}</p>`
+        : ''
+    const logo = logoUrl
+        ? `<img src="${escapeHtml(logoUrl)}" alt="${escapeHtml(quote.labels.brandName)}" width="160" style="display:block;width:160px;max-width:100%;height:auto;margin:0 auto 20px">`
+        : ''
     const html = `<!doctype html><html><body style="margin:0;padding:24px;background:#edf3f2;font-family:Arial,sans-serif;color:#263b46">
         <main style="max-width:680px;margin:0 auto;padding:28px;background:#fff;border-radius:16px">
+            ${logo}
             <p style="margin:0 0 8px;color:#08848a;font-weight:bold;letter-spacing:2px">${escapeHtml(quote.labels.brandName)}</p>
             <p style="margin:0 0 24px;color:#52666f">${escapeHtml(quote.labels.quoteLabel)}</p>
             <h1 style="margin:0 0 12px;color:#0d263b">${escapeHtml(quote.labels.headline)}</h1>
@@ -73,6 +81,7 @@ export function buildQuoteEmailBody(quote: QuotePdfContent) {
             </table>
             <p style="margin-top:24px;color:#52666f;font-size:13px;line-height:1.5">${escapeHtml(quote.disclaimer)}</p>
             <p style="margin-top:24px;line-height:1.5">${escapeHtml(quote.labels.closing)}<br><strong>${escapeHtml(quote.labels.brandName)}</strong></p>
+            ${contactSection}
         </main></body></html>`
 
     return { text, html }

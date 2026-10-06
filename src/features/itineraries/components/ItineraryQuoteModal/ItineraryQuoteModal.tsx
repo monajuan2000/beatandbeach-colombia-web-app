@@ -198,6 +198,7 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
                     <ItineraryQuoteEmailForm
                         quote={quote}
                         onError={setEmailError}
+                        onSuccess={(message) => setConfirmation({ kind: 'email', message })}
                     />
                 </div>
             )}

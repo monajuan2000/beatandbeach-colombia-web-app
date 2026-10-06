@@ -38,6 +38,7 @@ export type QuotePdfContent = {
         total: string
         closing: string
         brandName: string
+        contactDetails: string
         page: (current: number, total: number) => string
     }
 }
@@ -58,7 +59,7 @@ const COLORS = {
     page: [237, 243, 242] as const,
 }
 
-export async function createQuotePdfFile(quote: QuotePdfContent, fileName: string) {
+export async function createQuotePdfFile(quote: QuotePdfContent, fileName: string, contactMessage = '') {
     const { jsPDF } = await import('jspdf')
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true })
     let y = 10
@@ -305,6 +306,31 @@ export async function createQuotePdfFile(quote: QuotePdfContent, fileName: strin
     pdf.setFontSize(7)
     setTextColor(COLORS.muted)
     pdf.text(disclaimerLines, MARGIN + 4, thanksY)
+    y += thanksHeight + 6
+
+    if (contactMessage) {
+        const contactParagraphs = contactMessage.split('\n\n')
+        const contactLines = contactParagraphs.map((paragraph) => linesFor(paragraph, CONTENT_WIDTH - 14, 7.5))
+        const contactCardHeight = 12 + contactLines.reduce((height, lines) => height + lines.length * 3.5 + 2, 0)
+        ensureSpace(contactCardHeight)
+        setFillColor(COLORS.white)
+        pdf.roundedRect(MARGIN, y, CONTENT_WIDTH, contactCardHeight, 2, 2, 'F')
+        setFillColor(COLORS.teal)
+        pdf.roundedRect(MARGIN, y, 2, contactCardHeight, 1, 1, 'F')
+        pdf.setFont('helvetica', 'bold')
+        pdf.setFontSize(7)
+        setTextColor(COLORS.teal)
+        pdf.text(quote.labels.contactDetails, MARGIN + 7, y + 6)
+
+        let contactTextY = y + 12
+        contactLines.forEach((lines, index) => {
+            pdf.setFont('helvetica', index === 0 ? 'bold' : 'normal')
+            pdf.setFontSize(7.5)
+            setTextColor(index === 0 ? COLORS.ink : COLORS.muted)
+            pdf.text(lines, MARGIN + 7, contactTextY)
+            contactTextY += lines.length * 3.5 + 2
+        })
+    }
 
     const pageCount = pdf.getNumberOfPages()
     for (let page = 1; page <= pageCount; page += 1) {

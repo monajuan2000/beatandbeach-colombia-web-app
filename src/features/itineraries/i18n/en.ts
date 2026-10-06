@@ -108,6 +108,7 @@ export const itinerariesEn = {
             total: 'Estimated total',
             closing: 'Thank you for choosing Beat & Beach Colombia. Reply to this email if you have any questions about your plan.',
             brandName: 'Beat & Beach Colombia',
+            contactDetails: 'CONTACT AND MORE INFORMATION',
             page: (current: number, total: number) => `${current} / ${total}`,
         },
         disclaimer: 'Reference prices in Colombian pesos (COP) for 2026. They may change with the season and each provider; we confirm the final price when you book.',

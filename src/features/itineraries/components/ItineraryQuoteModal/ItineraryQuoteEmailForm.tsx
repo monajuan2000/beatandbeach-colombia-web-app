@@ -1,10 +1,5 @@
 import { useId, useState, type FormEvent } from 'react'
-import {
-    BUSINESS_EMAIL,
-    INSTAGRAM_PROFILE_URL,
-    PUBLIC_SITE_ORIGIN,
-    WHATSAPP_BUSINESS_PHONE,
-} from '@/config/externalLinks'
+import { PUBLIC_SITE_ORIGIN } from '@/config/externalLinks'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import { ITINERARY_EMAIL_PROVIDER_NAME } from '@/config/itineraryEmail'
 import { EmailJsConfigurationError } from '../../services/sendQuoteEmailWithEmailJs'
@@ -14,6 +9,7 @@ import type { QuoteCustomerDetails, QuotePdfContent } from '../../utils/download
 
 type ItineraryQuoteEmailFormProps = {
     quote: QuotePdfContent
+    contactMessage: string
     customerDetails: QuoteCustomerDetails
     isCustomerDetailsComplete: boolean
     onCustomerDetailsChange: (field: keyof QuoteCustomerDetails, value: string) => void
@@ -23,6 +19,7 @@ type ItineraryQuoteEmailFormProps = {
 
 export function ItineraryQuoteEmailForm({
     quote,
+    contactMessage,
     customerDetails,
     isCustomerDetailsComplete,
     onCustomerDetailsChange,
@@ -36,15 +33,6 @@ export function ItineraryQuoteEmailForm({
     const phoneInputId = useId()
     const [isSending, setIsSending] = useState(false)
 
-    const whatsappUrl = new URL(`https://wa.me/${WHATSAPP_BUSINESS_PHONE}`)
-    whatsappUrl.searchParams.set('text', copy.whatsappMessage(quote.planName, INSTAGRAM_PROFILE_URL))
-    const contactMessage = copy.emailMessage(
-        quote.planName,
-        BUSINESS_EMAIL,
-        WHATSAPP_BUSINESS_PHONE,
-        whatsappUrl.toString(),
-        INSTAGRAM_PROFILE_URL,
-    )
     const logoUrl = new URL(`${import.meta.env.BASE_URL}beat-and-beach-logo.png`, PUBLIC_SITE_ORIGIN).toString()
     const emailBody = buildQuoteEmailBody(quote, contactMessage, logoUrl)
 

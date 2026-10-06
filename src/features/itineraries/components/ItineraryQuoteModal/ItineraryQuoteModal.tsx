@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Modal } from '@/components/ui/Modal/Modal'
-import { INSTAGRAM_PROFILE_URL, WHATSAPP_BUSINESS_PHONE } from '@/config/externalLinks'
+import { BUSINESS_EMAIL, INSTAGRAM_PROFILE_URL, WHATSAPP_BUSINESS_PHONE } from '@/config/externalLinks'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import { formatCalendarDate } from '@/utils/date'
 import type { ItineraryPlan } from '../../types'
@@ -44,6 +44,15 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
         breakdown,
         customer: customerDetails,
     }), [breakdown, costCopy.categories, costCopy.disclaimer, costCopy.quotePdf, customerDetails, locale, localize, plan])
+    const whatsappUrl = new URL(`https://wa.me/${WHATSAPP_BUSINESS_PHONE}`)
+    whatsappUrl.searchParams.set('text', copy.whatsappMessage(quote.planName, INSTAGRAM_PROFILE_URL))
+    const contactMessage = copy.emailMessage(
+        quote.planName,
+        BUSINESS_EMAIL,
+        WHATSAPP_BUSINESS_PHONE,
+        whatsappUrl.toString(),
+        INSTAGRAM_PROFILE_URL,
+    )
     const isCustomerDetailsComplete = customerDetails.fullName.trim().length > 0
         && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerDetails.email.trim())
         && customerDetails.phone.replace(/\D/g, '').length >= 7
@@ -70,7 +79,7 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
         if (!isOpen || !isCustomerDetailsComplete) return
 
         let isCurrent = true
-        void createQuotePdfFile(quote, `beat-and-beach-${plan.id}-quote.pdf`)
+        void createQuotePdfFile(quote, `beat-and-beach-${plan.id}-quote.pdf`, contactMessage)
             .then((file) => {
                 if (isCurrent) setPreparedPdf({ key: quoteKey, file, error: '' })
             })
@@ -81,7 +90,7 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
         return () => {
             isCurrent = false
         }
-    }, [copy.downloadError, isCustomerDetailsComplete, isOpen, plan.id, quote, quoteKey])
+    }, [contactMessage, copy.downloadError, isCustomerDetailsComplete, isOpen, plan.id, quote, quoteKey])
 
     const handleCustomerDetailsChange = (field: keyof QuoteCustomerDetails, value: string) => {
         setCustomerDetails((current) => ({ ...current, [field]: value }))
@@ -186,6 +195,7 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
 
                     <ItineraryQuoteEmailForm
                         quote={quote}
+                        contactMessage={contactMessage}
                         customerDetails={customerDetails}
                         isCustomerDetailsComplete={isCustomerDetailsComplete}
                         onCustomerDetailsChange={handleCustomerDetailsChange}

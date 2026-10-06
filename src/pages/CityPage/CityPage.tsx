@@ -35,7 +35,7 @@ export function CityPage() {
 }
 
 function CityPageContent({ city }: { city: City }) {
-    const { openPlanner } = useTrip()
+    const { openPlanner, savedItemCount } = useTrip()
     const { t, localize } = useTranslation()
     const copy = t.cities.page
     const [categoryFilter, setCategoryFilter] = useState(ALL)
@@ -79,6 +79,11 @@ function CityPageContent({ city }: { city: City }) {
                         disabled={!canPlanTrip}
                     >
                         {copy.planTrip(city.name)}
+                        {savedItemCount > 0 ? (
+                            <span className="trip-count" aria-label={t.trip.savedItemsCount(savedItemCount)}>
+                                {savedItemCount}
+                            </span>
+                        ) : null}
                     </button>
                     <Link to="/" className="inverse-button city-page-back">
                         {t.common.backToHome}

@@ -14,20 +14,27 @@ export type TripPlannerSavedTour = {
     code: string
 }
 
-export type TripPlannerTourOption = {
-    id: string
-    title: string
-    code: string
+export type TripPlannerQuoteSummary = {
+    destination: string
+    availableTourDate: string
+    departureDate: string
+    travelers: number
+    interests: string[]
+    representativeName: string
+    documentType: string
+    documentNumber: string
+    email: string
+    phone: string
+    total: string
 }
 
 type TripPlannerSavedItemsProps = {
     events: TripPlannerSavedEvent[]
     selectedTour?: TripPlannerSavedTour
-    availableTours: TripPlannerTourOption[]
-    selectedPlanId?: string
+    quoteSummary?: TripPlannerQuoteSummary
     isTourSelectionLocked: boolean
     onBrowseEvents: () => void
-    onSelectTour: (planId: string) => void
+    onContinueQuote: () => void
     onRemoveTour: () => void
     onRemoveEvent: (eventId: string) => void
 }
@@ -35,11 +42,10 @@ type TripPlannerSavedItemsProps = {
 export function TripPlannerSavedItems({
     events,
     selectedTour,
-    availableTours,
-    selectedPlanId,
+    quoteSummary,
     isTourSelectionLocked,
     onBrowseEvents,
-    onSelectTour,
+    onContinueQuote,
     onRemoveTour,
     onRemoveEvent,
 }: TripPlannerSavedItemsProps) {
@@ -63,25 +69,6 @@ export function TripPlannerSavedItems({
                 </p>
             ) : null}
 
-            {!isTourSelectionLocked && availableTours.length > 0 ? (
-                <label className="planner-tour-select">
-                    <span>{copy.chooseTour}</span>
-                    <select
-                        value={selectedPlanId ?? ''}
-                        onChange={(event) => {
-                            if (event.target.value) onSelectTour(event.target.value)
-                        }}
-                    >
-                        <option value="" disabled>{copy.selectTour}</option>
-                        {availableTours.map((tour) => (
-                            <option key={tour.id} value={tour.id}>
-                                {tour.title} · {tour.code}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-            ) : null}
-
             {savedItemCount > 0 ? (
                 <ul className="planner-saved-list">
                     {selectedTour ? (
@@ -92,12 +79,72 @@ export function TripPlannerSavedItems({
                                 <span className="planner-saved-tour-code">
                                     {copy.tourCode}: {selectedTour.code}
                                 </span>
+                                {quoteSummary ? (
+                                    <div className="planner-quote-summary">
+                                        <strong>{copy.quoteSummary}</strong>
+                                        <dl>
+                                            <div>
+                                                <dt>{copy.fields.destination}</dt>
+                                                <dd>{quoteSummary.destination}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>{copy.fields.availableTourDate}</dt>
+                                                <dd>{quoteSummary.availableTourDate}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>{copy.fields.departureDate}</dt>
+                                                <dd>{quoteSummary.departureDate}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>{copy.fields.travelers}</dt>
+                                                <dd>{quoteSummary.travelers}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>{copy.fields.interests}</dt>
+                                                <dd>{quoteSummary.interests.join(', ') || '—'}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>{copy.fields.fullName}</dt>
+                                                <dd>{quoteSummary.representativeName}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>{copy.fields.documentType}</dt>
+                                                <dd>{quoteSummary.documentType}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>{copy.fields.documentNumber}</dt>
+                                                <dd>{quoteSummary.documentNumber}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>{copy.fields.email}</dt>
+                                                <dd>{quoteSummary.email}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>{copy.fields.phone}</dt>
+                                                <dd>{quoteSummary.phone}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>{copy.estimatedTotal}</dt>
+                                                <dd>{quoteSummary.total}</dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                ) : null}
                             </div>
-                            {!isTourSelectionLocked ? (
-                                <button type="button" className="text-button" onClick={onRemoveTour}>
-                                    {copy.remove}
+                            <div className="planner-saved-tour-actions">
+                                <button
+                                    type="button"
+                                    className="secondary-button planner-continue-quote"
+                                    onClick={onContinueQuote}
+                                >
+                                    {copy.continueQuote}
                                 </button>
-                            ) : null}
+                                {!isTourSelectionLocked ? (
+                                    <button type="button" className="text-button" onClick={onRemoveTour}>
+                                        {copy.remove}
+                                    </button>
+                                ) : null}
+                            </div>
                         </li>
                     ) : null}
 

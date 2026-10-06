@@ -34,36 +34,15 @@
   font-size: 0.9rem;
 }
 
-.planner-tour-select {
+.planner-continue-quote {
+  white-space: nowrap;
+}
+
+.planner-saved-tour-actions {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-top: 14px;
-}
-
-.planner-tour-select span {
-  color: #bef264;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.planner-tour-select select {
-  width: 100%;
-  padding: 0.8rem 1rem;
-  border: 1px solid rgba(190, 242, 100, 0.38);
-  border-radius: 12px;
-  background: rgba(2, 8, 23, 0.75);
-  color: #f8fafc;
-  font: inherit;
-  color-scheme: dark;
-}
-
-.planner-tour-select select:focus {
-  outline: none;
-  border-color: #bef264;
-  box-shadow: 0 0 0 3px rgba(190, 242, 100, 0.15);
+  align-items: flex-end;
+  gap: 8px;
 }
 
 .planner-saved-list {
@@ -113,6 +92,46 @@
   letter-spacing: 0.06em;
 }
 
+.planner-quote-summary {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(2, 8, 23, 0.42);
+}
+
+.planner-quote-summary > strong {
+  color: #7dd3fc;
+  font-size: 0.78rem;
+}
+
+.planner-quote-summary dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 16px;
+  margin: 8px 0 0;
+}
+
+.planner-quote-summary dl div {
+  min-width: 0;
+}
+
+.planner-quote-summary dt {
+  color: #94a3b8;
+  font-size: 0.72rem;
+}
+
+.planner-quote-summary dd {
+  margin: 2px 0 0;
+  color: #f8fafc;
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.planner-quote-summary dl div:last-child dd {
+  color: #bef264;
+  font-weight: 800;
+}
+
 .planner-saved-list li div {
   display: flex;
   flex-direction: column;
@@ -127,64 +146,49 @@
   color: #94a3b8;
 }
 
-.planner-form {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.form-field {
+.planner-request-panel {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  border: none;
+  gap: 8px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.16);
 }
 
-.form-field-full {
-  grid-column: 1 / -1;
-}
-
-.form-field > span,
-.form-field legend {
-  padding: 0;
-  color: #7dd3fc;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.form-field .chip-group {
-  justify-content: flex-start;
-  margin-top: 8px;
-}
-
-.form-field input,
-.form-field select {
+.planner-request-status,
+.planner-submit-error,
+.planner-request-guidance {
   width: 100%;
-  padding: 0.8rem 1rem;
-  border-radius: 14px;
-  border: 1px solid rgba(148, 163, 184, 0.24);
-  background: rgba(2, 8, 23, 0.6);
-  color: #f8fafc;
-  font: inherit;
-  color-scheme: dark;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
 }
 
-.form-field input:focus,
-.form-field select:focus {
-  outline: none;
-  border-color: rgba(125, 211, 252, 0.6);
-  box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.15);
+.planner-request-status {
+  color: #cbd5e1;
 }
 
-.planner-submit {
-  display: flex;
-  justify-content: flex-end;
+.planner-submit-error {
+  color: #fca5a5;
+}
+
+.planner-request-guidance {
+  color: #94a3b8;
+}
+
+.planner-request-panel .primary-button {
+  align-self: flex-end;
+}
+
+.planner-browse-itineraries {
+  align-self: flex-start;
+  width: fit-content;
+}
+
+.planner-request-panel .primary-button:disabled {
+  opacity: 0.65;
+  cursor: wait;
 }
 
 .planner-success p {
@@ -197,7 +201,19 @@
 }
 
 @media (max-width: 640px) {
-  .planner-form {
+  .planner-browse-itineraries {
+    width: 100%;
+  }
+
+  .planner-continue-quote {
+    padding: 0.7rem 0.9rem;
+  }
+
+  .planner-quote-summary dl {
     grid-template-columns: 1fr;
+  }
+
+  .planner-request-panel .primary-button {
+    width: 100%;
   }
 }

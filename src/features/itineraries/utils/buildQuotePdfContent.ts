@@ -15,6 +15,7 @@ type BuildQuotePdfContentOptions = {
     labels: QuotePdfContent['labels']
     breakdown: CostBreakdown
     customer: QuoteCustomerDetails
+    tripDetails: QuotePdfContent['tripDetails']
 }
 
 export function buildQuotePdfContent({
@@ -26,13 +27,18 @@ export function buildQuotePdfContent({
     labels,
     breakdown,
     customer,
+    tripDetails,
 }: BuildQuotePdfContentOptions): QuotePdfContent {
     return {
         customer: {
             fullName: customer.fullName.trim(),
+            documentType: labels.documentTypes[customer.documentType],
+            documentNumber: customer.documentNumber.trim(),
             email: customer.email.trim(),
+            phoneCountryCode: customer.phoneCountryCode,
             phone: customer.phone.trim(),
         },
+        tripDetails,
         planName: localize(plan.name),
         summary: localize(plan.summary),
         days: plan.days.map((day) => ({
@@ -47,8 +53,10 @@ export function buildQuotePdfContent({
         costs: breakdown.groups.map((group) => ({
             label: categories[group.category],
             value: formatCop(group.subtotal, locale),
+            groupValue: formatCop(group.subtotal * tripDetails.travelers, locale),
         })),
         total: formatCop(breakdown.total, locale),
+        groupTotal: formatCop(breakdown.total * tripDetails.travelers, locale),
         disclaimer,
         labels,
     }

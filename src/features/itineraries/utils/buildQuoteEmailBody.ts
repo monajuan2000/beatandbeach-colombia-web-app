@@ -19,7 +19,17 @@ export function buildQuoteEmailBody(quote: QuotePdfContent, contactMessage = '',
         `${quote.labels.day(index + 1)} - ${day.title}`,
         day.stops.map((stop) => `  ${stop.time}  ${stop.title}${stop.description ? ` — ${stop.description}` : ''}${stop.isTentative ? ` (${quote.labels.tentative})` : ''}`).join(`\n  ${divider}\n`),
     ].join('\n')).join('\n\n')
-    const costsText = quote.costs.map((cost) => `${cost.label}: ${cost.value}`).join('\n')
+    const costsText = quote.costs.map((cost) =>
+        `${cost.label} — ${quote.labels.perPerson}: ${cost.value}; ${quote.labels.groupAmount}: ${cost.groupValue}`,
+    ).join('\n')
+    const tripDetailsRows = [
+        `${quote.labels.destination}: ${quote.tripDetails.destination}`,
+        `${quote.labels.availableTourDate}: ${quote.tripDetails.availableTourDate}`,
+        `${quote.labels.departureDate}: ${quote.tripDetails.departureDate}`,
+        `${quote.labels.travelers}: ${quote.tripDetails.travelers}`,
+        `${quote.labels.interests}: ${quote.tripDetails.interests.join(', ') || quote.labels.noneSelected}`,
+    ]
+    const tripDetailsText = [quote.labels.tripDetails, ...tripDetailsRows].join('\n')
     const text = [
         quote.labels.brandName,
         quote.labels.tagline,
@@ -30,12 +40,16 @@ export function buildQuoteEmailBody(quote: QuotePdfContent, contactMessage = '',
         divider,
         quote.labels.customerDetails,
         `${quote.labels.customerName}: ${quote.customer.fullName}`,
+        `${quote.labels.customerDocumentType}: ${quote.customer.documentType}`,
+        `${quote.labels.customerDocumentNumber}: ${quote.customer.documentNumber}`,
         `${quote.labels.customerEmail}: ${quote.customer.email}`,
-        `${quote.labels.customerPhone}: ${quote.customer.phone}`,
+        `${quote.labels.customerPhone}: +${quote.customer.phoneCountryCode} ${quote.customer.phone}`,
         divider,
         quote.labels.selectedPlan,
         quote.planName,
         quote.summary,
+        '',
+        tripDetailsText,
         '',
         quote.labels.itinerary,
         daysText,
@@ -44,6 +58,7 @@ export function buildQuoteEmailBody(quote: QuotePdfContent, contactMessage = '',
         costsText,
         divider,
         `${quote.labels.total}: ${quote.total}`,
+        `${quote.labels.groupTotal(quote.tripDetails.travelers)}: ${quote.groupTotal}`,
         '',
         quote.labels.closing,
         quote.disclaimer,
@@ -68,7 +83,16 @@ export function buildQuoteEmailBody(quote: QuotePdfContent, contactMessage = '',
 
     const costRows = quote.costs.map((cost) => `
         <tr><td style="padding:8px 10px;border-bottom:1px solid #dfe8e6;color:#52666f;font-size:14px">${escapeHtml(cost.label)}</td>
-        <td style="padding:8px 10px;border-bottom:1px solid #dfe8e6;text-align:right;color:#0d263b;font-size:14px"><strong>${escapeHtml(cost.value)}</strong></td></tr>`).join('')
+        <td style="padding:8px 10px;border-bottom:1px solid #dfe8e6;text-align:right;color:#0d263b;font-size:12px">
+            ${escapeHtml(quote.labels.perPerson)}: <strong>${escapeHtml(cost.value)}</strong><br>
+            ${escapeHtml(quote.labels.groupAmount)}: <strong>${escapeHtml(cost.groupValue)}</strong>
+        </td></tr>`).join('')
+    const tripDetailsHtml = `<table role="presentation" width="100%" style="width:100%;margin:0 0 20px;border-collapse:collapse;background:#fff">
+        <tr><td style="padding:12px 16px;border-left:3px solid #08848a">
+            <p style="margin:0 0 8px;color:#08848a;font-size:11px;font-weight:bold">${escapeHtml(quote.labels.tripDetails)}</p>
+            ${tripDetailsRows.map((row) => `<p style="margin:0 0 4px;color:#263b46;font-size:13px">${escapeHtml(row)}</p>`).join('')}
+        </td></tr>
+    </table>`
     const contactSection = contactMessage
         ? `<table role="presentation" width="100%" style="width:100%;margin-top:16px;border-collapse:collapse;background:#fff"><tr><td style="padding:16px;color:#52666f;font-size:13px;line-height:1.6">${escapeHtml(contactMessage).replace(/\n/g, '<br>')}</td></tr></table>`
         : ''
@@ -92,8 +116,10 @@ export function buildQuoteEmailBody(quote: QuotePdfContent, contactMessage = '',
                         <tr><td style="padding:12px 16px;border-left:3px solid #08848a">
                             <p style="margin:0 0 8px;color:#08848a;font-size:11px;font-weight:bold">${escapeHtml(quote.labels.customerDetails)}</p>
                             <p style="margin:0 0 4px;color:#263b46;font-size:13px"><strong>${escapeHtml(quote.labels.customerName)}:</strong> ${escapeHtml(quote.customer.fullName)}</p>
+                            <p style="margin:0 0 4px;color:#263b46;font-size:13px"><strong>${escapeHtml(quote.labels.customerDocumentType)}:</strong> ${escapeHtml(quote.customer.documentType)}</p>
+                            <p style="margin:0 0 4px;color:#263b46;font-size:13px"><strong>${escapeHtml(quote.labels.customerDocumentNumber)}:</strong> ${escapeHtml(quote.customer.documentNumber)}</p>
                             <p style="margin:0 0 4px;color:#263b46;font-size:13px"><strong>${escapeHtml(quote.labels.customerEmail)}:</strong> ${escapeHtml(quote.customer.email)}</p>
-                            <p style="margin:0;color:#263b46;font-size:13px"><strong>${escapeHtml(quote.labels.customerPhone)}:</strong> ${escapeHtml(quote.customer.phone)}</p>
+                            <p style="margin:0;color:#263b46;font-size:13px"><strong>${escapeHtml(quote.labels.customerPhone)}:</strong> +${escapeHtml(quote.customer.phoneCountryCode)} ${escapeHtml(quote.customer.phone)}</p>
                         </td></tr>
                     </table>
                     <table role="presentation" width="100%" style="width:100%;margin:0 0 20px;border-collapse:collapse;background:#fff">
@@ -103,13 +129,16 @@ export function buildQuoteEmailBody(quote: QuotePdfContent, contactMessage = '',
                             <p style="margin:0;color:#52666f;font-size:13px;line-height:1.5">${escapeHtml(quote.summary)}</p>
                         </td></tr>
                     </table>
+                    ${tripDetailsHtml}
                     <h2 style="margin:0 0 10px;color:#0d263b;font-size:18px">${escapeHtml(quote.labels.itinerary)}</h2>
                     ${daySections}
                     <h2 style="margin:22px 0 10px;color:#0d263b;font-size:18px">${escapeHtml(quote.labels.costSummary)}</h2>
                     <table role="presentation" width="100%" style="width:100%;border-collapse:collapse;background:#fff">${costRows}</table>
                     <table role="presentation" width="100%" style="width:100%;margin-top:8px;border-collapse:collapse;background:#0d263b;border-radius:6px">
-                        <tr><td style="padding:12px;color:#fff;font-size:14px;font-weight:bold">${escapeHtml(quote.labels.total)}</td>
-                        <td style="padding:12px;text-align:right;color:#9de8df;font-size:18px;font-weight:bold">${escapeHtml(quote.total)}</td></tr>
+                        <tr><td style="padding:8px 12px;color:#fff;font-size:13px;font-weight:bold">${escapeHtml(quote.labels.total)}</td>
+                        <td style="padding:8px 12px;text-align:right;color:#9de8df;font-size:15px;font-weight:bold">${escapeHtml(quote.total)}</td></tr>
+                        <tr><td style="padding:8px 12px;color:#fff;font-size:13px;font-weight:bold">${escapeHtml(quote.labels.groupTotal(quote.tripDetails.travelers))}</td>
+                        <td style="padding:8px 12px;text-align:right;color:#9de8df;font-size:15px;font-weight:bold">${escapeHtml(quote.groupTotal)}</td></tr>
                     </table>
                     <table role="presentation" width="100%" style="width:100%;margin-top:16px;border-collapse:collapse;background:#fff">
                         <tr><td align="center" style="padding:14px 16px 6px;color:#52666f;font-size:13px;line-height:1.5">${escapeHtml(quote.labels.closing)}</td></tr>

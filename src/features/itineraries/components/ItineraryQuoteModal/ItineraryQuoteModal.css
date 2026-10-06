@@ -63,6 +63,80 @@
   line-height: 1.6;
 }
 
+.itinerary-quote-trip-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 18px 20px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.52);
+}
+
+.itinerary-quote-trip-details>div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.itinerary-quote-trip-details dt {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+.itinerary-quote-trip-details dd {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.itinerary-quote-travelers,
+.itinerary-quote-interests {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.itinerary-quote-travelers span,
+.itinerary-quote-interests legend {
+  padding: 0;
+  color: #7dd3fc;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.itinerary-quote-travelers input {
+  width: 100%;
+  max-width: 220px;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 14px;
+  background: rgba(2, 8, 23, 0.6);
+  color: #f8fafc;
+  font: inherit;
+  color-scheme: dark;
+}
+
+.itinerary-quote-travelers input:focus {
+  outline: none;
+  border-color: rgba(125, 211, 252, 0.6);
+  box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.15);
+}
+
+.itinerary-quote-interests .chip-group {
+  justify-content: flex-start;
+  margin-top: 0;
+}
+
 .itinerary-quote-section {
   display: flex;
   flex-direction: column;
@@ -175,6 +249,21 @@
   flex-direction: column;
 }
 
+.itinerary-quote-cost-headings {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) repeat(2, minmax(95px, 1fr));
+  gap: 12px;
+  color: #6ee7b7;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.itinerary-quote-cost-headings span:first-child {
+  text-align: left;
+}
+
 .itinerary-quote-cost-item,
 .itinerary-quote-total {
   display: flex;
@@ -185,13 +274,28 @@
 }
 
 .itinerary-quote-cost-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   padding: 12px 0;
   border-bottom: 1px solid rgba(148, 163, 184, 0.14);
 }
 
-.itinerary-quote-cost-item strong {
+.itinerary-quote-cost-values {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(95px, 1fr));
+  gap: 12px;
+  text-align: right;
+}
+
+.itinerary-quote-cost-values strong {
   color: #f8fafc;
   font-variant-numeric: tabular-nums;
+}
+
+.itinerary-quote-total-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .itinerary-quote-total {
@@ -207,6 +311,11 @@
   color: #082032;
   font-size: 1.15rem;
   font-variant-numeric: tabular-nums;
+}
+
+.itinerary-quote-total-list .itinerary-quote-total + .itinerary-quote-total {
+  margin-top: 0;
+  background: linear-gradient(105deg, #7dd3fc, #a7f3d0);
 }
 
 .itinerary-quote-actions {
@@ -228,6 +337,29 @@
 .itinerary-quote-email-row button {
   width: 100%;
   min-height: 48px;
+}
+
+.itinerary-quote-save-main-event {
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid rgba(190, 242, 100, 0.52);
+  border-radius: 8px;
+  background: linear-gradient(110deg, #bef264, #86efac);
+  color: #14230a;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.itinerary-quote-save-main-event:hover:not(:disabled) {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.itinerary-quote-save-main-event:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .itinerary-quote-download-error {
@@ -322,7 +454,7 @@
 
 .itinerary-quote-customer-fields {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -336,7 +468,8 @@
   font-weight: 700;
 }
 
-.itinerary-quote-customer-fields input {
+.itinerary-quote-customer-fields input,
+.itinerary-quote-customer-fields select {
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
@@ -349,10 +482,55 @@
   font: inherit;
 }
 
-.itinerary-quote-customer-fields input:focus-visible {
+.itinerary-quote-phone-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.itinerary-quote-phone-field>label {
+  color: var(--color-text-subtle);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.itinerary-quote-phone-input {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(240px, 1fr);
+  gap: 6px;
+}
+
+.itinerary-quote-phone-input select {
+  min-width: 0;
+}
+
+.itinerary-quote-phone-input input {
+  min-width: 0;
+}
+
+.itinerary-quote-customer-fields select {
+  color-scheme: dark;
+}
+
+.itinerary-quote-customer-fields input:focus-visible,
+.itinerary-quote-customer-fields select:focus-visible {
   outline: none;
   border-color: #6ee7b7;
   box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.14);
+}
+
+.itinerary-quote-customer-fields [aria-invalid='true'] {
+  border-color: #f87171;
+}
+
+.itinerary-quote-validation-alert {
+  padding: 10px 12px;
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  border-radius: 6px;
+  background: rgba(127, 29, 29, 0.2);
+  color: #fecaca !important;
 }
 
 .itinerary-quote-email-form>p {
@@ -392,6 +570,10 @@
 
   .itinerary-quote-customer-fields {
     grid-template-columns: 1fr;
+  }
+
+  .itinerary-quote-phone-input {
+    grid-template-columns: minmax(125px, 0.8fr) minmax(130px, 1fr);
   }
 
   .itinerary-quote-email-form {

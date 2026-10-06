@@ -1,4 +1,5 @@
 import brandLogoData from '@/assets/images/brand/beat-and-beach-logo.png?inline'
+import type { TripDocumentType } from '@/features/trip/types'
 
 type QuotePdfStop = {
     time: string
@@ -9,17 +10,29 @@ type QuotePdfStop = {
 
 export type QuoteCustomerDetails = {
     fullName: string
+    documentType: TripDocumentType
+    documentNumber: string
     email: string
+    phoneCountryIso: string
+    phoneCountryCode: string
     phone: string
 }
 
 export type QuotePdfContent = {
-    customer: QuoteCustomerDetails
+    customer: Omit<QuoteCustomerDetails, 'documentType' | 'phoneCountryIso'> & { documentType: string }
+    tripDetails: {
+        destination: string
+        availableTourDate: string
+        departureDate: string
+        travelers: number
+        interests: string[]
+    }
     planName: string
     summary: string
     days: { title: string; stops: QuotePdfStop[] }[]
-    costs: { label: string; value: string }[]
+    costs: { label: string; value: string; groupValue: string }[]
     total: string
+    groupTotal: string
     disclaimer: string
     labels: {
         tagline: string
@@ -28,14 +41,28 @@ export type QuotePdfContent = {
         intro: string
         customerDetails: string
         customerName: string
+        customerDocumentType: string
+        customerDocumentNumber: string
+        documentTypes: Record<TripDocumentType, string>
         customerEmail: string
         customerPhone: string
+        tripDetails: string
+        destination: string
+        availableTourDate: string
+        departureDate: string
+        travelers: string
+        interests: string
+        launching: string
+        noneSelected: string
         selectedPlan: string
         itinerary: string
         day: (day: number) => string
         tentative: string
         costSummary: string
+        perPerson: string
+        groupAmount: string
         total: string
+        groupTotal: (travelers: number) => string
         closing: string
         brandName: string
         contactDetails: string
@@ -151,8 +178,10 @@ export async function createQuotePdfFile(quote: QuotePdfContent, fileName: strin
 
     const customerRows = [
         `${quote.labels.customerName}: ${quote.customer.fullName}`,
+        `${quote.labels.customerDocumentType}: ${quote.customer.documentType}`,
+        `${quote.labels.customerDocumentNumber}: ${quote.customer.documentNumber}`,
         `${quote.labels.customerEmail}: ${quote.customer.email}`,
-        `${quote.labels.customerPhone}: ${quote.customer.phone}`,
+        `${quote.labels.customerPhone}: +${quote.customer.phoneCountryCode} ${quote.customer.phone}`,
     ]
     const customerRowLines = customerRows.map((row) => linesFor(row, CONTENT_WIDTH - 14, 8))
     const customerCardHeight = 11 + customerRowLines.reduce((height, lines) => height + lines.length * 3.5 + 1, 0)
@@ -196,6 +225,32 @@ export async function createQuotePdfFile(quote: QuotePdfContent, fileName: strin
     setTextColor(COLORS.muted)
     pdf.text(summaryLines, MARGIN + 7, planTextY)
     y += planCardHeight + 8
+
+    const tripDetailRows = [
+        `${quote.labels.destination}: ${quote.tripDetails.destination}`,
+        `${quote.labels.availableTourDate}: ${quote.tripDetails.availableTourDate}`,
+        `${quote.labels.departureDate}: ${quote.tripDetails.departureDate}`,
+        `${quote.labels.travelers}: ${quote.tripDetails.travelers}`,
+        `${quote.labels.interests}: ${quote.tripDetails.interests.join(', ') || quote.labels.noneSelected}`,
+    ]
+    const tripDetailLines = tripDetailRows.map((row) => linesFor(row, CONTENT_WIDTH - 14, 8))
+    const tripDetailsCardHeight = 11 + tripDetailLines.reduce((height, lines) => height + lines.length * 3.5 + 1, 0)
+    ensureSpace(tripDetailsCardHeight + 8)
+    setFillColor(COLORS.white)
+    pdf.roundedRect(MARGIN, y, CONTENT_WIDTH, tripDetailsCardHeight, 2, 2, 'F')
+    pdf.setFont('helvetica', 'bold')
+    pdf.setFontSize(7)
+    setTextColor(COLORS.teal)
+    pdf.text(quote.labels.tripDetails, MARGIN + 7, y + 6)
+    let tripDetailsTextY = y + 11
+    tripDetailLines.forEach((lines) => {
+        pdf.setFont('helvetica', 'normal')
+        pdf.setFontSize(8)
+        setTextColor(COLORS.ink)
+        pdf.text(lines, MARGIN + 7, tripDetailsTextY)
+        tripDetailsTextY += lines.length * 3.5 + 1
+    })
+    y += tripDetailsCardHeight + 8
 
     ensureSpace(14)
     pdf.setFont('helvetica', 'bold')
@@ -263,33 +318,44 @@ export async function createQuotePdfFile(quote: QuotePdfContent, fileName: strin
     pdf.text(quote.labels.costSummary, MARGIN, y)
     y += 7
 
+    ensureSpace(12)
+    pdf.setFont('helvetica', 'bold')
+    pdf.setFontSize(7)
+    setTextColor(COLORS.teal)
+    pdf.text(quote.labels.perPerson, 147, y, { align: 'right' })
+    pdf.text(quote.labels.groupAmount, PAGE_WIDTH - MARGIN - 4, y, { align: 'right' })
+    y += 3
+
     quote.costs.forEach((cost) => {
-        ensureSpace(9)
+        ensureSpace(10)
         setFillColor(COLORS.white)
-        pdf.rect(MARGIN, y, CONTENT_WIDTH, 8, 'F')
+        pdf.rect(MARGIN, y, CONTENT_WIDTH, 9, 'F')
         pdf.setFont('helvetica', 'normal')
         pdf.setFontSize(9)
         setTextColor(COLORS.muted)
-        pdf.text(cost.label, MARGIN + 4, y + 5.3)
+        pdf.text(linesFor(cost.label, 72, 9), MARGIN + 4, y + 5.3)
         pdf.setFont('helvetica', 'bold')
         setTextColor(COLORS.navy)
-        pdf.text(cost.value, PAGE_WIDTH - MARGIN - 4, y + 5.3, { align: 'right' })
+        pdf.text(cost.value, 147, y + 5.8, { align: 'right' })
+        pdf.text(cost.groupValue, PAGE_WIDTH - MARGIN - 4, y + 5.8, { align: 'right' })
         setDrawColor(COLORS.line)
-        pdf.line(MARGIN, y + 8, PAGE_WIDTH - MARGIN, y + 8)
-        y += 8
+        pdf.line(MARGIN, y + 9, PAGE_WIDTH - MARGIN, y + 9)
+        y += 9
     })
 
-    ensureSpace(14)
+    ensureSpace(21)
     setFillColor(COLORS.navy)
-    pdf.roundedRect(MARGIN, y, CONTENT_WIDTH, 12, 1.5, 1.5, 'F')
+    pdf.roundedRect(MARGIN, y, CONTENT_WIDTH, 19, 1.5, 1.5, 'F')
     pdf.setFont('helvetica', 'bold')
-    pdf.setFontSize(10)
+    pdf.setFontSize(8)
     setTextColor(COLORS.white)
-    pdf.text(quote.labels.total, MARGIN + 4, y + 7.5)
+    pdf.text(quote.labels.total, MARGIN + 4, y + 7)
+    pdf.text(quote.labels.groupTotal(quote.tripDetails.travelers), MARGIN + 4, y + 14)
     setTextColor(COLORS.mint)
-    pdf.setFontSize(13)
-    pdf.text(quote.total, PAGE_WIDTH - MARGIN - 4, y + 7.8, { align: 'right' })
-    y += 17
+    pdf.setFontSize(10)
+    pdf.text(quote.total, PAGE_WIDTH - MARGIN - 4, y + 7, { align: 'right' })
+    pdf.text(quote.groupTotal, PAGE_WIDTH - MARGIN - 4, y + 14, { align: 'right' })
+    y += 24
 
     const disclaimerLines = linesFor(quote.disclaimer, CONTENT_WIDTH - 8, 7)
     const footerLines = linesFor(quote.labels.closing, CONTENT_WIDTH - 8, 8)

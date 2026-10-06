@@ -13,10 +13,18 @@ type ItineraryCostSummaryProps = {
     plan: ItineraryPlan
     catalog: CityItineraries
     cityId: string
+    shouldOpenQuote?: boolean
+    onQuoteClosed?: () => void
 }
 
 /** Shows a plan's cost breakdown and opens quote actions when the plan supports them. */
-export function ItineraryCostSummary({ plan, catalog, cityId }: ItineraryCostSummaryProps) {
+export function ItineraryCostSummary({
+    plan,
+    catalog,
+    cityId,
+    shouldOpenQuote = false,
+    onQuoteClosed,
+}: ItineraryCostSummaryProps) {
     const { openPlanner } = useTrip()
     const { t, localize, locale } = useTranslation()
     const copy = t.itineraries.costs
@@ -53,14 +61,16 @@ export function ItineraryCostSummary({ plan, catalog, cityId }: ItineraryCostSum
                     <strong>{formatCop(breakdown.total, locale)}</strong>
                 </div>
 
-                <button
-                    type="button"
-                    className="primary-button"
-                    onClick={() => openPlanner(cityId, canQuotePlan ? plan.id : undefined)}
-                    disabled={planUnderReview || !isTripPlannerAvailable(cityId)}
-                >
-                    {canQuotePlan ? copy.registerTour : t.common.header.planTrip}
-                </button>
+                {!canQuotePlan ? (
+                    <button
+                        type="button"
+                        className="primary-button"
+                        onClick={() => openPlanner(cityId)}
+                        disabled={planUnderReview || !isTripPlannerAvailable(cityId)}
+                    >
+                        {t.common.header.planTrip}
+                    </button>
+                ) : null}
 
                 {isQuoteCity ? (
                     <div className="itinerary-cost-actions">
@@ -83,8 +93,12 @@ export function ItineraryCostSummary({ plan, catalog, cityId }: ItineraryCostSum
                 <ItineraryQuoteModal
                     plan={plan}
                     breakdown={breakdown}
-                    isOpen={isQuoteModalOpen}
-                    onClose={() => setIsQuoteModalOpen(false)}
+                    cityId={cityId}
+                    isOpen={isQuoteModalOpen || shouldOpenQuote}
+                    onClose={() => {
+                        setIsQuoteModalOpen(false)
+                        onQuoteClosed?.()
+                    }}
                 />
             ) : null}
         </>

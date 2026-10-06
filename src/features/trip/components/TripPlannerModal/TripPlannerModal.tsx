@@ -6,19 +6,19 @@ import { getEventById } from '@/features/events/data/events'
 import type { EventItem } from '@/features/events/types'
 import { isQuoteablePlan } from '@/features/itineraries/config'
 import { getItinerariesForCity } from '@/features/itineraries/data/itineraries'
+import { getPlanCostBreakdown } from '@/features/itineraries/utils/planCosts'
 import { useTranslation } from '@/i18n/context/LanguageContext'
+import { formatCop } from '@/utils/currency'
+import { sendTripRequestEmail } from '../../services/sendTripRequest'
 import { useTrip } from '../../context/TripContext'
-import { TRIP_PLANNER_CONFIG } from '../../config'
-import type { TripPlannerFormValues } from '../../types'
-import { getAvailableTourDates, getTodayDateInputValue } from '../../utils/tripDates'
-import { TripPlannerRequestForm } from './TripPlannerRequestForm'
 import {
     TripPlannerSavedItems,
     type TripPlannerSavedEvent,
+    type TripPlannerQuoteSummary,
     type TripPlannerSavedTour,
-    type TripPlannerTourOption,
 } from './TripPlannerSavedItems'
 import { TripPlannerSuccess } from './TripPlannerSuccess'
+import { formatTourOptionDate, formatTripDate } from '../../utils/tripDates'
 import './TripPlannerModal.css'
 
 export function TripPlannerModal() {
@@ -38,22 +38,20 @@ export function TripPlannerModal() {
     )
 }
 
-// Lives inside the Modal so its form state resets every time the planner is reopened.
 function TripPlannerContent() {
     const navigate = useNavigate()
     const {
         savedEventIds,
         toggleSavedEvent,
         plannerCityId,
-        plannerPlanId,
         savedTour,
+        quoteDetails,
+        plannerPlanId,
         clearSavedTour,
-        selectSavedTour,
         closePlanner,
     } = useTrip()
-    const { t, localize } = useTranslation()
+    const { t, localize, locale } = useTranslation()
     const copy = t.trip
-    const selectableTourCityId = plannerCityId ?? TRIP_PLANNER_CONFIG.defaultCityId
 
     const savedEvents = useMemo(
         () => savedEventIds
@@ -65,12 +63,10 @@ function TripPlannerContent() {
         if (!savedTour || !isQuoteablePlan(savedTour.cityId, savedTour.planId)) return undefined
         return getItinerariesForCity(savedTour.cityId)?.plans.find((plan) => plan.id === savedTour.planId)
     }, [savedTour])
-    const availableTourDates = useMemo(() => getAvailableTourDates(), [])
-    const selectableTours = useMemo(
-        () => (getItinerariesForCity(selectableTourCityId)?.plans ?? [])
-            .filter((plan) => isQuoteablePlan(selectableTourCityId, plan.id)),
-        [selectableTourCityId],
-    )
+    const matchingTripDetails = quoteDetails && quoteDetails.cityId === savedTour?.cityId
+        && quoteDetails.planId === selectedTour?.id
+        ? quoteDetails
+        : undefined
     const savedEventItems = useMemo<TripPlannerSavedEvent[]>(() => savedEvents.map((event) => ({
         id: event.id,
         title: localize(event.title),
@@ -86,33 +82,87 @@ function TripPlannerContent() {
             code: selectedTour.code,
         }
     }, [localize, savedTour, selectedTour])
-    const availableTourOptions = useMemo<TripPlannerTourOption[]>(() => selectableTours.map((tour) => ({
-        id: tour.id,
-        title: localize(tour.name),
-        code: tour.code,
-    })), [localize, selectableTours])
+    const quoteSummary = useMemo<TripPlannerQuoteSummary | undefined>(() => {
+        if (!matchingTripDetails || !savedTour || !selectedTour) return undefined
+        const city = getCityById(savedTour.cityId)
+        const catalog = getItinerariesForCity(savedTour.cityId)
+        if (!city || !catalog) return undefined
 
-    const [formValues, setFormValues] = useState<TripPlannerFormValues>(() => ({
-        cityId: plannerCityId ?? TRIP_PLANNER_CONFIG.defaultCityId,
-        arrivalDate: selectedTour ? availableTourDates[0] ?? '' : '',
-        departureDate: selectedTour ? availableTourDates[0] ?? '' : '',
-        travelers: 2,
-        interests: [],
-        name: '',
-        email: '',
-    }))
+        return {
+            destination: `${city.name} · ${t.cities.status.labels[city.status]}`,
+            availableTourDate: formatTourOptionDate(matchingTripDetails.departureDate, locale),
+            departureDate: matchingTripDetails.departureDate.split('-').reverse().join('/'),
+            travelers: matchingTripDetails.travelers,
+            interests: matchingTripDetails.interests.map((interest) => copy.interests[interest]),
+            representativeName: matchingTripDetails.name,
+            documentType: copy.documentTypes[matchingTripDetails.documentType],
+            documentNumber: matchingTripDetails.documentNumber,
+            email: matchingTripDetails.email,
+            phone: `+${matchingTripDetails.phoneCountryCode} ${matchingTripDetails.phone}`,
+            total: formatCop(getPlanCostBreakdown(selectedTour, catalog).total * matchingTripDetails.travelers, locale),
+        }
+    }, [copy.documentTypes, copy.interests, locale, matchingTripDetails, savedTour, selectedTour, t.cities.status.labels])
     const [submitted, setSubmitted] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [submitError, setSubmitError] = useState('')
+    const [requestReference, setRequestReference] = useState('')
 
-    const selectedCity = getCityById(formValues.cityId)
-    const savedItemCount = savedEvents.length + Number(Boolean(selectedTour))
-    const todayDate = getTodayDateInputValue()
+    const selectedCity = getCityById(matchingTripDetails?.cityId ?? savedTour?.cityId)
+    const canRequestAvailability = Boolean(
+        matchingTripDetails?.departureDate
+        && matchingTripDetails.name.trim()
+        && matchingTripDetails.email.trim()
+        && matchingTripDetails.phone.trim()
+        && matchingTripDetails.phoneCountryCode
+        && selectedTour
+        && selectedTourItem,
+    )
 
-    const updateFormValues = (changes: Partial<TripPlannerFormValues>) => {
-        setFormValues((current) => ({ ...current, ...changes }))
-    }
+    const handleSubmit = async () => {
+        if (isSubmitting || !matchingTripDetails || !selectedTour || !savedTour || !selectedTourItem) return
+        setIsSubmitting(true)
+        setSubmitError('')
 
-    const handleSubmit = () => {
-        setSubmitted(true)
+        const reference = `BBC-${new Date().toISOString().slice(0, 10).replaceAll('-', '')}-${crypto.randomUUID().slice(0, 8).toUpperCase()}`
+        const emailCopy = copy.requestEmail
+        const catalog = getItinerariesForCity(savedTour.cityId)
+        const groupTotal = catalog
+            ? formatCop(getPlanCostBreakdown(selectedTour, catalog).total * matchingTripDetails.travelers, locale)
+            : '—'
+        const departureDate = formatTripDate(matchingTripDetails.departureDate, locale)
+        const message = [
+            `${emailCopy.reference}: ${reference}`,
+            `${emailCopy.destination}: ${selectedCity?.name ?? savedTour.cityId}`,
+            `${emailCopy.arrivalDate}: ${departureDate}`,
+            `${emailCopy.departureDate}: ${departureDate}`,
+            `${emailCopy.travelers}: ${matchingTripDetails.travelers}`,
+            `${emailCopy.interests}: ${matchingTripDetails.interests.map((interest) => copy.interests[interest]).join(', ') || '—'}`,
+            `${emailCopy.selectedTour}: ${selectedTourItem.title}`,
+            `${emailCopy.tourCode}: ${selectedTourItem.code}`,
+            `${emailCopy.estimatedGroupTotal}: ${groupTotal}`,
+            `${emailCopy.savedEvents}: ${savedEventItems.map((event) => `${event.title} (${event.cityName}, ${event.date})`).join('; ') || '—'}`,
+            '',
+            `${emailCopy.contact}: ${matchingTripDetails.name}`,
+            `${emailCopy.email}: ${matchingTripDetails.email}`,
+            `${emailCopy.phone}: +${matchingTripDetails.phoneCountryCode} ${matchingTripDetails.phone}`,
+            '',
+            emailCopy.pendingAvailability,
+        ].join('\n')
+
+        try {
+            await sendTripRequestEmail({
+                reference,
+                customerName: matchingTripDetails.name,
+                customerEmail: matchingTripDetails.email,
+                message,
+            })
+            setRequestReference(reference)
+            setSubmitted(true)
+        } catch {
+            setSubmitError(copy.submitError)
+        } finally {
+            setIsSubmitting(false)
+        }
     }
 
     const browseEvents = () => {
@@ -120,26 +170,26 @@ function TripPlannerContent() {
         navigate('/', { state: { scrollTo: 'events' } })
     }
 
-    const handleSelectTour = (planId: string) => {
-        selectSavedTour(selectableTourCityId, planId)
-        const firstAvailableDate = availableTourDates[0] ?? ''
-        updateFormValues({ arrivalDate: firstAvailableDate, departureDate: firstAvailableDate })
+    const browseItineraries = () => {
+        const cityId = savedTour?.cityId ?? plannerCityId
+        if (!cityId) return
+        closePlanner()
+        navigate(`/cities/${cityId}`, {
+            state: { openItineraries: true, itineraryRequestId: crypto.randomUUID() },
+        })
     }
 
-    if (submitted) {
+    const continueToQuote = () => {
+        if (!savedTour || !isQuoteablePlan(savedTour.cityId, savedTour.planId)) return
+        closePlanner()
+        navigate(`/cities/${savedTour.cityId}`, { state: { openQuotePlanId: savedTour.planId } })
+    }
+
+    if (submitted && matchingTripDetails) {
         return (
             <TripPlannerSuccess
-                firstName={formValues.name.trim().split(/\s+/)[0] ?? ''}
-                email={formValues.email}
-                summary={{
-                    city: selectedCity?.name ?? '',
-                    travelers: formValues.travelers,
-                    arrivalDate: formValues.arrivalDate,
-                    departureDate: formValues.departureDate,
-                    savedCount: savedItemCount,
-                }}
+                requestReference={requestReference}
                 onDone={closePlanner}
-                onEdit={() => setSubmitted(false)}
             />
         )
     }
@@ -153,23 +203,38 @@ function TripPlannerContent() {
             <TripPlannerSavedItems
                 events={savedEventItems}
                 selectedTour={selectedTourItem}
-                availableTours={availableTourOptions}
-                selectedPlanId={savedTour?.planId}
+                quoteSummary={quoteSummary}
                 isTourSelectionLocked={Boolean(plannerPlanId)}
                 onBrowseEvents={browseEvents}
-                onSelectTour={handleSelectTour}
+                onContinueQuote={continueToQuote}
                 onRemoveTour={clearSavedTour}
                 onRemoveEvent={toggleSavedEvent}
             />
 
-            <TripPlannerRequestForm
-                values={formValues}
-                isTourSelected={Boolean(selectedTour)}
-                availableTourDates={availableTourDates}
-                minimumDate={todayDate}
-                onChange={updateFormValues}
-                onSubmit={handleSubmit}
-            />
+            <div className="planner-request-panel">
+                <p className="planner-request-status">{copy.requestStatusNotice}</p>
+                {!canRequestAvailability ? (
+                    <p className="planner-request-guidance">{copy.quoteRequiredNotice}</p>
+                ) : null}
+                <button
+                    type="button"
+                    className="primary-button small-button planner-browse-itineraries"
+                    onClick={browseItineraries}
+                >
+                    {copy.browseItineraries}
+                </button>
+                {submitError ? <p className="planner-submit-error" role="alert">{submitError}</p> : null}
+                {canRequestAvailability ? (
+                    <button
+                        type="button"
+                        className="primary-button"
+                        onClick={() => void handleSubmit()}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? copy.submitting : copy.submit}
+                    </button>
+                ) : null}
+            </div>
         </div>
     )
 }

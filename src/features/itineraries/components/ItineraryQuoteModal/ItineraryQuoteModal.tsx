@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { BUSINESS_EMAIL, INSTAGRAM_PROFILE_URL, WHATSAPP_BUSINESS_PHONE } from '@/config/externalLinks'
+import { getCityById } from '@/features/cities/data/cities'
 import { useTranslation } from '@/i18n/context/LanguageContext'
+import { useTrip } from '@/features/trip/context/TripContext'
+import { getAvailableTourDates, formatTourOptionDate } from '@/features/trip/utils/tripDates'
 import { formatCalendarDate } from '@/utils/date'
 import type { ItineraryPlan } from '../../types'
 import { openWhatsAppQuoteChat } from '../../utils/openWhatsAppQuoteChat'
@@ -13,6 +16,7 @@ import {
     type QuotePdfContent,
 } from '../../utils/downloadQuotePdf'
 import { buildQuotePdfContent } from '../../utils/buildQuotePdfContent'
+import { validateQuoteCustomerDetails } from '../../utils/quoteCustomerValidation'
 import type { getPlanCostBreakdown } from '../../utils/planCosts'
 import { ItineraryQuoteEmailForm } from './ItineraryQuoteEmailForm'
 import { ItineraryQuotePreview } from './ItineraryQuotePreview'
@@ -21,18 +25,56 @@ import './ItineraryQuoteModal.css'
 type ItineraryQuoteModalProps = {
     plan: ItineraryPlan
     breakdown: ReturnType<typeof getPlanCostBreakdown>
+    cityId: string
     isOpen: boolean
     onClose: () => void
 }
 
-export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: ItineraryQuoteModalProps) {
+export function ItineraryQuoteModal({ plan, breakdown, cityId, isOpen, onClose }: ItineraryQuoteModalProps) {
     const { t, localize, locale } = useTranslation()
+    const { quoteDetails, updateQuoteDetails, openPlanner } = useTrip()
     const copy = t.itineraries.costs.quoteModal
     const costCopy = t.itineraries.costs
+    const quoteLabels = costCopy.quotePdf
+    const city = getCityById(cityId)
+    const matchingTripDetails = quoteDetails?.cityId === cityId && quoteDetails.planId === plan.id
+        ? quoteDetails
+        : undefined
+    const availableTourDates = useMemo(() => getAvailableTourDates(), [])
+    const selectedTourDate = matchingTripDetails?.departureDate
+        && availableTourDates.includes(matchingTripDetails.departureDate)
+        ? matchingTripDetails.departureDate
+        : availableTourDates[0] ?? ''
+    const formattedTourDate = selectedTourDate
+        ? formatTourOptionDate(selectedTourDate, locale)
+        : '—'
+    const compactTourDate = selectedTourDate
+        ? selectedTourDate.split('-').reverse().join('/')
+        : '—'
+    const tripQuoteDetails = useMemo<QuotePdfContent['tripDetails']>(() => ({
+        destination: `${city?.name ?? ''}${city?.status === 'launching' ? ` · ${quoteLabels.launching}` : ''}`,
+        availableTourDate: formattedTourDate,
+        departureDate: compactTourDate,
+        travelers: matchingTripDetails?.travelers ?? 2,
+        interests: matchingTripDetails?.interests.map((interest) => t.trip.interests[interest]) ?? [],
+    }), [
+        city?.name,
+        city?.status,
+        compactTourDate,
+        formattedTourDate,
+        matchingTripDetails?.interests,
+        matchingTripDetails?.travelers,
+        quoteLabels.launching,
+        t.trip.interests,
+    ])
     const [customerDetails, setCustomerDetails] = useState<QuoteCustomerDetails>({
-        fullName: '',
-        email: '',
-        phone: '',
+        fullName: matchingTripDetails?.name ?? '',
+        documentType: matchingTripDetails?.documentType ?? 'nationalId',
+        documentNumber: matchingTripDetails?.documentNumber ?? '',
+        email: matchingTripDetails?.email ?? '',
+        phoneCountryIso: matchingTripDetails?.phoneCountryIso ?? 'CO',
+        phoneCountryCode: matchingTripDetails?.phoneCountryCode ?? '57',
+        phone: matchingTripDetails?.phone ?? '',
     })
     const quote = useMemo<QuotePdfContent>(() => buildQuotePdfContent({
         plan,
@@ -43,7 +85,8 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
         labels: costCopy.quotePdf,
         breakdown,
         customer: customerDetails,
-    }), [breakdown, costCopy.categories, costCopy.disclaimer, costCopy.quotePdf, customerDetails, locale, localize, plan])
+        tripDetails: tripQuoteDetails,
+    }), [breakdown, costCopy.categories, costCopy.disclaimer, costCopy.quotePdf, customerDetails, locale, localize, plan, tripQuoteDetails])
     const whatsappUrl = new URL(`https://wa.me/${WHATSAPP_BUSINESS_PHONE}`)
     whatsappUrl.searchParams.set('text', copy.whatsappMessage(quote.planName, INSTAGRAM_PROFILE_URL))
     const contactMessage = copy.emailMessage(
@@ -53,9 +96,15 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
         whatsappUrl.toString(),
         INSTAGRAM_PROFILE_URL,
     )
-    const isCustomerDetailsComplete = customerDetails.fullName.trim().length > 0
-        && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerDetails.email.trim())
-        && customerDetails.phone.replace(/\D/g, '').length >= 7
+    const customerFieldValidity = validateQuoteCustomerDetails(customerDetails)
+    const isCustomerDetailsComplete = Object.values(customerFieldValidity).every(Boolean)
+    const invalidCustomerFields = [
+        { isValid: customerFieldValidity.fullName, label: copy.fullNameLabel },
+        { isValid: customerFieldValidity.documentType, label: copy.documentTypeLabel },
+        { isValid: customerFieldValidity.documentNumber, label: copy.documentNumberLabel },
+        { isValid: customerFieldValidity.email, label: copy.emailLabel },
+        { isValid: customerFieldValidity.phone, label: copy.phoneLabel },
+    ].filter((field) => !field.isValid).map((field) => field.label)
 
     const [preparedPdf, setPreparedPdf] = useState<{
         key: string
@@ -94,6 +143,65 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
 
     const handleCustomerDetailsChange = (field: keyof QuoteCustomerDetails, value: string) => {
         setCustomerDetails((current) => ({ ...current, [field]: value }))
+    }
+
+    const handlePhoneCountryChange = (countryIso: string, callingCode: string) => {
+        setCustomerDetails((current) => ({
+            ...current,
+            phoneCountryIso: countryIso,
+            phoneCountryCode: callingCode,
+        }))
+    }
+
+    const handleTourDateChange = (date: string) => {
+        updateQuoteDetails({
+            cityId,
+            planId: plan.id,
+            departureDate: date,
+            travelers: matchingTripDetails?.travelers ?? 2,
+            interests: matchingTripDetails?.interests ?? [],
+            name: customerDetails.fullName,
+            documentType: customerDetails.documentType,
+            documentNumber: customerDetails.documentNumber,
+            email: customerDetails.email,
+            phoneCountryIso: customerDetails.phoneCountryIso,
+            phoneCountryCode: customerDetails.phoneCountryCode,
+            phone: customerDetails.phone,
+        })
+    }
+
+    const handleTravelersChange = (travelers: number) => {
+        updateQuoteDetails({
+            cityId,
+            planId: plan.id,
+            departureDate: selectedTourDate,
+            travelers: Math.min(20, Math.max(1, travelers)),
+            interests: matchingTripDetails?.interests ?? [],
+            name: customerDetails.fullName,
+            documentType: customerDetails.documentType,
+            documentNumber: customerDetails.documentNumber,
+            email: customerDetails.email,
+            phoneCountryIso: customerDetails.phoneCountryIso,
+            phoneCountryCode: customerDetails.phoneCountryCode,
+            phone: customerDetails.phone,
+        })
+    }
+
+    const handleInterestsChange = (interests: NonNullable<typeof matchingTripDetails>['interests']) => {
+        updateQuoteDetails({
+            cityId,
+            planId: plan.id,
+            departureDate: selectedTourDate,
+            travelers: matchingTripDetails?.travelers ?? 2,
+            interests,
+            name: customerDetails.fullName,
+            documentType: customerDetails.documentType,
+            documentNumber: customerDetails.documentNumber,
+            email: customerDetails.email,
+            phoneCountryIso: customerDetails.phoneCountryIso,
+            phoneCountryCode: customerDetails.phoneCountryCode,
+            phone: customerDetails.phone,
+        })
     }
 
     const handleDownload = () => {
@@ -137,8 +245,35 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
         setConfirmation(null)
         setEmailError('')
         setShareMessage('')
-        setCustomerDetails({ fullName: '', email: '', phone: '' })
+        setCustomerDetails({
+            fullName: '',
+            documentType: 'nationalId',
+            documentNumber: '',
+            email: '',
+            phoneCountryIso: 'CO',
+            phoneCountryCode: '57',
+            phone: '',
+        })
         onClose()
+    }
+
+    const handleSaveMainEvent = () => {
+        updateQuoteDetails({
+            cityId,
+            planId: plan.id,
+            departureDate: selectedTourDate,
+            travelers: matchingTripDetails?.travelers ?? 2,
+            interests: matchingTripDetails?.interests ?? [],
+            name: customerDetails.fullName.trim(),
+            documentType: customerDetails.documentType,
+            documentNumber: customerDetails.documentNumber.trim(),
+            email: customerDetails.email.trim(),
+            phoneCountryIso: customerDetails.phoneCountryIso,
+            phoneCountryCode: customerDetails.phoneCountryCode,
+            phone: customerDetails.phone,
+        })
+        openPlanner(cityId, plan.id)
+        handleClose()
     }
 
     return (
@@ -191,17 +326,38 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
                         <p>{quote.labels.intro}</p>
                     </header>
 
-                    <ItineraryQuotePreview quote={quote} planLabel={copy.planLabel} />
+                    <ItineraryQuotePreview
+                        quote={quote}
+                        planLabel={copy.planLabel}
+                        availableTourDates={availableTourDates}
+                        selectedTourDate={selectedTourDate}
+                        onTourDateChange={handleTourDateChange}
+                        travelers={matchingTripDetails?.travelers ?? 2}
+                        interests={matchingTripDetails?.interests ?? []}
+                        onTravelersChange={handleTravelersChange}
+                        onInterestsChange={handleInterestsChange}
+                    />
 
                     <ItineraryQuoteEmailForm
                         quote={quote}
                         contactMessage={contactMessage}
                         customerDetails={customerDetails}
                         isCustomerDetailsComplete={isCustomerDetailsComplete}
+                        invalidFields={invalidCustomerFields}
                         onCustomerDetailsChange={handleCustomerDetailsChange}
+                        onPhoneCountryChange={handlePhoneCountryChange}
                         onError={setEmailError}
                         onSuccess={(message) => setConfirmation({ kind: 'email', message })}
                     />
+
+                    <button
+                        type="button"
+                        className="itinerary-quote-save-main-event"
+                        onClick={handleSaveMainEvent}
+                        disabled={!isCustomerDetailsComplete}
+                    >
+                        {copy.saveMainEvent}
+                    </button>
 
                     <div className="itinerary-quote-actions">
                         <div className="itinerary-quote-download">

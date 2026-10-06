@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react
 import { getEventById } from '@/features/events/data/events'
 import { isQuoteablePlan } from '@/features/itineraries/config'
 import { isTripPlannerAvailable } from '../config'
-import type { SavedTour } from '../types'
+import type { SavedTour, TripQuoteDetails } from '../types'
 import { TripContext, type TripContextValue } from './TripContext'
 
 const STORAGE_KEY = 'beatandbeach:saved-events'
@@ -46,6 +46,7 @@ export function TripProvider({ children }: { children: ReactNode }) {
     const [plannerCityId, setPlannerCityId] = useState<string>()
     const [plannerPlanId, setPlannerPlanId] = useState<string>()
     const [savedTour, setSavedTour] = useState<SavedTour | undefined>(readSavedTour)
+    const [quoteDetails, setQuoteDetails] = useState<TripQuoteDetails>()
 
     useEffect(() => {
         try {
@@ -80,25 +81,22 @@ export function TripProvider({ children }: { children: ReactNode }) {
     }, [])
 
     const clearSavedTour = useCallback(() => setSavedTour(undefined), [])
-    const selectSavedTour = useCallback((cityId: string, planId: string) => {
-        if (isTripPlannerAvailable(cityId) && isQuoteablePlan(cityId, planId)) {
-            setSavedTour({ cityId, planId })
-        }
-    }, [])
-
+    const updateQuoteDetails = useCallback((details: TripQuoteDetails) => setQuoteDetails(details), [])
     const closePlanner = useCallback(() => setIsPlannerOpen(false), [])
 
     const value = useMemo<TripContextValue>(
         () => ({
             savedEventIds,
+            savedItemCount: savedEventIds.length + Number(Boolean(savedTour)),
             isEventSaved: (eventId) => savedEventIds.includes(eventId),
             toggleSavedEvent,
             isPlannerOpen,
             plannerCityId,
             plannerPlanId,
             savedTour,
+            quoteDetails,
+            updateQuoteDetails,
             clearSavedTour,
-            selectSavedTour,
             openPlanner,
             closePlanner,
         }),
@@ -109,8 +107,9 @@ export function TripProvider({ children }: { children: ReactNode }) {
             plannerCityId,
             plannerPlanId,
             savedTour,
+            quoteDetails,
+            updateQuoteDetails,
             clearSavedTour,
-            selectSavedTour,
             openPlanner,
             closePlanner,
         ],

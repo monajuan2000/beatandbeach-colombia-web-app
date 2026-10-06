@@ -9,7 +9,7 @@ import './SiteHeader.css'
 const navSections = ['discover', 'cities', 'events', 'insights'] as const
 
 export function SiteHeader() {
-    const { savedEventIds, openPlanner } = useTrip()
+    const { savedItemCount, openPlanner } = useTrip()
     const cityRoute = useMatch('/cities/:cityId')
     const { t } = useTranslation()
     const copy = t.common.header
@@ -43,9 +43,9 @@ export function SiteHeader() {
                     disabled={!canPlanTrip}
                 >
                     {copy.planTrip}
-                    {savedEventIds.length > 0 ? (
-                        <span className="trip-count" aria-label={copy.savedEvents(savedEventIds.length)}>
-                            {savedEventIds.length}
+                    {savedItemCount > 0 ? (
+                        <span className="trip-count" aria-label={t.trip.savedItemsCount(savedItemCount)}>
+                            {savedItemCount}
                         </span>
                     ) : null}
                 </button>

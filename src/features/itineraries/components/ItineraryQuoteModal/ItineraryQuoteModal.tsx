@@ -176,8 +176,11 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
                 </div>
             ) : (
                 <div className="modal-body itinerary-quote-modal">
-                    <span className="eyebrow">{copy.eyebrow}</span>
-                    <h3 id="itinerary-quote-title">{copy.title}</h3>
+                    <header className="itinerary-quote-header">
+                        <span className="eyebrow">{copy.eyebrow}</span>
+                        <h3 id="itinerary-quote-title">{copy.title}</h3>
+                        <p>{quote.labels.intro}</p>
+                    </header>
 
                     <ItineraryQuotePreview quote={quote} planLabel={copy.planLabel} />
 
@@ -190,7 +193,7 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
                         onSuccess={(message) => setConfirmation({ kind: 'email', message })}
                     />
 
-                    <div className="action-row modal-actions itinerary-quote-actions">
+                    <div className="itinerary-quote-actions">
                         <div className="itinerary-quote-download">
                             <button
                                 type="button"
@@ -204,21 +207,19 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
                                 <p className="itinerary-quote-download-error" role="alert">{downloadError}</p>
                             ) : null}
                         </div>
+                        <div className="itinerary-quote-share">
+                            <button
+                                type="button"
+                                className="secondary-button"
+                                onClick={handleShare}
+                                disabled={!isCustomerDetailsComplete || !pdfFile || isPreparing}
+                            >
+                                {isPreparing ? copy.sharingQuote : copy.shareQuote}
+                            </button>
+                            <p>{copy.shareInstructions(WHATSAPP_BUSINESS_PHONE)}</p>
+                            {shareMessage ? <p role="status" aria-live="polite">{shareMessage}</p> : null}
+                        </div>
                     </div>
-
-                    <div className="itinerary-quote-share">
-                        <button
-                            type="button"
-                            className="secondary-button"
-                            onClick={handleShare}
-                            disabled={!isCustomerDetailsComplete || !pdfFile || isPreparing}
-                        >
-                            {isPreparing ? copy.sharingQuote : copy.shareQuote}
-                        </button>
-                        <p>{copy.shareInstructions(WHATSAPP_BUSINESS_PHONE)}</p>
-                        {shareMessage ? <p role="status" aria-live="polite">{shareMessage}</p> : null}
-                    </div>
-
                 </div>
             )}
         </Modal>

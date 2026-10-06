@@ -7,7 +7,7 @@ type ItineraryQuotePreviewProps = {
 
 export function ItineraryQuotePreview({ quote, planLabel }: ItineraryQuotePreviewProps) {
     return (
-        <>
+        <div className="itinerary-quote-preview">
             <div className="itinerary-quote-summary">
                 <span>{planLabel}</span>
                 <strong>{quote.planName}</strong>
@@ -15,16 +15,22 @@ export function ItineraryQuotePreview({ quote, planLabel }: ItineraryQuotePrevie
             </div>
 
             <section className="itinerary-quote-section">
-                <h4>{quote.labels.itinerary}</h4>
+                <div className="itinerary-quote-section-heading">
+                    <h4>{quote.labels.itinerary}</h4>
+                </div>
                 <div className="itinerary-quote-list">
                     {quote.days.map((day, dayIndex) => (
                         <div key={`${dayIndex}-${day.title}`} className="itinerary-quote-day">
-                            <strong>{quote.labels.day(dayIndex + 1)} · {day.title}</strong>
+                            <h5><span>{quote.labels.day(dayIndex + 1)}</span>{day.title}</h5>
                             <ul>
                                 {day.stops.map((stop, stopIndex) => (
                                     <li key={`${stopIndex}-${stop.title}`}>
-                                        <span>{stop.time}</span>
-                                        <span>{stop.title}</span>
+                                        <time>{stop.time}</time>
+                                        <div className="itinerary-quote-stop-copy">
+                                            <strong>{stop.title}</strong>
+                                            {stop.description ? <p>{stop.description}</p> : null}
+                                            {stop.isTentative ? <small>{quote.labels.tentative}</small> : null}
+                                        </div>
                                     </li>
                                 ))}
                             </ul>
@@ -34,7 +40,9 @@ export function ItineraryQuotePreview({ quote, planLabel }: ItineraryQuotePrevie
             </section>
 
             <section className="itinerary-quote-section">
-                <h4>{quote.labels.costSummary}</h4>
+                <div className="itinerary-quote-section-heading">
+                    <h4>{quote.labels.costSummary}</h4>
+                </div>
                 <div className="itinerary-quote-cost-list">
                     {quote.costs.map((cost) => (
                         <div key={cost.label} className="itinerary-quote-cost-item">
@@ -48,6 +56,6 @@ export function ItineraryQuotePreview({ quote, planLabel }: ItineraryQuotePrevie
                     <strong>{quote.total}</strong>
                 </div>
             </section>
-        </>
+        </div>
     )
 }

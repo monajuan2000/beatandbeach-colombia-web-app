@@ -72,9 +72,13 @@ export function ItineraryQuoteEmailForm({
 
     return (
         <form className="itinerary-quote-email-form" onSubmit={handleSubmit}>
-            <h4>{copy.customerDetailsTitle}</h4>
+            <div className="itinerary-quote-section-heading">
+                <h4>{copy.customerDetailsTitle}</h4>
+                <span aria-hidden="true">*</span>
+            </div>
             <div className="itinerary-quote-customer-fields">
-                <label htmlFor={fullNameInputId}>{copy.fullNameLabel}
+                <label htmlFor={fullNameInputId}>
+                    <span>{copy.fullNameLabel}</span>
                     <input
                         id={fullNameInputId}
                         type="text"
@@ -85,7 +89,8 @@ export function ItineraryQuoteEmailForm({
                         disabled={isSending}
                     />
                 </label>
-                <label htmlFor={emailInputId}>{copy.emailLabel}
+                <label htmlFor={emailInputId}>
+                    <span>{copy.emailLabel}</span>
                     <input
                         id={emailInputId}
                         type="email"
@@ -96,7 +101,8 @@ export function ItineraryQuoteEmailForm({
                         disabled={isSending}
                     />
                 </label>
-                <label htmlFor={phoneInputId}>{copy.phoneLabel}
+                <label htmlFor={phoneInputId}>
+                    <span>{copy.phoneLabel}</span>
                     <input
                         id={phoneInputId}
                         type="tel"

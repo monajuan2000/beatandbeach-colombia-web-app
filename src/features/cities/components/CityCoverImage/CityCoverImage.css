@@ -14,8 +14,8 @@
   aspect-ratio: 21 / 9;
   max-height: 520px;
   object-fit: cover;
-  animation: cityCoverReveal 0.9s ease-out both;
-  transition: transform 1.2s ease;
+  animation: var(--city-motion-cover-reveal);
+  transition: var(--city-motion-cover-hover);
 }
 
 .city-cover:hover img {
@@ -29,7 +29,7 @@
 
 .city-cover-under-review img {
   filter: grayscale(0.75) brightness(0.8);
-  transition: transform 1.2s ease, filter 0.5s ease;
+  transition: var(--city-motion-cover-review);
 }
 
 .city-cover-under-review:hover img {
@@ -46,18 +46,6 @@
   pointer-events: none;
 }
 
-@keyframes cityCoverReveal {
-  from {
-    opacity: 0;
-    transform: scale(1.04);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 @media (max-width: 640px) {
   .city-cover {
     border-radius: 22px;
@@ -65,13 +53,5 @@
 
   .city-cover img {
     aspect-ratio: 4 / 3;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .city-cover img,
-  .city-cover-under-review img {
-    animation: none;
-    transition: none;
   }
 }

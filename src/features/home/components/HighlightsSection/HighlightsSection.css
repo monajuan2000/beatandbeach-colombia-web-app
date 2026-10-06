@@ -27,10 +27,10 @@
   height: 52px;
   border-radius: 16px;
   background: var(--gradient-brand);
-  box-shadow: 0 10px 24px rgba(59, 130, 246, 0.28);
+  box-shadow: 0 10px 24px rgba(var(--home-rgb-accent), 0.28);
   font-size: 1.5rem;
-  color: #ffffff;
-  transition: transform 0.35s ease;
+  color: var(--home-color-foreground);
+  transition: var(--home-motion-card);
 }
 
 .highlight-card:hover .highlight-icon {
@@ -49,11 +49,5 @@
 @media (max-width: 960px) {
   .highlights-grid {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .highlight-icon {
-    transition: none;
   }
 }

@@ -1,4 +1,21 @@
 .city-page {
+  --city-rgb-ink: 15, 23, 42;
+  --city-rgb-neutral: 148, 163, 184;
+  --city-rgb-amber: 251, 191, 36;
+  --city-color-banner: linear-gradient(135deg, rgba(var(--city-rgb-ink), 0.9), rgba(var(--city-rgb-ink), 0.72));
+  --city-color-banner-border: rgba(var(--city-rgb-neutral), 0.18);
+  --city-color-banner-shadow: 0 18px 40px rgba(var(--city-rgb-ink), 0.2);
+  --city-color-review-border: rgba(var(--city-rgb-amber), 0.35);
+  --city-color-review-glow: rgba(var(--city-rgb-amber), 0.12);
+  --city-color-feature-border: rgba(var(--city-rgb-ink), 0.08);
+  --city-color-feature-background: linear-gradient(115deg, #f5f0e6 0%, #e6f1ed 100%);
+  --city-color-divider: rgba(var(--city-rgb-ink), 0.14);
+  --city-color-divider-soft: rgba(var(--city-rgb-ink), 0.12);
+  --city-color-stat: #08786f;
+  --city-motion-cover-reveal: city-cover-reveal 0.9s ease-out both;
+  --city-motion-cover-hover: transform 1.2s ease;
+  --city-motion-cover-review: transform 1.2s ease, filter 0.5s ease;
+
   width: min(1200px, calc(100% - 32px));
   margin: 0 auto;
   padding: 32px 0 64px;
@@ -15,18 +32,18 @@
   gap: 20px;
   padding: 28px 32px;
   border-radius: 28px;
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 64, 175, 0.3));
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.2);
+  border: 1px solid var(--city-color-banner-border);
+  background: var(--city-color-banner);
+  box-shadow: var(--city-color-banner-shadow);
 }
 
 /* Destinations under review get the same amber edge and glow as their home card. */
 .city-page-banner-under-review {
-  border-color: rgba(251, 191, 36, 0.35);
+  border-color: var(--city-color-review-border);
   background:
-    radial-gradient(circle at 100% 0%, rgba(251, 191, 36, 0.12), transparent 45%),
-    linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 64, 175, 0.3));
-  box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.1), 0 18px 40px rgba(15, 23, 42, 0.2);
+    radial-gradient(circle at 100% 0%, var(--city-color-review-glow), transparent 45%),
+    var(--city-color-banner);
+  box-shadow: 0 0 0 1px rgba(var(--city-rgb-amber), 0.1), var(--city-color-banner-shadow);
 }
 
 .city-page-banner h1 {
@@ -38,7 +55,7 @@
 .city-page-banner p {
   max-width: 760px;
   margin: 0.8rem 0 0;
-  color: #cbd5e1;
+  color: var(--color-text-muted);
   line-height: 1.7;
 }
 
@@ -77,9 +94,9 @@
   margin-top: 28px;
   padding: 32px;
   overflow: hidden;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border: 1px solid var(--city-color-feature-border);
   border-radius: 24px;
-  background: linear-gradient(115deg, #f5f0e6 0%, #e6f1ed 100%);
+  background: var(--city-color-feature-background);
   box-shadow: var(--shadow-card);
 }
 
@@ -107,7 +124,7 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-self: stretch;
   align-items: center;
-  border-left: 1px solid rgba(15, 23, 42, 0.14);
+  border-left: 1px solid var(--city-color-divider);
 }
 
 .city-page-stats div {
@@ -119,11 +136,11 @@
 }
 
 .city-page-stats div+div {
-  border-left: 1px solid rgba(15, 23, 42, 0.14);
+  border-left: 1px solid var(--city-color-divider);
 }
 
 .city-page-stats strong {
-  color: #08786f;
+  color: var(--city-color-stat);
   font-size: 2.35rem;
   line-height: 1;
   font-variant-numeric: tabular-nums;
@@ -150,7 +167,7 @@
 
 .city-page-events-header p {
   margin: 0.6rem 0 0;
-  color: #cbd5e1;
+  color: var(--color-text-muted);
   line-height: 1.7;
 }
 
@@ -166,6 +183,25 @@
   flex-direction: column;
   align-items: center;
   margin-top: 48px;
+}
+
+@keyframes city-cover-reveal {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .city-page .city-cover img {
+    animation: none;
+    transition: none;
+  }
 }
 
 @media (max-width: 960px) {
@@ -189,7 +225,7 @@
   }
 
   .city-page-stats {
-    border-top: 1px solid rgba(15, 23, 42, 0.14);
+    border-top: 1px solid var(--city-color-divider);
     border-left: 0;
     padding-top: 16px;
   }
@@ -221,7 +257,7 @@
   }
 
   .city-page-stats div+div {
-    border-top: 1px solid rgba(15, 23, 42, 0.12);
+    border-top: 1px solid var(--city-color-divider-soft);
     border-left: 0;
   }
 

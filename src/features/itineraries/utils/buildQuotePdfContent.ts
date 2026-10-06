@@ -1,7 +1,7 @@
 import { formatCop } from '@/utils/currency'
 import type { LocalizedText } from '@/i18n/types'
 import type { CostCategory, ItineraryPlan } from '../types'
-import type { QuotePdfContent } from './downloadQuotePdf'
+import type { QuoteCustomerDetails, QuotePdfContent } from './downloadQuotePdf'
 import type { getPlanCostBreakdown } from './planCosts'
 
 type CostBreakdown = ReturnType<typeof getPlanCostBreakdown>
@@ -14,6 +14,7 @@ type BuildQuotePdfContentOptions = {
     disclaimer: string
     labels: QuotePdfContent['labels']
     breakdown: CostBreakdown
+    customer: QuoteCustomerDetails
 }
 
 export function buildQuotePdfContent({
@@ -24,8 +25,14 @@ export function buildQuotePdfContent({
     disclaimer,
     labels,
     breakdown,
+    customer,
 }: BuildQuotePdfContentOptions): QuotePdfContent {
     return {
+        customer: {
+            fullName: customer.fullName.trim(),
+            email: customer.email.trim(),
+            phone: customer.phone.trim(),
+        },
         planName: localize(plan.name),
         summary: localize(plan.summary),
         days: plan.days.map((day) => ({

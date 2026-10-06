@@ -7,7 +7,14 @@ type QuotePdfStop = {
     isTentative?: boolean
 }
 
+export type QuoteCustomerDetails = {
+    fullName: string
+    email: string
+    phone: string
+}
+
 export type QuotePdfContent = {
+    customer: QuoteCustomerDetails
     planName: string
     summary: string
     days: { title: string; stops: QuotePdfStop[] }[]
@@ -19,6 +26,10 @@ export type QuotePdfContent = {
         quoteLabel: string
         headline: string
         intro: string
+        customerDetails: string
+        customerName: string
+        customerEmail: string
+        customerPhone: string
         selectedPlan: string
         itinerary: string
         day: (day: number) => string
@@ -101,6 +112,13 @@ export async function createQuotePdfFile(quote: QuotePdfContent, fileName: strin
         pdf.rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT, 'F')
     }
 
+    const drawSeparator = () => {
+        setDrawColor(COLORS.line)
+        pdf.setLineWidth(0.3)
+        pdf.line(MARGIN, y, PAGE_WIDTH - MARGIN, y)
+        y += 5
+    }
+
     drawPageBackground()
 
     // Branded masthead matching the email template; the image is bundled into the app.
@@ -116,7 +134,8 @@ export async function createQuotePdfFile(quote: QuotePdfContent, fileName: strin
     addWrappedText(quote.labels.quoteLabel, MARGIN, CONTENT_WIDTH, 8, COLORS.teal, 'bold', 4)
     y += 2
     addWrappedText(quote.labels.headline, MARGIN, CONTENT_WIDTH, 19, COLORS.navy, 'bold', 8)
-    y += 2
+    y += 4
+    drawSeparator()
     addWrappedText(
         quote.labels.intro,
         MARGIN,
@@ -126,7 +145,32 @@ export async function createQuotePdfFile(quote: QuotePdfContent, fileName: strin
         'normal',
         4.8,
     )
-    y += 5
+    y += 2
+    drawSeparator()
+
+    const customerRows = [
+        `${quote.labels.customerName}: ${quote.customer.fullName}`,
+        `${quote.labels.customerEmail}: ${quote.customer.email}`,
+        `${quote.labels.customerPhone}: ${quote.customer.phone}`,
+    ]
+    const customerRowLines = customerRows.map((row) => linesFor(row, CONTENT_WIDTH - 14, 8))
+    const customerCardHeight = 11 + customerRowLines.reduce((height, lines) => height + lines.length * 3.5 + 1, 0)
+    ensureSpace(customerCardHeight + 8)
+    setFillColor(COLORS.white)
+    pdf.roundedRect(MARGIN, y, CONTENT_WIDTH, customerCardHeight, 2, 2, 'F')
+    pdf.setFont('helvetica', 'bold')
+    pdf.setFontSize(7)
+    setTextColor(COLORS.teal)
+    pdf.text(quote.labels.customerDetails, MARGIN + 7, y + 6)
+    let customerTextY = y + 11
+    customerRowLines.forEach((lines) => {
+        pdf.setFont('helvetica', 'normal')
+        pdf.setFontSize(8)
+        setTextColor(COLORS.ink)
+        pdf.text(lines, MARGIN + 7, customerTextY)
+        customerTextY += lines.length * 3.5 + 1
+    })
+    y += customerCardHeight + 8
 
     const planNameLines = linesFor(quote.planName, CONTENT_WIDTH - 12, 14)
     const summaryLines = linesFor(quote.summary, CONTENT_WIDTH - 12, 9)

@@ -9,6 +9,7 @@ import {
     createQuoteDownloadFileName,
     createQuotePdfFile,
     downloadQuoteFile,
+    type QuoteCustomerDetails,
     type QuotePdfContent,
 } from '../../utils/downloadQuotePdf'
 import { buildQuotePdfContent } from '../../utils/buildQuotePdfContent'
@@ -28,6 +29,11 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
     const { t, localize, locale } = useTranslation()
     const copy = t.itineraries.costs.quoteModal
     const costCopy = t.itineraries.costs
+    const [customerDetails, setCustomerDetails] = useState<QuoteCustomerDetails>({
+        fullName: '',
+        email: '',
+        phone: '',
+    })
     const quote = useMemo<QuotePdfContent>(() => buildQuotePdfContent({
         plan,
         locale,
@@ -36,7 +42,11 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
         disclaimer: costCopy.disclaimer,
         labels: costCopy.quotePdf,
         breakdown,
-    }), [breakdown, costCopy.categories, costCopy.disclaimer, costCopy.quotePdf, locale, localize, plan])
+        customer: customerDetails,
+    }), [breakdown, costCopy.categories, costCopy.disclaimer, costCopy.quotePdf, customerDetails, locale, localize, plan])
+    const isCustomerDetailsComplete = customerDetails.fullName.trim().length > 0
+        && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerDetails.email.trim())
+        && customerDetails.phone.replace(/\D/g, '').length >= 7
 
     const [preparedPdf, setPreparedPdf] = useState<{
         key: string
@@ -53,11 +63,11 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
     const quoteKey = JSON.stringify(quote)
     const currentPdf = preparedPdf?.key === quoteKey ? preparedPdf : null
     const pdfFile = currentPdf?.file ?? null
-    const isPreparing = isOpen && currentPdf === null
+    const isPreparing = isOpen && isCustomerDetailsComplete && currentPdf === null
     const downloadError = downloadActionError || currentPdf?.error || ''
 
     useEffect(() => {
-        if (!isOpen) return
+        if (!isOpen || !isCustomerDetailsComplete) return
 
         let isCurrent = true
         void createQuotePdfFile(quote, `beat-and-beach-${plan.id}-quote.pdf`)
@@ -71,7 +81,11 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
         return () => {
             isCurrent = false
         }
-    }, [copy.downloadError, isOpen, plan.id, quote, quoteKey])
+    }, [copy.downloadError, isCustomerDetailsComplete, isOpen, plan.id, quote, quoteKey])
+
+    const handleCustomerDetailsChange = (field: keyof QuoteCustomerDetails, value: string) => {
+        setCustomerDetails((current) => ({ ...current, [field]: value }))
+    }
 
     const handleDownload = () => {
         if (!pdfFile) return
@@ -114,6 +128,7 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
         setConfirmation(null)
         setEmailError('')
         setShareMessage('')
+        setCustomerDetails({ fullName: '', email: '', phone: '' })
         onClose()
     }
 
@@ -166,13 +181,22 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
 
                     <ItineraryQuotePreview quote={quote} planLabel={copy.planLabel} />
 
+                    <ItineraryQuoteEmailForm
+                        quote={quote}
+                        customerDetails={customerDetails}
+                        isCustomerDetailsComplete={isCustomerDetailsComplete}
+                        onCustomerDetailsChange={handleCustomerDetailsChange}
+                        onError={setEmailError}
+                        onSuccess={(message) => setConfirmation({ kind: 'email', message })}
+                    />
+
                     <div className="action-row modal-actions itinerary-quote-actions">
                         <div className="itinerary-quote-download">
                             <button
                                 type="button"
                                 className="primary-button"
                                 onClick={handleDownload}
-                                disabled={!pdfFile || isPreparing}
+                                disabled={!isCustomerDetailsComplete || !pdfFile || isPreparing}
                             >
                                 {isPreparing ? copy.downloadingQuote : copy.downloadQuote}
                             </button>
@@ -187,7 +211,7 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
                             type="button"
                             className="secondary-button"
                             onClick={handleShare}
-                            disabled={!pdfFile || isPreparing}
+                            disabled={!isCustomerDetailsComplete || !pdfFile || isPreparing}
                         >
                             {isPreparing ? copy.sharingQuote : copy.shareQuote}
                         </button>
@@ -195,11 +219,6 @@ export function ItineraryQuoteModal({ plan, breakdown, isOpen, onClose }: Itiner
                         {shareMessage ? <p role="status" aria-live="polite">{shareMessage}</p> : null}
                     </div>
 
-                    <ItineraryQuoteEmailForm
-                        quote={quote}
-                        onError={setEmailError}
-                        onSuccess={(message) => setConfirmation({ kind: 'email', message })}
-                    />
                 </div>
             )}
         </Modal>

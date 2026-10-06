@@ -39,7 +39,7 @@
 
 .event-details-soon-hint {
   margin: 0;
-  color: #fde68a;
+  color: var(--color-status-warning-text);
   font-size: 0.85rem;
   opacity: 0.85;
 }

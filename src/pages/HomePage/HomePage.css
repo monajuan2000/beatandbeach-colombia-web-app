@@ -1,30 +1,4 @@
 .home-page {
-  --home-color-ink: #0f172a;
-  --home-color-deep: #020617;
-  --home-color-foreground: #f8fafc;
-  --home-color-copy: #dfe8f4;
-  --home-color-muted: #cbd5e1;
-  --home-color-subtle: #94a3b8;
-  --home-color-accent: #34d399;
-  --home-color-accent-cool: #7dd3fc;
-  --home-color-accent-soft: #a7f3d0;
-  --home-rgb-ink: 15, 23, 42;
-  --home-rgb-deep: 2, 6, 23;
-  --home-rgb-neutral: 148, 163, 184;
-  --home-rgb-white: 255, 255, 255;
-  --home-rgb-accent: 52, 211, 153;
-  --home-rgb-accent-cool: 125, 211, 252;
-  --home-motion-image: transform 1.2s ease;
-  --home-motion-hover: 0.2s ease;
-  --home-motion-card: transform 0.35s ease;
-  --home-animation-gradient: home-gradient-shift 8s ease-in-out infinite alternate;
-  --home-animation-scroll: home-scroll-bounce 2s ease-in-out infinite;
-  --home-animation-logo: home-logo-float 6s ease-in-out infinite;
-  --home-animation-halo: home-halo-breathe 6s ease-in-out infinite alternate;
-  --home-animation-pulse: home-indicator-pulse 2s ease-out infinite;
-  --home-animation-heading: headingGlow 5s ease-in-out infinite alternate;
-  --home-animation-underline: linePulse 5s ease-in-out infinite alternate;
-
   width: min(1200px, calc(100% - 32px));
   margin: 0 auto;
   padding: 24px 0 64px;

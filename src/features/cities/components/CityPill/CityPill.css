@@ -68,8 +68,8 @@
 .city-pill-tag {
   padding: 0.15rem 0.45rem;
   border-radius: 999px;
-  background: rgba(251, 191, 36, 0.12);
-  color: #fde68a;
+  background: rgba(var(--rgb-status-warning), 0.12);
+  color: var(--color-status-warning-text);
   font-size: 0.64rem;
   font-weight: 700;
   letter-spacing: 0.08em;

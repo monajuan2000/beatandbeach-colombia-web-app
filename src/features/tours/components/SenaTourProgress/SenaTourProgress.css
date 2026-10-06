@@ -1,27 +1,14 @@
 .sena-tour-progress {
-  --home-color-deep: #020617;
-  --home-color-foreground: #f8fafc;
-  --home-color-copy: #dfe8f4;
-  --home-color-muted: #cbd5e1;
-  --home-color-subtle: #94a3b8;
-  --home-color-accent: #34d399;
-  --home-color-accent-cool: #7dd3fc;
-  --home-color-accent-soft: #a7f3d0;
-  --home-rgb-deep: 2, 6, 23;
-  --home-rgb-white: 255, 255, 255;
-  --home-rgb-accent: 52, 211, 153;
-  --home-rgb-accent-cool: 125, 211, 252;
-
   width: min(100%, 1200px);
   margin: -24px auto 0;
   padding: clamp(22px, 4vw, 36px);
   overflow: hidden;
-  border: 1px solid rgba(var(--home-rgb-accent), 0.28);
-  border-radius: 24px;
+  border: 1px solid rgba(var(--rgb-accent), 0.28);
+  border-radius: var(--radius-card);
   background:
-    radial-gradient(ellipse at 100% 0%, rgba(var(--home-rgb-accent-cool), 0.12), transparent 48%),
-    linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.96));
-  box-shadow: 0 20px 56px rgba(var(--home-rgb-deep), 0.28);
+    radial-gradient(ellipse at 100% 0%, rgba(var(--rgb-accent-blue), 0.12), transparent 48%),
+    linear-gradient(135deg, rgba(var(--rgb-ink), 0.96), rgba(var(--rgb-deep), 0.96));
+  box-shadow: var(--shadow-home-card);
 }
 
 .sena-tour-progress-header {
@@ -53,9 +40,9 @@
   align-items: center;
   gap: 8px;
   padding: 9px 13px;
-  border: 1px solid rgba(var(--home-rgb-accent), 0.3);
-  border-radius: 999px;
-  background: rgba(var(--home-rgb-accent), 0.1);
+  border: 1px solid rgba(var(--rgb-accent), 0.3);
+  border-radius: var(--radius-pill);
+  background: rgba(var(--rgb-accent), 0.1);
   color: var(--home-color-accent-soft);
   font-size: 0.85rem;
   font-weight: 700;
@@ -134,7 +121,7 @@
   height: 32px;
   flex: 0 0 32px;
   place-items: center;
-  border: 1px solid rgba(var(--home-rgb-white), 0.22);
+  border: 1px solid rgba(var(--rgb-white), 0.22);
   border-radius: 50%;
   background: var(--home-color-deep);
   color: var(--home-color-muted);
@@ -163,7 +150,7 @@
 @media (max-width: 640px) {
   .sena-tour-progress {
     margin-top: -14px;
-    border-radius: 20px;
+    border-radius: var(--radius-card);
   }
 
   .sena-tour-progress-header {

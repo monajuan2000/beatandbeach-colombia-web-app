@@ -1,7 +1,7 @@
 .city-page {
-  --city-rgb-ink: 15, 23, 42;
+  --city-rgb-ink: var(--rgb-ink);
   --city-rgb-neutral: 148, 163, 184;
-  --city-rgb-amber: 251, 191, 36;
+  --city-rgb-amber: var(--rgb-status-warning);
   --city-color-banner: linear-gradient(135deg, rgba(var(--city-rgb-ink), 0.9), rgba(var(--city-rgb-ink), 0.72));
   --city-color-banner-border: rgba(var(--city-rgb-neutral), 0.18);
   --city-color-banner-shadow: 0 18px 40px rgba(var(--city-rgb-ink), 0.2);
@@ -13,8 +13,8 @@
   --city-color-divider-soft: rgba(var(--city-rgb-ink), 0.12);
   --city-color-stat: #08786f;
   --city-motion-cover-reveal: city-cover-reveal 0.9s ease-out both;
-  --city-motion-cover-hover: transform 1.2s ease;
-  --city-motion-cover-review: transform 1.2s ease, filter 0.5s ease;
+  --city-motion-cover-hover: var(--motion-transition-image);
+  --city-motion-cover-review: var(--motion-transition-image-filter);
 
   width: min(1200px, calc(100% - 32px));
   margin: 0 auto;

@@ -10,6 +10,8 @@ import { surveyEn } from '@/features/survey/i18n/en'
 import { surveyEs } from '@/features/survey/i18n/es'
 import { tripEn } from '@/features/trip/i18n/en'
 import { tripEs } from '@/features/trip/i18n/es'
+import { toursEn } from '@/features/tours/i18n/en'
+import { toursEs } from '@/features/tours/i18n/es'
 import type { Language } from './config'
 import { commonEn } from './locales/en'
 import { commonEs } from './locales/es'
@@ -26,6 +28,7 @@ const en = {
     events: eventsEn,
     itineraries: itinerariesEn,
     trip: tripEn,
+    tours: toursEn,
     survey: surveyEn,
 }
 
@@ -38,6 +41,7 @@ const es: Messages = {
     events: eventsEs,
     itineraries: itinerariesEs,
     trip: tripEs,
+    tours: toursEs,
     survey: surveyEs,
 }
 

@@ -3,7 +3,7 @@ import './SenaTourProgress.css'
 
 export function SenaTourProgress() {
     const { t } = useTranslation()
-    const copy = t.home.senaTour
+    const copy = t.tours.progress
 
     return (
         <section className="sena-tour-progress" aria-label={copy.ariaLabel}>

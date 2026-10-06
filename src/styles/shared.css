@@ -34,9 +34,9 @@ main section[id] {
 .inverse-button,
 .text-button {
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: var(--motion-transition-hover);
 }
 
 .primary-button,
@@ -237,7 +237,7 @@ main section[id] {
 .accent-card {
   position: relative;
   overflow: hidden;
-  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  transition: var(--motion-transition-card);
 }
 
 .accent-card::before {
@@ -307,7 +307,7 @@ main section[id] {
 
 .dark-card:hover {
   border-color: rgba(125, 211, 252, 0.35);
-  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.3), 0 0 0 1px rgba(52, 211, 153, 0.2);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .dark-card .card-number {

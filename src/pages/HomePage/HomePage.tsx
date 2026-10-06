@@ -13,7 +13,7 @@ import { HeroSection } from '@/features/home/components/HeroSection/HeroSection'
 import { HighlightedEventsHeading } from '@/features/home/components/HighlightedEventsHeading/HighlightedEventsHeading'
 import { HighlightsSection } from '@/features/home/components/HighlightsSection/HighlightsSection'
 import { ProjectsSection } from '@/features/home/components/ProjectsSection/ProjectsSection'
-import { SenaTourProgress } from '@/features/home/components/SenaTourProgress/SenaTourProgress'
+import { SenaTourProgress } from '@/features/tours/components/SenaTourProgress/SenaTourProgress'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import './HomePage.css'
 

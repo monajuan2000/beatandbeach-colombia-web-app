@@ -1,10 +1,10 @@
 /* Solid amber "Coming soon" badge with a live dot, so it stands out on photos and banners. */
 .city-status-badge-under-review {
   gap: 7px;
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  color: #422006;
-  box-shadow: 0 0 0 1px rgba(253, 230, 138, 0.6), 0 6px 18px rgba(245, 158, 11, 0.4);
-  animation: cityBadgeGlow 2.8s ease-in-out infinite alternate;
+  background: var(--gradient-status-warning);
+  color: var(--color-status-warning-contrast);
+  box-shadow: 0 0 0 1px rgba(var(--rgb-status-warning), 0.6), 0 6px 18px rgba(var(--rgb-status-warning-strong), 0.4);
+  animation: cityBadgeGlow var(--motion-duration-pulse) ease-in-out infinite alternate;
 }
 
 .city-status-badge-under-review::before {
@@ -12,17 +12,17 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #422006;
-  animation: cityBadgeDot 1.6s ease-in-out infinite;
+  background: var(--color-status-warning-contrast);
+  animation: cityBadgeDot var(--motion-duration-pulse-dot) ease-in-out infinite;
 }
 
 @keyframes cityBadgeGlow {
   from {
-    box-shadow: 0 0 0 1px rgba(253, 230, 138, 0.6), 0 6px 18px rgba(245, 158, 11, 0.3);
+    box-shadow: 0 0 0 1px rgba(var(--rgb-status-warning), 0.6), 0 6px 18px rgba(var(--rgb-status-warning-strong), 0.3);
   }
 
   to {
-    box-shadow: 0 0 0 1px rgba(253, 230, 138, 0.9), 0 6px 26px rgba(245, 158, 11, 0.6);
+    box-shadow: 0 0 0 1px rgba(var(--rgb-status-warning), 0.9), 0 6px 26px rgba(var(--rgb-status-warning-strong), 0.6);
   }
 }
 

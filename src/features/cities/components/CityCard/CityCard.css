@@ -87,7 +87,7 @@
 
 /* Destinations under review stay clickable, but their photo fades to a muted tone. */
 .city-card.city-card-under-review {
-  border-color: rgba(251, 191, 36, 0.28);
+  border-color: rgba(var(--rgb-status-warning), 0.28);
 }
 
 .city-card-under-review .city-card-overlay {
@@ -108,7 +108,7 @@
 }
 
 .city-card.city-card-under-review:hover {
-  border-color: rgba(251, 191, 36, 0.55);
+  border-color: rgba(var(--rgb-status-warning), 0.55);
 }
 
 .city-card-notice {

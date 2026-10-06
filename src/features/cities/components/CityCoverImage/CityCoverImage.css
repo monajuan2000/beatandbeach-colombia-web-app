@@ -24,7 +24,7 @@
 
 /* Destinations under review fade to a muted, desaturated photo; hover brings the color back. */
 .city-cover-under-review {
-  border-color: rgba(251, 191, 36, 0.28);
+  border-color: rgba(var(--rgb-status-warning), 0.28);
 }
 
 .city-cover-under-review img {

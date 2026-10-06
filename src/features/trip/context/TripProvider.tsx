@@ -81,6 +81,13 @@ export function TripProvider({ children }: { children: ReactNode }) {
     }, [])
 
     const clearSavedTour = useCallback(() => setSavedTour(undefined), [])
+    const clearSavedTrip = useCallback(() => {
+        setSavedEventIds([])
+        setSavedTour(undefined)
+        setQuoteDetails(undefined)
+        setPlannerCityId(undefined)
+        setPlannerPlanId(undefined)
+    }, [])
     const updateQuoteDetails = useCallback((details: TripQuoteDetails) => setQuoteDetails(details), [])
     const closePlanner = useCallback(() => setIsPlannerOpen(false), [])
 
@@ -97,6 +104,7 @@ export function TripProvider({ children }: { children: ReactNode }) {
             quoteDetails,
             updateQuoteDetails,
             clearSavedTour,
+            clearSavedTrip,
             openPlanner,
             closePlanner,
         }),
@@ -110,6 +118,7 @@ export function TripProvider({ children }: { children: ReactNode }) {
             quoteDetails,
             updateQuoteDetails,
             clearSavedTour,
+            clearSavedTrip,
             openPlanner,
             closePlanner,
         ],

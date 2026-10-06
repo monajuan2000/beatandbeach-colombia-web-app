@@ -28,4 +28,5 @@ export type EventItem = {
     featured: boolean
     audience: LocalizedText
     image?: string
+    comingSoon?: boolean
 }

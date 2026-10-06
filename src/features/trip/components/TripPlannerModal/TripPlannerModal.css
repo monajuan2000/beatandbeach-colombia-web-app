@@ -35,13 +35,56 @@
 }
 
 .planner-continue-quote {
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .planner-saved-tour-actions {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.planner-quote-email-confirmation {
+  flex-basis: 100%;
+  padding: 12px 14px;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  border-radius: 10px;
+  background: rgba(120, 53, 15, 0.2);
+  color: #fef3c7;
+}
+
+.planner-quote-email-confirmation p {
+  margin: 6px 0 12px;
+  color: #fde68a;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.planner-quote-email-confirmation dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 16px;
+  margin: 0 0 12px;
+}
+
+.planner-quote-email-confirmation dt {
+  color: #fde68a;
+  font-size: 0.76rem;
+}
+
+.planner-quote-email-confirmation dd {
+  margin: 2px 0 0;
+  color: #fff;
+  font-size: 0.86rem;
+  overflow-wrap: anywhere;
+}
+
+.planner-quote-email-confirmation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 8px;
 }
 
@@ -64,6 +107,8 @@
 }
 
 .planner-saved-list li.planner-saved-tour {
+  flex-direction: column;
+  align-items: stretch;
   padding: 12px 14px;
   border: 1px solid rgba(190, 242, 100, 0.42);
   border-left: 4px solid #bef264;
@@ -75,13 +120,36 @@
   color: #ecfccb;
 }
 
+.planner-saved-tour-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(190, 242, 100, 0.2);
+}
+
+.planner-saved-tour-heading strong {
+  color: #f7fee7;
+  font-size: 1.08rem;
+  letter-spacing: -0.015em;
+}
+
+.planner-saved-tour-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  text-align: right;
+}
+
 .planner-saved-tour small {
-  color: #bef264;
+  color: #d9f99d;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .planner-saved-tour-code {
-  align-self: flex-start;
-  margin-top: 6px;
   padding: 3px 8px;
   border: 1px solid rgba(190, 242, 100, 0.28);
   border-radius: 999px;
@@ -102,6 +170,13 @@
 .planner-quote-summary > strong {
   color: #7dd3fc;
   font-size: 0.78rem;
+}
+
+.planner-quote-costs-heading {
+  display: block;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(148, 163, 184, 0.16);
 }
 
 .planner-quote-summary dl {
@@ -127,7 +202,23 @@
   overflow-wrap: anywhere;
 }
 
-.planner-quote-summary dl div:last-child dd {
+.planner-quote-costs dd {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.planner-quote-costs dd span:first-child {
+  color: #cbd5e1;
+  font-size: 0.74rem;
+}
+
+.planner-quote-total {
+  padding-top: 8px;
+  border-top: 1px solid rgba(190, 242, 100, 0.22);
+}
+
+.planner-quote-total dd span:last-child {
   color: #bef264;
   font-weight: 800;
 }
@@ -201,6 +292,15 @@
 }
 
 @media (max-width: 640px) {
+  .planner-saved-tour-heading {
+    grid-template-columns: 1fr;
+  }
+
+  .planner-saved-tour-meta {
+    align-items: flex-start;
+    text-align: left;
+  }
+
   .planner-browse-itineraries {
     width: 100%;
   }
@@ -209,7 +309,15 @@
     padding: 0.7rem 0.9rem;
   }
 
+  .planner-saved-tour-actions {
+    justify-content: stretch;
+  }
+
   .planner-quote-summary dl {
+    grid-template-columns: 1fr;
+  }
+
+  .planner-quote-email-confirmation dl {
     grid-template-columns: 1fr;
   }
 

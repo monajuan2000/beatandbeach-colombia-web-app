@@ -63,6 +63,7 @@ export const events: EventItem[] = [
         },
         price: { en: 'From $45.000', es: 'Desde $45.000' },
         featured: true,
+        comingSoon: true,
         audience: { en: 'Active travelers and fitness lovers', es: 'Viajeros activos y amantes del ejercicio' },
     },
     {
@@ -213,6 +214,7 @@ export const events: EventItem[] = [
         },
         price: { en: 'From $95.000', es: 'Desde $95.000' },
         featured: false,
+        comingSoon: true,
         audience: { en: 'Outdoor explorers', es: 'Exploradores al aire libre' },
     },
 ]
@@ -225,7 +227,7 @@ export function getEventsByCity(cityId: string) {
     return events.filter((event) => event.cityId === cityId)
 }
 
-/** Destinations under review can be browsed, but their events cannot be added to a trip yet. */
+/** Events marked as coming soon and events in destinations under review cannot be added to a trip yet. */
 export function isEventBookable(event: EventItem) {
-    return getCityById(event.cityId)?.status !== 'under-review'
+    return !event.comingSoon && getCityById(event.cityId)?.status !== 'under-review'
 }

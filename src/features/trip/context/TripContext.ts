@@ -13,6 +13,7 @@ export type TripContextValue = {
     quoteDetails: TripQuoteDetails | undefined
     updateQuoteDetails: (details: TripQuoteDetails) => void
     clearSavedTour: () => void
+    clearSavedTrip: () => void
     openPlanner: (cityId: string, planId?: string) => void
     closePlanner: () => void
 }

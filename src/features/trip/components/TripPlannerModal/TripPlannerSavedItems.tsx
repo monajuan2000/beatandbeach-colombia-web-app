@@ -17,6 +17,7 @@ export type TripPlannerSavedTour = {
 export type TripPlannerQuoteSummary = {
     destination: string
     availableTourDate: string
+    arrivalDate: string
     departureDate: string
     travelers: number
     interests: string[]
@@ -25,6 +26,8 @@ export type TripPlannerQuoteSummary = {
     documentNumber: string
     email: string
     phone: string
+    costs: { label: string; perPerson: string; group: string }[]
+    totalPerPerson: string
     total: string
 }
 
@@ -74,11 +77,15 @@ export function TripPlannerSavedItems({
                     {selectedTour ? (
                         <li key={selectedTour.planId} className="planner-saved-tour">
                             <div>
-                                <strong>{selectedTour.title}</strong>
-                                <small>{selectedTour.cityName} · {copy.selectedTour}</small>
-                                <span className="planner-saved-tour-code">
-                                    {copy.tourCode}: {selectedTour.code}
-                                </span>
+                                <header className="planner-saved-tour-heading">
+                                    <strong>{selectedTour.title}</strong>
+                                    <div className="planner-saved-tour-meta">
+                                        <small>{selectedTour.cityName} · {copy.selectedTour}</small>
+                                        <span className="planner-saved-tour-code">
+                                            {copy.tourCode}: {selectedTour.code}
+                                        </span>
+                                    </div>
+                                </header>
                                 {quoteSummary ? (
                                     <div className="planner-quote-summary">
                                         <strong>{copy.quoteSummary}</strong>
@@ -90,6 +97,10 @@ export function TripPlannerSavedItems({
                                             <div>
                                                 <dt>{copy.fields.availableTourDate}</dt>
                                                 <dd>{quoteSummary.availableTourDate}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>{copy.fields.arrivalDate}</dt>
+                                                <dd>{quoteSummary.arrivalDate}</dd>
                                             </div>
                                             <div>
                                                 <dt>{copy.fields.departureDate}</dt>
@@ -123,9 +134,24 @@ export function TripPlannerSavedItems({
                                                 <dt>{copy.fields.phone}</dt>
                                                 <dd>{quoteSummary.phone}</dd>
                                             </div>
-                                            <div>
+                                        </dl>
+                                        <strong className="planner-quote-costs-heading">{copy.monetarySummary}</strong>
+                                        <dl className="planner-quote-costs">
+                                            {quoteSummary.costs.map((cost) => (
+                                                <div key={cost.label}>
+                                                    <dt>{cost.label}</dt>
+                                                    <dd>
+                                                        <span>{copy.perPerson}: {cost.perPerson}</span>
+                                                        <span>{copy.groupAmount}: {cost.group}</span>
+                                                    </dd>
+                                                </div>
+                                            ))}
+                                            <div className="planner-quote-total">
                                                 <dt>{copy.estimatedTotal}</dt>
-                                                <dd>{quoteSummary.total}</dd>
+                                                <dd>
+                                                    <span>{copy.perPerson}: {quoteSummary.totalPerPerson}</span>
+                                                    <span>{copy.groupAmount}: {quoteSummary.total}</span>
+                                                </dd>
                                             </div>
                                         </dl>
                                     </div>

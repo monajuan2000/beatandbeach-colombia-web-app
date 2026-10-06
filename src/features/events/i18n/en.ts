@@ -17,6 +17,7 @@ export const eventsEn = {
         addToTrip: 'Add to my trip',
         savedToTrip: '✓ Saved to my trip',
         bookingSoon: '⏳ Available very soon',
+        eventBookingSoonHint: 'Bookings for this experience will be available very soon.',
         bookingSoonHint: (city: string) => `You'll be able to add this event to your trip once ${city} opens as a destination.`,
         planTrip: 'Plan my trip',
         explore: (city: string) => `Explore ${city}`,

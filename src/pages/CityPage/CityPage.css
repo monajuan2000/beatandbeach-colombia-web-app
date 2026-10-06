@@ -87,6 +87,14 @@
   white-space: nowrap;
 }
 
+.city-page-tour-progress {
+  margin-top: 28px;
+}
+
+.city-page-tour-progress .sena-tour-progress {
+  margin-top: 0;
+}
+
 .city-page-intro {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);

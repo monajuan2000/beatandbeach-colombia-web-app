@@ -8,6 +8,7 @@ import { useTranslation } from '@/i18n/context/LanguageContext'
 type ItineraryQuotePreviewProps = {
     quote: QuotePdfContent
     planLabel: string
+    planCode: string
     availableTourDates: string[]
     selectedTourDate: string
     onTourDateChange: (date: string) => void
@@ -20,6 +21,7 @@ type ItineraryQuotePreviewProps = {
 export function ItineraryQuotePreview({
     quote,
     planLabel,
+    planCode,
     availableTourDates,
     selectedTourDate,
     onTourDateChange,
@@ -42,9 +44,13 @@ export function ItineraryQuotePreview({
             <div className="itinerary-quote-summary">
                 <span>{planLabel}</span>
                 <strong>{quote.planName}</strong>
+                <span className="itinerary-quote-plan-code">
+                    {t.trip.tourCode}: {planCode}
+                </span>
                 <p>{quote.summary}</p>
                 <dl className="itinerary-quote-trip-details">
                     <div><dt>{quote.labels.destination}</dt><dd>{quote.tripDetails.destination}</dd></div>
+                    <div><dt>{quote.labels.arrivalDate}</dt><dd>{quote.tripDetails.arrivalDate}</dd></div>
                     <div><dt>{quote.labels.departureDate}</dt><dd>{quote.tripDetails.departureDate}</dd></div>
                 </dl>
             </div>

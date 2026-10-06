@@ -17,6 +17,7 @@ export const eventsEs: EventsMessages = {
         addToTrip: 'Agregar a mi viaje',
         savedToTrip: '✓ Guardado en mi viaje',
         bookingSoon: '⏳ Disponible muy pronto',
+        eventBookingSoonHint: 'Las reservas para esta experiencia estarán disponibles muy pronto.',
         bookingSoonHint: (city: string) => `Podrás agregar este evento a tu viaje cuando ${city} abra como destino.`,
         planTrip: 'Planear mi viaje',
         explore: (city: string) => `Explorar ${city}`,

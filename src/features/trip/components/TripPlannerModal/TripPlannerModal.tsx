@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Modal } from '@/components/ui/Modal/Modal'
+import { BUSINESS_EMAIL, INSTAGRAM_PROFILE_URL, WHATSAPP_BUSINESS_PHONE, PUBLIC_SITE_ORIGIN } from '@/config/externalLinks'
+import { ITINERARY_EMAIL_PROVIDER_NAME } from '@/config/itineraryEmail'
 import { getCityById } from '@/features/cities/data/cities'
 import { getEventById } from '@/features/events/data/events'
 import type { EventItem } from '@/features/events/types'
@@ -9,7 +11,12 @@ import { getItinerariesForCity } from '@/features/itineraries/data/itineraries'
 import { getPlanCostBreakdown } from '@/features/itineraries/utils/planCosts'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import { formatCop } from '@/utils/currency'
-import { sendTripRequestEmail } from '../../services/sendTripRequest'
+import { EmailJsConfigurationError } from '@/features/itineraries/services/sendQuoteEmailWithEmailJs'
+import { sendItineraryQuoteEmail } from '@/features/itineraries/services/sendItineraryQuoteEmail'
+import { buildQuoteEmailBody } from '@/features/itineraries/utils/buildQuoteEmailBody'
+import { buildQuotePdfContent } from '@/features/itineraries/utils/buildQuotePdfContent'
+import { validateQuoteCustomerDetails } from '@/features/itineraries/utils/quoteCustomerValidation'
+import type { QuotePdfContent } from '@/features/itineraries/utils/downloadQuotePdf'
 import { useTrip } from '../../context/TripContext'
 import {
     TripPlannerSavedItems,
@@ -17,8 +24,8 @@ import {
     type TripPlannerQuoteSummary,
     type TripPlannerSavedTour,
 } from './TripPlannerSavedItems'
-import { TripPlannerSuccess } from './TripPlannerSuccess'
-import { formatTourOptionDate, formatTripDate } from '../../utils/tripDates'
+import { formatTourOptionDate } from '../../utils/tripDates'
+import type { QuoteCustomerDetails } from '@/features/itineraries/utils/downloadQuotePdf'
 import './TripPlannerModal.css'
 
 export function TripPlannerModal() {
@@ -48,6 +55,7 @@ function TripPlannerContent() {
         quoteDetails,
         plannerPlanId,
         clearSavedTour,
+        clearSavedTrip,
         closePlanner,
     } = useTrip()
     const { t, localize, locale } = useTranslation()
@@ -87,10 +95,12 @@ function TripPlannerContent() {
         const city = getCityById(savedTour.cityId)
         const catalog = getItinerariesForCity(savedTour.cityId)
         if (!city || !catalog) return undefined
+        const breakdown = getPlanCostBreakdown(selectedTour, catalog)
 
         return {
             destination: `${city.name} · ${t.cities.status.labels[city.status]}`,
             availableTourDate: formatTourOptionDate(matchingTripDetails.departureDate, locale),
+            arrivalDate: matchingTripDetails.departureDate.split('-').reverse().join('/'),
             departureDate: matchingTripDetails.departureDate.split('-').reverse().join('/'),
             travelers: matchingTripDetails.travelers,
             interests: matchingTripDetails.interests.map((interest) => copy.interests[interest]),
@@ -99,69 +109,110 @@ function TripPlannerContent() {
             documentNumber: matchingTripDetails.documentNumber,
             email: matchingTripDetails.email,
             phone: `+${matchingTripDetails.phoneCountryCode} ${matchingTripDetails.phone}`,
-            total: formatCop(getPlanCostBreakdown(selectedTour, catalog).total * matchingTripDetails.travelers, locale),
+            costs: breakdown.groups.map((group) => ({
+                label: t.itineraries.costs.categories[group.category],
+                perPerson: formatCop(group.subtotal, locale),
+                group: formatCop(group.subtotal * matchingTripDetails.travelers, locale),
+            })),
+            totalPerPerson: formatCop(breakdown.total, locale),
+            total: formatCop(breakdown.total * matchingTripDetails.travelers, locale),
         }
-    }, [copy.documentTypes, copy.interests, locale, matchingTripDetails, savedTour, selectedTour, t.cities.status.labels])
-    const [submitted, setSubmitted] = useState(false)
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const [submitError, setSubmitError] = useState('')
-    const [requestReference, setRequestReference] = useState('')
-
-    const selectedCity = getCityById(matchingTripDetails?.cityId ?? savedTour?.cityId)
-    const canRequestAvailability = Boolean(
-        matchingTripDetails?.departureDate
-        && matchingTripDetails.name.trim()
-        && matchingTripDetails.email.trim()
-        && matchingTripDetails.phone.trim()
-        && matchingTripDetails.phoneCountryCode
-        && selectedTour
-        && selectedTourItem,
-    )
-
-    const handleSubmit = async () => {
-        if (isSubmitting || !matchingTripDetails || !selectedTour || !savedTour || !selectedTourItem) return
-        setIsSubmitting(true)
-        setSubmitError('')
-
-        const reference = `BBC-${new Date().toISOString().slice(0, 10).replaceAll('-', '')}-${crypto.randomUUID().slice(0, 8).toUpperCase()}`
-        const emailCopy = copy.requestEmail
+    }, [
+        copy.documentTypes,
+        copy.interests,
+        locale,
+        matchingTripDetails,
+        savedTour,
+        selectedTour,
+        t.cities.status.labels,
+        t.itineraries.costs.categories,
+    ])
+    const quoteEmailContent = useMemo<{
+        quote: QuotePdfContent
+        body: ReturnType<typeof buildQuoteEmailBody>
+    } | undefined>(() => {
+        if (!matchingTripDetails || !savedTour || !selectedTour || !quoteSummary) return undefined
         const catalog = getItinerariesForCity(savedTour.cityId)
-        const groupTotal = catalog
-            ? formatCop(getPlanCostBreakdown(selectedTour, catalog).total * matchingTripDetails.travelers, locale)
-            : '—'
-        const departureDate = formatTripDate(matchingTripDetails.departureDate, locale)
-        const message = [
-            `${emailCopy.reference}: ${reference}`,
-            `${emailCopy.destination}: ${selectedCity?.name ?? savedTour.cityId}`,
-            `${emailCopy.arrivalDate}: ${departureDate}`,
-            `${emailCopy.departureDate}: ${departureDate}`,
-            `${emailCopy.travelers}: ${matchingTripDetails.travelers}`,
-            `${emailCopy.interests}: ${matchingTripDetails.interests.map((interest) => copy.interests[interest]).join(', ') || '—'}`,
-            `${emailCopy.selectedTour}: ${selectedTourItem.title}`,
-            `${emailCopy.tourCode}: ${selectedTourItem.code}`,
-            `${emailCopy.estimatedGroupTotal}: ${groupTotal}`,
-            `${emailCopy.savedEvents}: ${savedEventItems.map((event) => `${event.title} (${event.cityName}, ${event.date})`).join('; ') || '—'}`,
-            '',
-            `${emailCopy.contact}: ${matchingTripDetails.name}`,
-            `${emailCopy.email}: ${matchingTripDetails.email}`,
-            `${emailCopy.phone}: +${matchingTripDetails.phoneCountryCode} ${matchingTripDetails.phone}`,
-            '',
-            emailCopy.pendingAvailability,
-        ].join('\n')
+        if (!catalog) return undefined
 
+        const customer: QuoteCustomerDetails = {
+            fullName: matchingTripDetails.name,
+            documentType: matchingTripDetails.documentType,
+            documentNumber: matchingTripDetails.documentNumber,
+            email: matchingTripDetails.email,
+            phoneCountryIso: matchingTripDetails.phoneCountryIso,
+            phoneCountryCode: matchingTripDetails.phoneCountryCode,
+            phone: matchingTripDetails.phone,
+        }
+        const quote = buildQuotePdfContent({
+            plan: selectedTour,
+            locale,
+            localize,
+            categories: t.itineraries.costs.categories,
+            disclaimer: t.itineraries.costs.disclaimer,
+            labels: t.itineraries.costs.quotePdf,
+            breakdown: getPlanCostBreakdown(selectedTour, catalog),
+            customer,
+            tripDetails: {
+                destination: quoteSummary.destination,
+                availableTourDate: quoteSummary.availableTourDate,
+                arrivalDate: quoteSummary.arrivalDate,
+                departureDate: quoteSummary.departureDate,
+                travelers: matchingTripDetails.travelers,
+                interests: matchingTripDetails.interests.map((interest) => copy.interests[interest]),
+            },
+        })
+        const whatsappUrl = new URL(`https://wa.me/${WHATSAPP_BUSINESS_PHONE}`)
+        const quoteCopy = t.itineraries.costs.quoteModal
+        whatsappUrl.searchParams.set('text', quoteCopy.whatsappMessage(quote.planName, INSTAGRAM_PROFILE_URL))
+        const contactMessage = quoteCopy.emailMessage(
+            quote.planName,
+            BUSINESS_EMAIL,
+            WHATSAPP_BUSINESS_PHONE,
+            whatsappUrl.toString(),
+            INSTAGRAM_PROFILE_URL,
+        )
+        const logoUrl = new URL(`${import.meta.env.BASE_URL}beat-and-beach-logo.png`, PUBLIC_SITE_ORIGIN).toString()
+
+        return { quote, body: buildQuoteEmailBody(quote, contactMessage, logoUrl) }
+    }, [copy.interests, locale, localize, matchingTripDetails, quoteSummary, savedTour, selectedTour, t.itineraries.costs])
+    const [isSendingQuoteEmail, setIsSendingQuoteEmail] = useState(false)
+    const [quoteEmailFeedback, setQuoteEmailFeedback] = useState('')
+    const [quoteEmailSentTo, setQuoteEmailSentTo] = useState('')
+    const [isConfirmingQuoteEmail, setIsConfirmingQuoteEmail] = useState(false)
+    const isQuoteEmailReady = Boolean(matchingTripDetails && Object.values(validateQuoteCustomerDetails({
+        fullName: matchingTripDetails.name,
+        documentType: matchingTripDetails.documentType,
+        documentNumber: matchingTripDetails.documentNumber,
+        email: matchingTripDetails.email,
+        phoneCountryIso: matchingTripDetails.phoneCountryIso,
+        phoneCountryCode: matchingTripDetails.phoneCountryCode,
+        phone: matchingTripDetails.phone,
+    })).every(Boolean))
+
+    const handleSendQuoteEmail = async () => {
+        if (isSendingQuoteEmail || !isQuoteEmailReady || !matchingTripDetails || !quoteEmailContent) return
+        setIsSendingQuoteEmail(true)
+        setQuoteEmailFeedback('')
         try {
-            await sendTripRequestEmail({
-                reference,
-                customerName: matchingTripDetails.name,
+            await sendItineraryQuoteEmail({
+                quote: quoteEmailContent.quote,
                 customerEmail: matchingTripDetails.email,
-                message,
+                body: quoteEmailContent.body,
             })
-            setRequestReference(reference)
-            setSubmitted(true)
-        } catch {
-            setSubmitError(copy.submitError)
+            setQuoteEmailSentTo(matchingTripDetails.email)
+            clearSavedTrip()
+        } catch (error) {
+            console.error(`${ITINERARY_EMAIL_PROVIDER_NAME} rejected the itinerary quote:`, error)
+            const errorMessage = error instanceof Error ? error.message : ''
+            const quoteCopy = t.itineraries.costs.quoteModal
+            setQuoteEmailFeedback(error instanceof EmailJsConfigurationError
+                ? quoteCopy.emailJsNotConfigured
+                : /rate limit exceeded/i.test(errorMessage)
+                    ? quoteCopy.emailProviderRateLimitError(ITINERARY_EMAIL_PROVIDER_NAME)
+                    : quoteCopy.emailProviderError(ITINERARY_EMAIL_PROVIDER_NAME))
         } finally {
-            setIsSubmitting(false)
+            setIsSendingQuoteEmail(false)
         }
     }
 
@@ -185,12 +236,18 @@ function TripPlannerContent() {
         navigate(`/cities/${savedTour.cityId}`, { state: { openQuotePlanId: savedTour.planId } })
     }
 
-    if (submitted && matchingTripDetails) {
+    if (quoteEmailSentTo) {
         return (
-            <TripPlannerSuccess
-                requestReference={requestReference}
-                onDone={closePlanner}
-            />
+            <div className="modal-body planner-success" role="status" aria-live="polite">
+                <span className="card-tag">{copy.quoteEmailSuccess.tag}</span>
+                <h3 id="trip-planner-title">{copy.quoteEmailSuccess.title}</h3>
+                <p>{copy.quoteEmailSuccess.message.replace('{email}', quoteEmailSentTo)}</p>
+                <div className="action-row modal-actions">
+                    <button type="button" className="primary-button" onClick={closePlanner}>
+                        {copy.quoteEmailSuccess.done}
+                    </button>
+                </div>
+            </div>
         )
     }
 
@@ -213,7 +270,7 @@ function TripPlannerContent() {
 
             <div className="planner-request-panel">
                 <p className="planner-request-status">{copy.requestStatusNotice}</p>
-                {!canRequestAvailability ? (
+                {!quoteSummary ? (
                     <p className="planner-request-guidance">{copy.quoteRequiredNotice}</p>
                 ) : null}
                 <button
@@ -223,16 +280,65 @@ function TripPlannerContent() {
                 >
                     {copy.browseItineraries}
                 </button>
-                {submitError ? <p className="planner-submit-error" role="alert">{submitError}</p> : null}
-                {canRequestAvailability ? (
+                {quoteEmailFeedback ? <p className="planner-submit-error" role="alert">{quoteEmailFeedback}</p> : null}
+                {quoteSummary ? (
                     <button
                         type="button"
                         className="primary-button"
-                        onClick={() => void handleSubmit()}
-                        disabled={isSubmitting}
+                        onClick={() => setIsConfirmingQuoteEmail(true)}
+                        disabled={isSendingQuoteEmail || !isQuoteEmailReady}
                     >
-                        {isSubmitting ? copy.submitting : copy.submit}
+                        {isSendingQuoteEmail ? t.itineraries.costs.quoteModal.sendingQuote : copy.submit}
                     </button>
+                ) : null}
+                {isConfirmingQuoteEmail && quoteSummary && selectedTourItem ? (
+                    <div className="planner-quote-email-confirmation" role="alert">
+                        <strong>{copy.quoteEmailConfirmationTitle}</strong>
+                        <p>{copy.quoteEmailConfirmationMessage.replace('{email}', quoteSummary.email)}</p>
+                        <dl>
+                            <div>
+                                <dt>{copy.fields.destination}</dt>
+                                <dd>{quoteSummary.destination}</dd>
+                            </div>
+                            <div>
+                                <dt>{copy.selectedTour}</dt>
+                                <dd>{selectedTourItem.title} · {selectedTourItem.code}</dd>
+                            </div>
+                            <div>
+                                <dt>{copy.fields.arrivalDate}</dt>
+                                <dd>{quoteSummary.arrivalDate}</dd>
+                            </div>
+                            <div>
+                                <dt>{copy.fields.departureDate}</dt>
+                                <dd>{quoteSummary.departureDate}</dd>
+                            </div>
+                            <div>
+                                <dt>{copy.fields.travelers}</dt>
+                                <dd>{quoteSummary.travelers}</dd>
+                            </div>
+                        </dl>
+                        <div className="planner-quote-email-confirmation-actions">
+                            <button
+                                type="button"
+                                className="primary-button"
+                                onClick={() => {
+                                    setIsConfirmingQuoteEmail(false)
+                                    void handleSendQuoteEmail()
+                                }}
+                                disabled={isSendingQuoteEmail || !isQuoteEmailReady}
+                            >
+                                {copy.confirmQuoteEmail}
+                            </button>
+                            <button
+                                type="button"
+                                className="secondary-button"
+                                onClick={() => setIsConfirmingQuoteEmail(false)}
+                                disabled={isSendingQuoteEmail}
+                            >
+                                {copy.cancelQuoteEmail}
+                            </button>
+                        </div>
+                    </div>
                 ) : null}
             </div>
         </div>

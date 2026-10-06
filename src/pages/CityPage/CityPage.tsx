@@ -8,12 +8,14 @@ import { CityCoverImage } from '@/features/cities/components/CityCoverImage/City
 import { CityPill } from '@/features/cities/components/CityPill/CityPill'
 import { CityStatusBadge } from '@/features/cities/components/CityStatusBadge/CityStatusBadge'
 import { CityStatusNotice } from '@/features/cities/components/CityStatusNotice/CityStatusNotice'
+import { FEATURED_CITY_ID } from '@/features/cities/config'
 import { citiesByRollout, getCityById } from '@/features/cities/data/cities'
 import type { City } from '@/features/cities/types'
 import { EventCard } from '@/features/events/components/EventCard/EventCard'
 import { EventDetailsModal } from '@/features/events/components/EventDetailsModal/EventDetailsModal'
 import { getEventsByCity } from '@/features/events/data/events'
 import type { EventItem } from '@/features/events/types'
+import { SenaTourProgress } from '@/features/home/components/SenaTourProgress/SenaTourProgress'
 import { CityItineraries } from '@/features/itineraries/components/CityItineraries/CityItineraries'
 import { SurveyCallout } from '@/features/survey/components/SurveyCallout/SurveyCallout'
 import { getSurveyForCity } from '@/features/survey/data/surveys'
@@ -90,6 +92,12 @@ function CityPageContent({ city }: { city: City }) {
                     </Link>
                 </div>
             </header>
+
+            {city.id === FEATURED_CITY_ID ? (
+                <div className="city-page-tour-progress">
+                    <SenaTourProgress />
+                </div>
+            ) : null}
 
             {survey ? <SurveyCallout survey={survey} /> : null}
 

@@ -23,6 +23,7 @@ export type QuotePdfContent = {
     tripDetails: {
         destination: string
         availableTourDate: string
+        arrivalDate: string
         departureDate: string
         travelers: number
         interests: string[]
@@ -49,6 +50,7 @@ export type QuotePdfContent = {
         tripDetails: string
         destination: string
         availableTourDate: string
+        arrivalDate: string
         departureDate: string
         travelers: string
         interests: string
@@ -229,6 +231,7 @@ export async function createQuotePdfFile(quote: QuotePdfContent, fileName: strin
     const tripDetailRows = [
         `${quote.labels.destination}: ${quote.tripDetails.destination}`,
         `${quote.labels.availableTourDate}: ${quote.tripDetails.availableTourDate}`,
+        `${quote.labels.arrivalDate}: ${quote.tripDetails.arrivalDate}`,
         `${quote.labels.departureDate}: ${quote.tripDetails.departureDate}`,
         `${quote.labels.travelers}: ${quote.tripDetails.travelers}`,
         `${quote.labels.interests}: ${quote.tripDetails.interests.join(', ') || quote.labels.noneSelected}`,

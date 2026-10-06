@@ -1,0 +1,229 @@
+.sena-tour-progress {
+  --home-color-deep: #020617;
+  --home-color-foreground: #f8fafc;
+  --home-color-copy: #dfe8f4;
+  --home-color-muted: #cbd5e1;
+  --home-color-subtle: #94a3b8;
+  --home-color-accent: #34d399;
+  --home-color-accent-cool: #7dd3fc;
+  --home-color-accent-soft: #a7f3d0;
+  --home-rgb-deep: 2, 6, 23;
+  --home-rgb-white: 255, 255, 255;
+  --home-rgb-accent: 52, 211, 153;
+  --home-rgb-accent-cool: 125, 211, 252;
+
+  width: min(100%, 1200px);
+  margin: -24px auto 0;
+  padding: clamp(22px, 4vw, 36px);
+  overflow: hidden;
+  border: 1px solid rgba(var(--home-rgb-accent), 0.28);
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(var(--home-rgb-accent-cool), 0.12), transparent 48%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.96));
+  box-shadow: 0 20px 56px rgba(var(--home-rgb-deep), 0.28);
+}
+
+.sena-tour-progress-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.sena-tour-progress-eyebrow {
+  color: var(--home-color-accent);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.sena-tour-progress h3 {
+  margin: 8px 0 0;
+  color: var(--home-color-foreground);
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+}
+
+.sena-tour-confirmed {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 13px;
+  border: 1px solid rgba(var(--home-rgb-accent), 0.3);
+  border-radius: 999px;
+  background: rgba(var(--home-rgb-accent), 0.1);
+  color: var(--home-color-accent-soft);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.sena-tour-confirmed-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--home-color-accent);
+  box-shadow: 0 0 12px rgba(var(--home-rgb-accent), 0.75);
+}
+
+.sena-tour-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 18px 0 30px;
+  color: var(--home-color-copy);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.sena-tour-stage-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  color: var(--home-color-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.sena-tour-current-stage {
+  color: var(--home-color-accent-soft);
+}
+
+.sena-tour-stages {
+  display: flex;
+  gap: 0;
+  margin: 0;
+  padding: 0 0 10px;
+  overflow-x: auto;
+  list-style: none;
+  scrollbar-color: rgba(var(--home-rgb-accent-cool), 0.5) rgba(var(--home-rgb-white), 0.08);
+  scrollbar-width: thin;
+}
+
+.sena-tour-stage {
+  position: relative;
+  display: grid;
+  flex: 1 0 112px;
+  grid-template-rows: 32px 1fr;
+  justify-items: center;
+  align-content: start;
+  gap: 11px;
+  color: var(--home-color-subtle);
+  text-align: center;
+}
+
+.sena-tour-stage:not(:last-child)::after {
+  position: absolute;
+  top: 15px;
+  left: calc(50% + 17px);
+  width: calc(100% - 34px);
+  height: 2px;
+  background: rgba(var(--home-rgb-white), 0.16);
+  content: "";
+}
+
+.sena-tour-stage-marker {
+  z-index: 1;
+  display: grid;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  place-items: center;
+  border: 1px solid rgba(var(--home-rgb-white), 0.22);
+  border-radius: 50%;
+  background: var(--home-color-deep);
+  color: var(--home-color-muted);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.sena-tour-stage.is-current {
+  color: var(--home-color-foreground);
+}
+
+.sena-tour-stage.is-current .sena-tour-stage-marker {
+  border-color: var(--home-color-accent);
+  background: var(--home-color-accent);
+  color: var(--home-color-deep);
+  box-shadow: 0 0 18px rgba(var(--home-rgb-accent), 0.35);
+}
+
+.sena-tour-stage-name {
+  max-width: 120px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .sena-tour-progress {
+    margin-top: -14px;
+    border-radius: 20px;
+  }
+
+  .sena-tour-progress-header {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .sena-tour-date {
+    margin-bottom: 24px;
+  }
+
+  .sena-tour-stage-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .sena-tour-stages {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .sena-tour-stage {
+    min-height: 52px;
+    flex-direction: row;
+    grid-template-columns: 32px minmax(0, 1fr);
+    grid-template-rows: auto;
+    justify-items: start;
+    align-content: center;
+    gap: 12px;
+    text-align: left;
+  }
+
+  .sena-tour-stages::before {
+    position: absolute;
+    top: 26px;
+    bottom: 26px;
+    left: 15px;
+    width: 2px;
+    background: rgba(var(--home-rgb-white), 0.16);
+    content: "";
+  }
+
+  .sena-tour-stage:not(:last-child)::after {
+    display: none;
+  }
+
+  .sena-tour-stage-marker {
+    margin-top: 10px;
+  }
+
+  .sena-tour-stage-name {
+    align-self: center;
+  }
+
+  .sena-tour-stage-name {
+    max-width: none;
+  }
+}

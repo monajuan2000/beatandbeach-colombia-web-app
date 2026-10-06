@@ -38,7 +38,10 @@ export function EventDetailsModal({ event, onClose, showCityLink = true }: Event
             <div className="modal-body event-details">
                 <div className="event-details-top">
                     <Badge tone="blue">{t.events.categories[event.category]}</Badge>
-                    {event.featured ? <Badge tone="green">{t.common.featured}</Badge> : null}
+                    <div className="event-details-status-badges">
+                        {event.comingSoon ? <Badge tone="amber">{t.events.card.comingSoon}</Badge> : null}
+                        {event.featured ? <Badge tone="green">{t.common.featured}</Badge> : null}
+                    </div>
                 </div>
 
                 <h3 id="event-details-title">{localize(event.title)}</h3>
@@ -84,7 +87,7 @@ export function EventDetailsModal({ event, onClose, showCityLink = true }: Event
 
                 {!bookingOpen && !saved && city ? (
                     <p id="event-details-soon-hint" className="event-details-soon-hint">
-                        {copy.bookingSoonHint(city.name)}
+                        {event.comingSoon ? copy.eventBookingSoonHint : copy.bookingSoonHint(city.name)}
                     </p>
                 ) : null}
             </div>

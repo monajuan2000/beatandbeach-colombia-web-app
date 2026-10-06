@@ -54,6 +54,7 @@ export function ItineraryQuoteModal({ plan, breakdown, cityId, isOpen, onClose }
     const tripQuoteDetails = useMemo<QuotePdfContent['tripDetails']>(() => ({
         destination: `${city?.name ?? ''}${city?.status === 'launching' ? ` · ${quoteLabels.launching}` : ''}`,
         availableTourDate: formattedTourDate,
+        arrivalDate: compactTourDate,
         departureDate: compactTourDate,
         travelers: matchingTripDetails?.travelers ?? 2,
         interests: matchingTripDetails?.interests.map((interest) => t.trip.interests[interest]) ?? [],
@@ -113,10 +114,9 @@ export function ItineraryQuoteModal({ plan, breakdown, cityId, isOpen, onClose }
     } | null>(null)
     const [downloadActionError, setDownloadActionError] = useState('')
     const [confirmation, setConfirmation] = useState<{
-        kind: 'download' | 'email'
+        kind: 'download'
         message: string
     } | null>(null)
-    const [emailError, setEmailError] = useState('')
     const [shareMessage, setShareMessage] = useState('')
     const quoteKey = JSON.stringify(quote)
     const currentPdf = preparedPdf?.key === quoteKey ? preparedPdf : null
@@ -243,7 +243,6 @@ export function ItineraryQuoteModal({ plan, breakdown, cityId, isOpen, onClose }
     const handleClose = () => {
         setDownloadActionError('')
         setConfirmation(null)
-        setEmailError('')
         setShareMessage('')
         setCustomerDetails({
             fullName: '',
@@ -280,40 +279,19 @@ export function ItineraryQuoteModal({ plan, breakdown, cityId, isOpen, onClose }
         <Modal
             isOpen={isOpen}
             onClose={handleClose}
-            labelledBy={confirmation
-                ? `itinerary-${confirmation.kind}-confirmation-title`
-                : emailError
-                    ? 'itinerary-email-error-title'
-                    : 'itinerary-quote-title'}
+            labelledBy={confirmation ? `itinerary-${confirmation.kind}-confirmation-title` : 'itinerary-quote-title'}
             closeLabel={t.common.close}
             wide
         >
             {confirmation ? (
                 <div className="modal-body itinerary-download-confirmation">
                     <span className="itinerary-download-confirmation-icon" aria-hidden="true">✓</span>
-                    <h3 id={`itinerary-${confirmation.kind}-confirmation-title`}>
-                        {confirmation.kind === 'download'
-                            ? copy.downloadConfirmationTitle
-                            : copy.emailConfirmationTitle}
-                    </h3>
+                    <h3 id={`itinerary-${confirmation.kind}-confirmation-title`}>{copy.downloadConfirmationTitle}</h3>
                     <p>{confirmation.message}</p>
                     <button
                         type="button"
                         className="primary-button"
                         onClick={() => setConfirmation(null)}
-                    >
-                        {copy.acceptAndReturn}
-                    </button>
-                </div>
-            ) : emailError ? (
-                <div className="modal-body itinerary-download-confirmation itinerary-email-error-confirmation">
-                    <span className="itinerary-download-confirmation-icon" aria-hidden="true">!</span>
-                    <h3 id="itinerary-email-error-title">{copy.emailErrorTitle}</h3>
-                    <p role="alert">{emailError}</p>
-                    <button
-                        type="button"
-                        className="primary-button"
-                        onClick={() => setEmailError('')}
                     >
                         {copy.acceptAndReturn}
                     </button>
@@ -329,6 +307,7 @@ export function ItineraryQuoteModal({ plan, breakdown, cityId, isOpen, onClose }
                     <ItineraryQuotePreview
                         quote={quote}
                         planLabel={copy.planLabel}
+                        planCode={plan.code}
                         availableTourDates={availableTourDates}
                         selectedTourDate={selectedTourDate}
                         onTourDateChange={handleTourDateChange}
@@ -339,15 +318,10 @@ export function ItineraryQuoteModal({ plan, breakdown, cityId, isOpen, onClose }
                     />
 
                     <ItineraryQuoteEmailForm
-                        quote={quote}
-                        contactMessage={contactMessage}
                         customerDetails={customerDetails}
-                        isCustomerDetailsComplete={isCustomerDetailsComplete}
                         invalidFields={invalidCustomerFields}
                         onCustomerDetailsChange={handleCustomerDetailsChange}
                         onPhoneCountryChange={handlePhoneCountryChange}
-                        onError={setEmailError}
-                        onSuccess={(message) => setConfirmation({ kind: 'email', message })}
                     />
 
                     <button

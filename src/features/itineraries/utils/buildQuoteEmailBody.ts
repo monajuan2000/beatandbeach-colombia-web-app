@@ -25,6 +25,7 @@ export function buildQuoteEmailBody(quote: QuotePdfContent, contactMessage = '',
     const tripDetailsRows = [
         `${quote.labels.destination}: ${quote.tripDetails.destination}`,
         `${quote.labels.availableTourDate}: ${quote.tripDetails.availableTourDate}`,
+        `${quote.labels.arrivalDate}: ${quote.tripDetails.arrivalDate}`,
         `${quote.labels.departureDate}: ${quote.tripDetails.departureDate}`,
         `${quote.labels.travelers}: ${quote.tripDetails.travelers}`,
         `${quote.labels.interests}: ${quote.tripDetails.interests.join(', ') || quote.labels.noneSelected}`,

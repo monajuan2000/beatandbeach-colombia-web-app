@@ -57,6 +57,19 @@
   line-height: 1.25;
 }
 
+.itinerary-quote-summary .itinerary-quote-plan-code {
+  align-self: flex-start;
+  padding: 5px 10px;
+  border: 1px solid rgba(190, 242, 100, 0.32);
+  border-radius: 999px;
+  background: rgba(190, 242, 100, 0.1);
+  color: #ecfccb;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
 .itinerary-quote-summary p {
   margin: 0;
   color: var(--color-text-muted);

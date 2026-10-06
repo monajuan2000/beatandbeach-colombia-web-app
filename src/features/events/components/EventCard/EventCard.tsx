@@ -39,7 +39,7 @@ export function EventCard({ event, onViewDetails, variant = 'standard' }: EventC
     )
 
     if (variant === 'city') {
-        const comingSoon = !isEventBookable(event)
+        const comingSoon = event.comingSoon || !isEventBookable(event)
 
         return (
             <article
@@ -73,7 +73,11 @@ export function EventCard({ event, onViewDetails, variant = 'standard' }: EventC
             <div className="event-card-row">
                 <Badge tone="blue">{categoryLabel}</Badge>
                 <div className="event-card-status-badges">
-                    {city?.status === 'under-review' ? <CityStatusBadge status={city.status} /> : null}
+                    {event.comingSoon ? (
+                        <CityStatusBadge status="under-review" />
+                    ) : city?.status === 'under-review' ? (
+                        <CityStatusBadge status={city.status} />
+                    ) : null}
                     {event.featured ? <Badge tone="green">{t.common.featured}</Badge> : null}
                 </div>
             </div>

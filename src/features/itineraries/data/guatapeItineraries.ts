@@ -373,7 +373,7 @@ export const guatapeItineraries: CityItineraries = {
         },
         {
             id: 'guatape-sena',
-            code: 'GUA-SENA',
+            code: 'GUA-SENA-001',
             name: { en: 'SENA special plan', es: 'Plan especial SENA' },
             specialLabel: { en: 'SENA plan', es: 'Plan SENA' },
             summary: {

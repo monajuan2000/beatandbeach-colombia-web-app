@@ -58,7 +58,17 @@ export function CityItineraries({ city }: { city: City }) {
             aria-label={copy.eyebrow}
         >
             <SectionHeader eyebrow={copy.eyebrow} title={copy.title(city.name)} variant="accent">
-                <p className="city-itineraries-intro">{copy.intro}</p>
+                <div className="city-itineraries-overview">
+                    <p className="city-itineraries-intro">{copy.intro(city.name)}</p>
+                    <div className="city-itineraries-inclusions">
+                        <span>{copy.inclusionsLabel}</span>
+                        <ul>
+                            {copy.inclusions.map((inclusion) => (
+                                <li key={inclusion}>{inclusion}</li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
                 <div className="city-itineraries-toggle-row">
                     <button
                         type="button"
@@ -77,7 +87,13 @@ export function CityItineraries({ city }: { city: City }) {
             </SectionHeader>
 
             {city.id === ITINERARY_RULES.guatape.cityId && unavailablePlanIds.length > 0 ? (
-                <p className="city-itineraries-construction-note">{copy.comingSoon}</p>
+                <aside className="city-itineraries-construction-note">
+                    <span className="city-itineraries-construction-indicator" aria-hidden="true" />
+                    <div>
+                        <strong>{copy.availabilityLabel}</strong>
+                        <p>{copy.comingSoon}</p>
+                    </div>
+                </aside>
             ) : null}
 
             <Collapsible id={contentId} isOpen={isOpen}>

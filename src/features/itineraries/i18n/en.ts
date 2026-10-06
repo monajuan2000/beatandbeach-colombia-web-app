@@ -4,7 +4,17 @@ export const itinerariesEn = {
     section: {
         eyebrow: 'Itineraries',
         title: (city: string) => `Basic plans to experience ${city}`,
-        intro: 'Pick how many days you have. Basic plans include transport, accident insurance, breakfast, lunch and dinner, the main attractions and, for multi-day trips, lodging.',
+        intro: (city: string) => `Choose how many days you have to explore ${city} at your own pace.`,
+        inclusionsLabel: 'Every plan includes',
+        inclusions: [
+            'Transport',
+            'Accident insurance',
+            'Breakfast',
+            'Lunch and dinner',
+            'Top attractions',
+            'Lodging on multi-day trips',
+        ],
+        availabilityLabel: 'Plan availability',
         durationAriaLabel: 'Choose the length of your trip',
         selectedPlan: 'Currently viewing',
         duration: (days: number) => `${days} ${days === 1 ? 'day' : 'days'}`,

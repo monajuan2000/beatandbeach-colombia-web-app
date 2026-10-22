@@ -68,7 +68,10 @@ export function CityItineraries({ city }: { city: City }) {
         ...catalog.plans.flatMap((item) =>
             item.specialLabel ? [{ value: item.id, label: localize(item.specialLabel), tone: 'lime' as const }] : [],
         ),
-        ...basicPlans.map((item) => ({ value: item.id, label: copy.duration(item.days.length) })),
+        ...basicPlans.map((item) => ({
+            value: item.id,
+            label: item.durationLabel ? localize(item.durationLabel) : copy.duration(item.days.length),
+        })),
     ]
     const lowestTotal = Math.min(...basicPlans.map((item) => getPlanCostBreakdown(item, catalog).total))
     const contentId = `${city.id}-itineraries-content`

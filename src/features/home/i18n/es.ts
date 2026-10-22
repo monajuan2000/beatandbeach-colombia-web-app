@@ -43,6 +43,13 @@ export const homeEs: HomeMessages = {
         title: 'Los eventos más inolvidables de Colombia',
         subtitle: 'Festivales, cultura y paisajes que vale la pena vivir al menos una vez.',
     },
+    santaElena: {
+        eyebrow: 'Medellín · Santa Elena',
+        title: 'Una noche de camping en Santa Elena',
+        description: 'Explora la naturaleza del Parque Arví, pasa una noche de camping y regresa a Medellín a la mañana siguiente.',
+        imageAlt: 'Paisaje de un camping en Santa Elena, Medellín',
+        cta: 'Ver itinerario',
+    },
     wonders: {
         ariaLabel: 'Banner de lo mejor de Colombia',
         eyebrow: 'Un país de contrastes',

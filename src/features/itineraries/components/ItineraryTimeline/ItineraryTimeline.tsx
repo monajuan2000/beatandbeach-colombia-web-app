@@ -34,6 +34,13 @@ export function ItineraryTimeline({ plan, catalog }: ItineraryTimelineProps) {
                 {plan.specialLabel ? <span className="card-tag itinerary-special-tag">{copy.specialPlan}</span> : null}
                 <h3>{localize(plan.name)}</h3>
                 <p>{localize(plan.summary)}</p>
+                {plan.coverImage ? (
+                    <img
+                        className="itinerary-plan-cover"
+                        src={plan.coverImage.src}
+                        alt={localize(plan.coverImage.alt)}
+                    />
+                ) : null}
             </div>
 
             {plan.days.map((day, dayIndex) => (

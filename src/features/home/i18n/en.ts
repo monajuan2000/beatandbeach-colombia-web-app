@@ -41,6 +41,13 @@ export const homeEn = {
         title: 'Colombia’s most unforgettable events',
         subtitle: 'Festivals, culture, and landscapes worth living at least once.',
     },
+    santaElena: {
+        eyebrow: 'Medellín · Santa Elena',
+        title: 'A night of camping in Santa Elena',
+        description: 'Explore the nature of Arví Park, spend a night camping, and return to Medellín the next morning.',
+        imageAlt: 'Scenic campground in Santa Elena, Medellín',
+        cta: 'View the itinerary',
+    },
     wonders: {
         ariaLabel: 'Colombia highlights banner',
         eyebrow: 'A country of contrasts',

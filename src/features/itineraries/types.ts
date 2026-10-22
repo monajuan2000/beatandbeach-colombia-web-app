@@ -38,6 +38,13 @@ export type ItineraryPlan = {
     code: string
     name: LocalizedText
     summary: LocalizedText
+    /** Optional cover shown with this plan's itinerary. */
+    coverImage?: {
+        src: string
+        alt: LocalizedText
+    }
+    /** Optional display label for plans whose overnight duration differs from their calendar days. */
+    durationLabel?: LocalizedText
     days: ItineraryDay[]
     /**
      * Marks a plan made for a specific group (e.g. SENA). It is shown as the selector label instead

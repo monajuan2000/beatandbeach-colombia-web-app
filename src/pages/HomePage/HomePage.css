@@ -19,6 +19,52 @@
   min-height: 280px;
 }
 
+.home-santa-elena-card {
+  width: min(100%, 1200px);
+  margin: -28px auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(8, 47, 73, 0.94));
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.2);
+}
+
+.home-santa-elena-image {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  object-fit: cover;
+}
+
+.home-santa-elena-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 14px;
+  padding: clamp(24px, 5vw, 52px);
+}
+
+.home-santa-elena-copy h2,
+.home-santa-elena-copy p {
+  margin: 0;
+}
+
+.home-santa-elena-copy h2 {
+  color: #f8fafc;
+}
+
+.home-santa-elena-copy p {
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.home-santa-elena-cta {
+  margin-top: 6px;
+}
+
 @keyframes home-gradient-shift {
   from {
     background-position: 0% 50%;
@@ -108,5 +154,14 @@
 
   .home-featured-destination-card .city-card {
     min-height: 340px;
+  }
+
+  .home-santa-elena-card {
+    grid-template-columns: 1fr;
+  }
+
+  .home-santa-elena-image {
+    min-height: 220px;
+    max-height: 280px;
   }
 }

@@ -16,6 +16,17 @@
   line-height: 1.6;
 }
 
+.itinerary-plan-cover {
+  display: block;
+  width: 100%;
+  height: clamp(180px, 24vw, 300px);
+  margin-top: 18px;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  object-fit: cover;
+  object-position: center;
+}
+
 .itinerary-day {
   padding: clamp(18px, 3vw, 24px);
   border-radius: 24px;

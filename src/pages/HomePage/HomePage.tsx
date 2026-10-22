@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom'
 import { PageSection } from '@/components/layout/PageSection/PageSection'
 import { SiteFooter } from '@/components/layout/SiteFooter/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader/SiteHeader'
+import santaElenaCampingImage from '@/assets/images/destinations/Medellin-Santa-Elena-an-attractive-campground.png'
 import { CityCard } from '@/features/cities/components/CityCard/CityCard'
 import { FEATURED_CITY_ID } from '@/features/cities/config'
 import { CitiesGrid } from '@/features/cities/components/CitiesGrid/CitiesGrid'
@@ -37,6 +39,26 @@ export function HomePage() {
                             <CityCard city={featuredDestination} />
                         </div>
                     ) : null}
+                    <article className="home-santa-elena-card" aria-labelledby="home-santa-elena-title">
+                        <img
+                            className="home-santa-elena-image"
+                            src={santaElenaCampingImage}
+                            alt={t.home.santaElena.imageAlt}
+                        />
+                        <div className="home-santa-elena-copy">
+                            <span className="card-tag">{t.home.santaElena.eyebrow}</span>
+                            <h2 id="home-santa-elena-title">{t.home.santaElena.title}</h2>
+                            <p>{t.home.santaElena.description}</p>
+                            <Link
+                                className="primary-button home-santa-elena-cta"
+                                to="/cities/medellin"
+                                state={{ openItineraries: true }}
+                            >
+                                {t.home.santaElena.cta}
+                                <span aria-hidden="true"> →</span>
+                            </Link>
+                        </div>
+                    </article>
                     <ColombiaWondersShowcase />
                     <FeaturedEventSpotlight />
                 </PageSection>

@@ -78,7 +78,19 @@
 }
 
 .sena-tour-current-stage {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   color: var(--home-color-accent-soft);
+}
+
+.sena-tour-current-stage strong {
+  padding: 4px 9px;
+  border: 1px solid rgba(var(--rgb-accent), 0.3);
+  border-radius: var(--radius-pill);
+  background: rgba(var(--rgb-accent), 0.1);
+  color: var(--home-color-foreground);
+  font-size: 0.75rem;
 }
 
 .sena-tour-stages {
@@ -114,6 +126,18 @@
   content: "";
 }
 
+.sena-tour-stage.is-complete:not(:last-child)::after {
+  background: var(--home-color-accent);
+}
+
+.sena-tour-stage.is-current:not(:last-child)::after {
+  background: linear-gradient(
+    to right,
+    var(--home-color-accent) 0 var(--current-stage-progress, 50%),
+    rgba(var(--home-rgb-white), 0.16) var(--current-stage-progress, 50%) 100%
+  );
+}
+
 .sena-tour-stage-marker {
   z-index: 1;
   display: grid;
@@ -138,6 +162,12 @@
   background: var(--home-color-accent);
   color: var(--home-color-deep);
   box-shadow: 0 0 18px rgba(var(--home-rgb-accent), 0.35);
+}
+
+.sena-tour-stage.is-complete .sena-tour-stage-marker {
+  border-color: rgba(var(--rgb-accent), 0.7);
+  background: rgba(var(--rgb-accent), 0.18);
+  color: var(--home-color-accent-soft);
 }
 
 .sena-tour-stage-name {
@@ -188,18 +218,25 @@
     text-align: left;
   }
 
-  .sena-tour-stages::before {
-    position: absolute;
-    top: 26px;
-    bottom: 26px;
+  .sena-tour-stage:not(:last-child)::after {
+    top: 42px;
+    bottom: -10px;
     left: 15px;
     width: 2px;
+    height: auto;
     background: rgba(var(--home-rgb-white), 0.16);
-    content: "";
   }
 
-  .sena-tour-stage:not(:last-child)::after {
-    display: none;
+  .sena-tour-stage.is-complete:not(:last-child)::after {
+    background: var(--home-color-accent);
+  }
+
+  .sena-tour-stage.is-current:not(:last-child)::after {
+    background: linear-gradient(
+      to bottom,
+      var(--home-color-accent) 0 var(--current-stage-progress, 50%),
+      rgba(var(--home-rgb-white), 0.16) var(--current-stage-progress, 50%) 100%
+    );
   }
 
   .sena-tour-stage-marker {

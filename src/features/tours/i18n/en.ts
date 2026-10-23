@@ -7,6 +7,7 @@ export const toursEn = {
         date: 'March 20, 2027',
         stagesLabel: 'Tour stages',
         currentStageLabel: 'Current stage',
+        currentStageProgress: (percent: number) => `${percent}% complete`,
         stages: [
             'Planning',
             'Route design and stop selection',

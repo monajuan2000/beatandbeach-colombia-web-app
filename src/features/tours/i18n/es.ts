@@ -9,6 +9,7 @@ export const toursEs: ToursMessages = {
         date: '20 de marzo de 2027',
         stagesLabel: 'Etapas del tour',
         currentStageLabel: 'Etapa actual',
+        currentStageProgress: (percent: number) => `${percent}% completada`,
         stages: [
             'Planeación',
             'Diseño de ruta y selección de paradas',

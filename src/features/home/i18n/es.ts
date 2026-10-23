@@ -91,6 +91,8 @@ export const homeEs: HomeMessages = {
             'Beat & Beach Colombia es una marca de turismo creada para conectar a los viajeros con el ritmo, la cultura y la belleza de los destinos más icónicos del país. Diseñamos experiencias que combinan identidad local, hospitalidad premium y momentos auténticos en Medellín, Cartagena y Guatapé.',
             'Nuestra misión es simple: ayudar a los visitantes a descubrir el alma de Colombia a través de eventos cuidadosamente seleccionados, experiencias culturales, energía costera y escapadas escénicas que se sienten emocionantes y profundamente locales.',
         ],
+        instagramLinkLabel: 'Visita Beat & Beach Colombia en Instagram',
+        instagramCta: 'Síguenos en Instagram',
         points: [
             { title: 'Viajes a la medida', description: 'Experiencias pensadas para cada destino.' },
             { title: 'Identidad local', description: 'Momentos auténticos moldeados por la cultura y la comunidad de cada región.' },

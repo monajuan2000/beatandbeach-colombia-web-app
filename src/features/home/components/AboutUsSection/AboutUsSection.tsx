@@ -2,6 +2,7 @@ import logoImage from '@/assets/images/brand/beat-and-beach-logo.png'
 import { useInView } from '@/hooks/useInView'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import { formatCardNumber, revealDelay } from '@/utils/reveal'
+import { InstagramFollowLink } from '../InstagramFollowLink/InstagramFollowLink'
 import './AboutUsSection.css'
 
 export function AboutUsSection() {
@@ -22,6 +23,8 @@ export function AboutUsSection() {
                 {copy.paragraphs.map((paragraph) => (
                     <p key={paragraph}>{paragraph}</p>
                 ))}
+
+                <InstagramFollowLink />
 
                 <div ref={ref} className={`about-points reveal-group ${inView ? 'is-revealed' : ''}`}>
                     {copy.points.map((point, index) => (

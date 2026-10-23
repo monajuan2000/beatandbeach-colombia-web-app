@@ -5,6 +5,7 @@ import { cities, citiesByRollout } from '@/features/cities/data/cities'
 import { useInView } from '@/hooks/useInView'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import { revealDelay } from '@/utils/reveal'
+import { InstagramFollowLink } from '../InstagramFollowLink/InstagramFollowLink'
 import { NextEventLink } from '../NextEventLink/NextEventLink'
 import './HeroSection.css'
 
@@ -41,7 +42,6 @@ export function HeroSection() {
                             {copy.viewCities}
                         </Link>
                     </div>
-                    <NextEventLink />
                 </div>
 
                 <ul className="hero-stats reveal-item" style={revealDelay(4)} aria-label={copy.statsAriaLabel}>
@@ -59,6 +59,11 @@ export function HeroSection() {
                         </li>
                     ))}
                 </ul>
+
+                <div className="hero-support-links reveal-item" style={revealDelay(5)}>
+                    <NextEventLink />
+                    <InstagramFollowLink />
+                </div>
             </div>
 
             <div className="hero-visual reveal-item" style={revealDelay(2)} aria-label={copy.visualAriaLabel}>

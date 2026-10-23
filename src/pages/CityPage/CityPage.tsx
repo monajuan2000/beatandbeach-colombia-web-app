@@ -21,6 +21,7 @@ import { SurveyCallout } from '@/features/survey/components/SurveyCallout/Survey
 import { getSurveyForCity } from '@/features/survey/data/surveys'
 import { useTrip } from '@/features/trip/context/TripContext'
 import { isTripPlannerAvailable } from '@/features/trip/config'
+import { InstagramFollowLink } from '@/features/home/components/InstagramFollowLink/InstagramFollowLink'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import './CityPage.css'
 
@@ -74,22 +75,25 @@ function CityPageContent({ city }: { city: City }) {
                     <CityStatusNotice city={city} variant="highlight" className="city-page-notice" />
                 </div>
                 <div className="city-page-actions">
-                    <button
-                        type="button"
-                        className="primary-button"
-                        onClick={() => canPlanTrip && openPlanner(city.id)}
-                        disabled={!canPlanTrip}
-                    >
-                        {copy.planTrip(city.name)}
-                        {savedItemCount > 0 ? (
-                            <span className="trip-count" aria-label={t.trip.savedItemsCount(savedItemCount)}>
-                                {savedItemCount}
-                            </span>
-                        ) : null}
-                    </button>
-                    <Link to="/" className="inverse-button city-page-back">
-                        {t.common.backToHome}
-                    </Link>
+                    <div className="city-page-primary-actions">
+                        <button
+                            type="button"
+                            className="primary-button"
+                            onClick={() => canPlanTrip && openPlanner(city.id)}
+                            disabled={!canPlanTrip}
+                        >
+                            {copy.planTrip(city.name)}
+                            {savedItemCount > 0 ? (
+                                <span className="trip-count" aria-label={t.trip.savedItemsCount(savedItemCount)}>
+                                    {savedItemCount}
+                                </span>
+                            ) : null}
+                        </button>
+                        <Link to="/" className="inverse-button city-page-back">
+                            {t.common.backToHome}
+                        </Link>
+                    </div>
+                    <InstagramFollowLink variant="compact" />
                 </div>
             </header>
 

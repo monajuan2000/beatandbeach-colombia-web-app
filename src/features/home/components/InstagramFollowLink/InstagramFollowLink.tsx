@@ -2,13 +2,17 @@ import { INSTAGRAM_PROFILE_URL } from '@/config/externalLinks'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import './InstagramFollowLink.css'
 
-export function InstagramFollowLink() {
+type InstagramFollowLinkProps = {
+    variant?: 'default' | 'compact'
+}
+
+export function InstagramFollowLink({ variant = 'default' }: InstagramFollowLinkProps) {
     const { t } = useTranslation()
     const copy = t.home.about
 
     return (
         <a
-            className="instagram-follow-link"
+            className={`instagram-follow-link instagram-follow-link-${variant}`}
             href={INSTAGRAM_PROFILE_URL}
             target="_blank"
             rel="noreferrer"

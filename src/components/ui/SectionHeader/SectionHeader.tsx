@@ -4,20 +4,28 @@ import './SectionHeader.css'
 type SectionHeaderProps = {
     eyebrow: string
     title: string
+    titleId?: string
     /** `accent` adds the eyebrow pill and animated gradient title (meant for light surfaces). */
     variant?: 'default' | 'accent'
     className?: string
     children?: ReactNode
 }
 
-export function SectionHeader({ eyebrow, title, variant = 'default', className = '', children }: SectionHeaderProps) {
+export function SectionHeader({
+    eyebrow,
+    title,
+    titleId,
+    variant = 'default',
+    className = '',
+    children,
+}: SectionHeaderProps) {
     const isAccent = variant === 'accent'
 
     return (
         <div className={`section-header ${className}`.trim()}>
             <div>
                 <span className={isAccent ? 'eyebrow eyebrow-pill' : 'eyebrow'}>{eyebrow}</span>
-                <h2 className={isAccent ? 'accent-heading' : undefined}>{title}</h2>
+                <h2 id={titleId} className={isAccent ? 'accent-heading' : undefined}>{title}</h2>
                 {children}
             </div>
         </div>

@@ -1,4 +1,5 @@
 export const CITY_IDS = {
+    medellin: 'medellin',
     guatape: 'guatape',
 } as const
 

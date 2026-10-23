@@ -47,7 +47,12 @@ export function CityItineraries({ city }: { city: City }) {
         : undefined
     const isSectionOpen = isOpen || routeOpenItineraries || Boolean(requestedQuotePlan)
 
-    const activePlanId = requestedQuotePlan?.id ?? selectedPlanId
+    const routeSelectedPlanId =
+        dismissedQuoteLocationKey !== location.key && typeof routeQuotePlanId === 'string' &&
+        catalog?.plans.some((item) => item.id === routeQuotePlanId)
+            ? routeQuotePlanId
+            : undefined
+    const activePlanId = requestedQuotePlan?.id ?? routeSelectedPlanId ?? selectedPlanId
     const plan = catalog?.plans.find((item) => item.id === activePlanId) ?? firstAvailablePlan
 
     useEffect(() => {

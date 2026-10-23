@@ -1,13 +1,15 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Collapsible } from '@/components/ui/Collapsible/Collapsible'
 import { Modal } from '@/components/ui/Modal/Modal'
+import { SectionHeader } from '@/components/ui/SectionHeader/SectionHeader'
 import { BUSINESS_EMAIL, INSTAGRAM_PROFILE_URL, WHATSAPP_BUSINESS_PHONE, PUBLIC_SITE_ORIGIN } from '@/config/externalLinks'
 import { ITINERARY_EMAIL_PROVIDER_NAME } from '@/config/itineraryEmail'
 import { getCityById } from '@/features/cities/data/cities'
 import { getEventById } from '@/features/events/data/events'
 import type { EventItem } from '@/features/events/types'
 import { isQuoteablePlan } from '@/features/itineraries/config'
-import { getItinerariesForCity } from '@/features/itineraries/data/itineraries'
+import { getItinerariesForCity, itineraries } from '@/features/itineraries/data/itineraries'
 import { getPlanCostBreakdown } from '@/features/itineraries/utils/planCosts'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import { formatCop } from '@/utils/currency'
@@ -47,10 +49,10 @@ export function TripPlannerModal() {
 
 function TripPlannerContent() {
     const navigate = useNavigate()
+    const [isItineraryCatalogOpen, setIsItineraryCatalogOpen] = useState(false)
     const {
         savedEventIds,
         toggleSavedEvent,
-        plannerCityId,
         savedTour,
         quoteDetails,
         plannerPlanId,
@@ -66,6 +68,31 @@ function TripPlannerContent() {
             .map((id) => getEventById(id))
             .filter((event): event is EventItem => Boolean(event)),
         [savedEventIds],
+    )
+    const plannerItineraries = useMemo(
+        () => itineraries.flatMap((catalog) => {
+            const city = getCityById(catalog.cityId)
+            if (!city) return []
+
+            return catalog.plans.map((plan) => ({
+                cityId: catalog.cityId,
+                cityName: city.name,
+                planId: plan.id,
+                title: localize(plan.name),
+                duration: plan.specialLabel
+                    ? localize(plan.specialLabel)
+                    : plan.durationLabel
+                        ? localize(plan.durationLabel)
+                        : copy.itineraryDuration(plan.days.length),
+                summary: localize(plan.summary),
+                isQuoteable: isQuoteablePlan(catalog.cityId, plan.id),
+            }))
+        }),
+        [copy, localize],
+    )
+    const plannerDestinationCount = useMemo(
+        () => new Set(plannerItineraries.map((itinerary) => itinerary.cityId)).size,
+        [plannerItineraries],
     )
     const selectedTour = useMemo(() => {
         if (!savedTour || !isQuoteablePlan(savedTour.cityId, savedTour.planId)) return undefined
@@ -221,12 +248,14 @@ function TripPlannerContent() {
         navigate('/', { state: { scrollTo: 'events' } })
     }
 
-    const browseItineraries = () => {
-        const cityId = savedTour?.cityId ?? plannerCityId
-        if (!cityId) return
+    const openItinerary = (cityId: string, planId: string) => {
         closePlanner()
         navigate(`/cities/${cityId}`, {
-            state: { openItineraries: true, itineraryRequestId: crypto.randomUUID() },
+            state: {
+                openItineraries: true,
+                openQuotePlanId: planId,
+                itineraryRequestId: crypto.randomUUID(),
+            },
         })
     }
 
@@ -253,9 +282,73 @@ function TripPlannerContent() {
 
     return (
         <div className="modal-body">
-            <span className="eyebrow">{copy.eyebrow}</span>
-            <h3 id="trip-planner-title">{copy.title}</h3>
-            <p className="planner-intro">{copy.intro}</p>
+            <section className="planner-itineraries" aria-label={copy.title}>
+                <div className="planner-cover">
+                    <SectionHeader
+                        eyebrow={copy.eyebrow}
+                        title={copy.title}
+                        titleId="trip-planner-title"
+                        className="planner-cover-header"
+                    >
+                        <p className="planner-intro">{copy.intro}</p>
+                    </SectionHeader>
+                    <div className="planner-cover-summary" aria-label={copy.plannerSummary}>
+                        <span>
+                            <strong>{plannerDestinationCount}</strong>
+                            {copy.destinationCount(plannerDestinationCount)}
+                        </span>
+                        <span>
+                            <strong>{plannerItineraries.length}</strong>
+                            {copy.itineraryCount(plannerItineraries.length)}
+                        </span>
+                    </div>
+                    <button
+                        type="button"
+                        className="primary-button planner-itineraries-toggle"
+                        aria-expanded={isItineraryCatalogOpen}
+                        aria-controls="planner-itinerary-catalog"
+                        onClick={() => setIsItineraryCatalogOpen((isOpen) => !isOpen)}
+                    >
+                        {isItineraryCatalogOpen
+                            ? copy.hideItineraries
+                            : copy.showItineraries(plannerItineraries.length)}
+                        <span
+                            className={`planner-itineraries-chevron ${isItineraryCatalogOpen ? 'is-open' : ''}`}
+                            aria-hidden="true"
+                        />
+                    </button>
+                </div>
+                <Collapsible id="planner-itinerary-catalog" isOpen={isItineraryCatalogOpen}>
+                    <div className="planner-itineraries-content">
+                        <p className="planner-itineraries-intro">{copy.itineraryCatalogIntro}</p>
+                        <div className="planner-itinerary-grid">
+                            {plannerItineraries.map((itinerary) => (
+                                <article className="planner-itinerary-card" key={itinerary.planId}>
+                                    <div className="planner-itinerary-meta">
+                                        <span className="planner-itinerary-city">
+                                            {itinerary.cityName} · {itinerary.duration}
+                                        </span>
+                                        <span
+                                            className={`planner-itinerary-status ${itinerary.isQuoteable ? 'is-available' : 'is-coming-soon'}`}
+                                        >
+                                            {itinerary.isQuoteable ? copy.itineraryAvailable : copy.itineraryComingSoon}
+                                        </span>
+                                    </div>
+                                    <h4>{itinerary.title}</h4>
+                                    <p>{itinerary.summary}</p>
+                                    <button
+                                        type="button"
+                                        className={itinerary.isQuoteable ? 'primary-button' : 'secondary-button'}
+                                        onClick={() => openItinerary(itinerary.cityId, itinerary.planId)}
+                                    >
+                                        {itinerary.isQuoteable ? copy.quoteItinerary : copy.viewItinerary}
+                                    </button>
+                                </article>
+                            ))}
+                        </div>
+                    </div>
+                </Collapsible>
+            </section>
 
             <TripPlannerSavedItems
                 events={savedEventItems}
@@ -268,20 +361,10 @@ function TripPlannerContent() {
                 onRemoveEvent={toggleSavedEvent}
             />
 
-            <div className="planner-request-panel">
-                <p className="planner-request-status">{copy.requestStatusNotice}</p>
-                {!quoteSummary ? (
-                    <p className="planner-request-guidance">{copy.quoteRequiredNotice}</p>
-                ) : null}
-                <button
-                    type="button"
-                    className="primary-button small-button planner-browse-itineraries"
-                    onClick={browseItineraries}
-                >
-                    {copy.browseItineraries}
-                </button>
-                {quoteEmailFeedback ? <p className="planner-submit-error" role="alert">{quoteEmailFeedback}</p> : null}
-                {quoteSummary ? (
+            {quoteSummary ? (
+                <div className="planner-request-panel">
+                    <p className="planner-request-status">{copy.requestStatusNotice}</p>
+                    {quoteEmailFeedback ? <p className="planner-submit-error" role="alert">{quoteEmailFeedback}</p> : null}
                     <button
                         type="button"
                         className="primary-button"
@@ -290,57 +373,57 @@ function TripPlannerContent() {
                     >
                         {isSendingQuoteEmail ? t.itineraries.costs.quoteModal.sendingQuote : copy.submit}
                     </button>
-                ) : null}
-                {isConfirmingQuoteEmail && quoteSummary && selectedTourItem ? (
-                    <div className="planner-quote-email-confirmation" role="alert">
-                        <strong>{copy.quoteEmailConfirmationTitle}</strong>
-                        <p>{copy.quoteEmailConfirmationMessage.replace('{email}', quoteSummary.email)}</p>
-                        <dl>
-                            <div>
-                                <dt>{copy.fields.destination}</dt>
-                                <dd>{quoteSummary.destination}</dd>
+                    {isConfirmingQuoteEmail && selectedTourItem ? (
+                        <div className="planner-quote-email-confirmation" role="alert">
+                            <strong>{copy.quoteEmailConfirmationTitle}</strong>
+                            <p>{copy.quoteEmailConfirmationMessage.replace('{email}', quoteSummary.email)}</p>
+                            <dl>
+                                <div>
+                                    <dt>{copy.fields.destination}</dt>
+                                    <dd>{quoteSummary.destination}</dd>
+                                </div>
+                                <div>
+                                    <dt>{copy.selectedTour}</dt>
+                                    <dd>{selectedTourItem.title} · {selectedTourItem.code}</dd>
+                                </div>
+                                <div>
+                                    <dt>{copy.fields.arrivalDate}</dt>
+                                    <dd>{quoteSummary.arrivalDate}</dd>
+                                </div>
+                                <div>
+                                    <dt>{copy.fields.departureDate}</dt>
+                                    <dd>{quoteSummary.departureDate}</dd>
+                                </div>
+                                <div>
+                                    <dt>{copy.fields.travelers}</dt>
+                                    <dd>{quoteSummary.travelers}</dd>
+                                </div>
+                            </dl>
+                            <div className="planner-quote-email-confirmation-actions">
+                                <button
+                                    type="button"
+                                    className="primary-button"
+                                    onClick={() => {
+                                        setIsConfirmingQuoteEmail(false)
+                                        void handleSendQuoteEmail()
+                                    }}
+                                    disabled={isSendingQuoteEmail || !isQuoteEmailReady}
+                                >
+                                    {copy.confirmQuoteEmail}
+                                </button>
+                                <button
+                                    type="button"
+                                    className="secondary-button"
+                                    onClick={() => setIsConfirmingQuoteEmail(false)}
+                                    disabled={isSendingQuoteEmail}
+                                >
+                                    {copy.cancelQuoteEmail}
+                                </button>
                             </div>
-                            <div>
-                                <dt>{copy.selectedTour}</dt>
-                                <dd>{selectedTourItem.title} · {selectedTourItem.code}</dd>
-                            </div>
-                            <div>
-                                <dt>{copy.fields.arrivalDate}</dt>
-                                <dd>{quoteSummary.arrivalDate}</dd>
-                            </div>
-                            <div>
-                                <dt>{copy.fields.departureDate}</dt>
-                                <dd>{quoteSummary.departureDate}</dd>
-                            </div>
-                            <div>
-                                <dt>{copy.fields.travelers}</dt>
-                                <dd>{quoteSummary.travelers}</dd>
-                            </div>
-                        </dl>
-                        <div className="planner-quote-email-confirmation-actions">
-                            <button
-                                type="button"
-                                className="primary-button"
-                                onClick={() => {
-                                    setIsConfirmingQuoteEmail(false)
-                                    void handleSendQuoteEmail()
-                                }}
-                                disabled={isSendingQuoteEmail || !isQuoteEmailReady}
-                            >
-                                {copy.confirmQuoteEmail}
-                            </button>
-                            <button
-                                type="button"
-                                className="secondary-button"
-                                onClick={() => setIsConfirmingQuoteEmail(false)}
-                                disabled={isSendingQuoteEmail}
-                            >
-                                {copy.cancelQuoteEmail}
-                            </button>
                         </div>
-                    </div>
-                ) : null}
-            </div>
+                    ) : null}
+                </div>
+            ) : null}
         </div>
     )
 }

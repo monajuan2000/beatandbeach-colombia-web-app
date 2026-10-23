@@ -1,4 +1,5 @@
 import santaElenaCampingImage from '@/assets/images/destinations/Medellin-Santa-Elena-an-attractive-campground.png'
+import { CITY_IDS } from '@/features/cities/config'
 import type { CityItineraries, ItineraryStop } from '../types'
 
 const prices: CityItineraries['prices'] = [
@@ -64,7 +65,7 @@ function transport(time: string, returning = false): ItineraryStop {
 }
 
 export const santaElenaItineraries: CityItineraries = {
-    cityId: 'medellin',
+    cityId: CITY_IDS.medellin,
     prices,
     dailyPriceIds: ['santa-elena-insurance'],
     plans: [

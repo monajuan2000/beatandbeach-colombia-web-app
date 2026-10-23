@@ -23,5 +23,5 @@ export function isQuoteablePlan(cityId: string, planId: string) {
 }
 
 export function isPlanUnderReview(cityId: string, planId: string) {
-    return cityId === ITINERARY_RULES.guatape.cityId && !isQuoteablePlan(cityId, planId)
+    return !isQuoteablePlan(cityId, planId)
 }

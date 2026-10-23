@@ -10,7 +10,6 @@ import { getCityById } from '@/features/cities/data/cities'
 import { EventsList } from '@/features/events/components/EventsList/EventsList'
 import { AboutUsSection } from '@/features/home/components/AboutUsSection/AboutUsSection'
 import { ColombiaWondersShowcase } from '@/features/home/components/ColombiaWondersShowcase/ColombiaWondersShowcase'
-import { FeaturedEventSpotlight } from '@/features/home/components/FeaturedEventSpotlight/FeaturedEventSpotlight'
 import { HeroSection } from '@/features/home/components/HeroSection/HeroSection'
 import { HighlightedEventsHeading } from '@/features/home/components/HighlightedEventsHeading/HighlightedEventsHeading'
 import { HighlightsSection } from '@/features/home/components/HighlightsSection/HighlightsSection'
@@ -60,7 +59,6 @@ export function HomePage() {
                         </div>
                     </article>
                     <ColombiaWondersShowcase />
-                    <FeaturedEventSpotlight />
                 </PageSection>
                 <PageSection index={2} label={sections.about} surface="light">
                     <ProjectsSection />

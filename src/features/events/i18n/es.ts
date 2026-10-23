@@ -7,6 +7,8 @@ export const eventsEs: EventsMessages = {
         filterAriaLabel: 'Filtrar eventos por ciudad',
         showAll: (hiddenCount: number) => `Ver todos los eventos (${hiddenCount} más)`,
         showFewer: 'Ver menos eventos',
+        pastEyebrow: 'Archivo',
+        pastTitle: 'Eventos pasados',
     },
     card: {
         saved: '✓ Guardado',

@@ -65,6 +65,7 @@ export const homeEs: HomeMessages = {
         description: (city: string) =>
             `Vive el fin de semana de festival más electrizante de la ciudad, con artistas electrónicos de talla mundial, escenarios inmersivos y un ambiente nocturno único en ${city}.`,
         moreIn: (city: string) => `Más en ${city}`,
+        pastEvent: 'Evento finalizado',
         countdown: {
             label: 'Comienza en',
             ended: 'Está pasando ahora 🎉',

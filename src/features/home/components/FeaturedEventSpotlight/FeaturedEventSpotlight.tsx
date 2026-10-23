@@ -5,6 +5,7 @@ import { getCityById } from '@/features/cities/data/cities'
 import { EventDetailsModal } from '@/features/events/components/EventDetailsModal/EventDetailsModal'
 import { SaveEventButton } from '@/features/events/components/SaveEventButton/SaveEventButton'
 import { getEventById } from '@/features/events/data/events'
+import { useCountdown } from '@/hooks/useCountdown'
 import { useInView } from '@/hooks/useInView'
 import { useTranslation } from '@/i18n/context/LanguageContext'
 import { formatDayRange } from '@/utils/date'
@@ -18,12 +19,14 @@ export function FeaturedEventSpotlight() {
     const { ref, inView } = useInView<HTMLElement>()
     const copy = t.home.spotlight
     const event = getEventById(SPOTLIGHT_EVENT_ID)
+    const eventEnd = useCountdown(event?.endsAt ?? event?.startsAt ?? '1970-01-01T00:00:00Z')
 
     if (!event) return null
 
     const city = getCityById(event.cityId)
     const cityName = city?.name ?? ''
     const calendar = event.startsAt ? formatDayRange(event.startsAt, event.endsAt, locale) : null
+    const isPastEvent = Boolean(event.endsAt && eventEnd.isOver)
     const facts = [
         { id: 'date', icon: '📅', label: copy.facts.date, value: localize(event.date) },
         { id: 'venue', icon: '📍', label: copy.facts.venue, value: `${localize(event.location)} · ${cityName}` },
@@ -52,7 +55,10 @@ export function FeaturedEventSpotlight() {
             </div>
 
             <div className="featured-event-copy">
-                <span className="featured-event-badge reveal-item">{copy.eyebrow}</span>
+                <div className="featured-event-badges reveal-item">
+                    <span className="featured-event-badge">{copy.eyebrow}</span>
+                    {isPastEvent ? <span className="featured-event-status">{copy.pastEvent}</span> : null}
+                </div>
                 <h2 className="reveal-item" style={revealDelay(1)}>
                     {localize(event.title)}
                 </h2>
@@ -60,7 +66,7 @@ export function FeaturedEventSpotlight() {
                     {copy.description(cityName)}
                 </p>
 
-                {event.startsAt ? (
+                {event.startsAt && !isPastEvent ? (
                     <div className="reveal-item" style={revealDelay(3)}>
                         <Countdown
                             target={event.startsAt}
@@ -88,7 +94,7 @@ export function FeaturedEventSpotlight() {
                     <button type="button" className="primary-button" onClick={() => setIsDetailsOpen(true)}>
                         {t.common.viewDetails}
                     </button>
-                    <SaveEventButton event={event} variant="secondary" />
+                    {!isPastEvent ? <SaveEventButton event={event} variant="secondary" /> : null}
                     {city ? (
                         <Link to={`/cities/${city.id}`} className="text-button featured-event-more">
                             {copy.moreIn(city.name)} <span aria-hidden="true">→</span>

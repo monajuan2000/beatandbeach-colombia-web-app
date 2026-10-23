@@ -7,6 +7,8 @@ export const eventsEn = {
         filterAriaLabel: 'Filter events by city',
         showAll: (hiddenCount: number) => `Show all events (${hiddenCount} more)`,
         showFewer: 'Show fewer events',
+        pastEyebrow: 'Archive',
+        pastTitle: 'Past events',
     },
     card: {
         saved: '✓ Saved',

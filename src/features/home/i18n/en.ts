@@ -63,6 +63,7 @@ export const homeEn = {
         description: (city: string) =>
             `Experience the city’s most electrifying festival weekend with world-class electronic acts, immersive stages, and a late-night atmosphere unlike any other in ${city}.`,
         moreIn: (city: string) => `More in ${city}`,
+        pastEvent: 'Event ended',
         countdown: {
             label: 'Starts in',
             ended: 'Happening now 🎉',

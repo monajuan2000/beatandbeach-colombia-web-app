@@ -56,6 +56,10 @@
   animation: cityPillPulse 2s ease-out infinite;
 }
 
+.city-pill-open .city-pill-dot {
+  animation: none;
+}
+
 .city-pill-highlighted .city-pill-dot {
   background: #365314;
 }

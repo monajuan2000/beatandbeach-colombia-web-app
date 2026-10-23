@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import featuredDestinationImage from '@/assets/images/destinations/colombia-featured-destination.jpeg'
 import { CityPill } from '@/features/cities/components/CityPill/CityPill'
-import { FEATURED_CITY_ID } from '@/features/cities/config'
 import { cities, citiesByRollout } from '@/features/cities/data/cities'
 import { useInView } from '@/hooks/useInView'
 import { useTranslation } from '@/i18n/context/LanguageContext'
@@ -15,9 +14,9 @@ export function HeroSection() {
     const { ref, inView } = useInView<HTMLElement>(0)
 
     const stats = [
-        { id: 'events', value: '120+', label: copy.stats.events },
-        { id: 'cities', value: String(cities.length), label: copy.stats.cities },
-        { id: 'rating', value: '4.9/5', label: copy.stats.rating, icon: '★' },
+        { id: 'open-cities', value: String(cities.filter((city) => city.status === 'open').length), label: copy.stats.openCities },
+        { id: 'upcoming-cities', value: String(cities.filter((city) => city.status !== 'open').length), label: copy.stats.upcomingCities },
+        { id: 'rating', value: '4.5/5', label: copy.stats.rating, icon: '★' },
     ]
 
     return (
@@ -33,20 +32,19 @@ export function HeroSection() {
                     {copy.description}
                 </p>
 
-                <div className="action-row reveal-item" style={revealDelay(3)}>
-                    <Link to="/" state={{ scrollTo: 'events' }} className="primary-button">
-                        {copy.exploreEvents} <span aria-hidden="true">→</span>
-                    </Link>
-                    <Link to="/" state={{ scrollTo: 'cities' }} className="inverse-button">
-                        {copy.viewCities}
-                    </Link>
-                </div>
-
-                <div className="reveal-item" style={revealDelay(4)}>
+                <div className="hero-actions reveal-item" style={revealDelay(3)}>
+                    <div className="action-row">
+                        <Link to="/" state={{ scrollTo: 'events' }} className="primary-button">
+                            {copy.exploreEvents} <span aria-hidden="true">→</span>
+                        </Link>
+                        <Link to="/" state={{ scrollTo: 'cities' }} className="inverse-button">
+                            {copy.viewCities}
+                        </Link>
+                    </div>
                     <NextEventLink />
                 </div>
 
-                <ul className="hero-stats reveal-item" style={revealDelay(5)} aria-label={copy.statsAriaLabel}>
+                <ul className="hero-stats reveal-item" style={revealDelay(4)} aria-label={copy.statsAriaLabel}>
                     {stats.map((stat) => (
                         <li key={stat.id}>
                             <strong>
@@ -81,7 +79,7 @@ export function HeroSection() {
                     <span className="hero-destinations-label">{copy.chooseDestination}</span>
                     <nav className="city-pill-row" aria-label={copy.destinationsAriaLabel}>
                         {citiesByRollout.map((city) => (
-                            <CityPill key={city.id} city={city} isHighlighted={city.id === FEATURED_CITY_ID} />
+                            <CityPill key={city.id} city={city} isHighlighted={city.status === 'open'} />
                         ))}
                     </nav>
                 </div>

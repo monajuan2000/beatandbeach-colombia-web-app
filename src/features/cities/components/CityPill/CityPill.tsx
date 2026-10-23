@@ -20,7 +20,9 @@ export function CityPill({ city, isHighlighted = false }: { city: City; isHighli
             aria-label={t.cities.status.withStatus(city.name, statusLabel)}
             title={statusLabel}
         >
-            {city.status === 'launching' ? <span className="city-pill-dot" aria-hidden="true" /> : null}
+            {city.status !== 'under-review' ? (
+                <span className="city-pill-dot" aria-hidden="true" />
+            ) : null}
             {city.name}
             {city.status === 'under-review' ? (
                 <small className="city-pill-tag" aria-hidden="true">

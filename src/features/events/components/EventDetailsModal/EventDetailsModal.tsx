@@ -39,7 +39,11 @@ export function EventDetailsModal({ event, onClose, showCityLink = true }: Event
                 <div className="event-details-top">
                     <Badge tone="blue">{t.events.categories[event.category]}</Badge>
                     <div className="event-details-status-badges">
-                        {event.comingSoon ? <Badge tone="amber">{t.events.card.comingSoon}</Badge> : null}
+                        {event.comingSoon ? (
+                            <Badge tone="amber" className="event-card-coming-soon-badge">
+                                {t.events.card.comingSoon}
+                            </Badge>
+                        ) : null}
                         {event.featured ? <Badge tone="green">{t.common.featured}</Badge> : null}
                     </div>
                 </div>

@@ -1,35 +1,26 @@
 import { Link } from 'react-router-dom'
-import { getEventById } from '@/features/events/data/events'
-import { useCountdown } from '@/hooks/useCountdown'
+import { CITY_IDS } from '@/features/cities/config'
 import { useTranslation } from '@/i18n/context/LanguageContext'
-import { SPOTLIGHT_EVENT_ID } from '../../data/spotlight'
 import './NextEventLink.css'
 
-/** Compact "Next up: EDC · in 11 days" link that scrolls to the spotlight. */
-export function NextEventLink() {
-    const { t, localize } = useTranslation()
-    const copy = t.home.hero.nextEvent
-    const event = getEventById(SPOTLIGHT_EVENT_ID)
+const SANTA_ELENA_PLAN_ID = 'medellin-santa-elena-1d1n'
 
-    if (!event?.startsAt) return null
+/** Compact link to the next featured experience: a camping night in Santa Elena. */
+export function NextEventLink() {
+    const { t } = useTranslation()
+    const copy = t.home.hero.nextEvent
 
     return (
-        <Link to="/" state={{ scrollTo: 'spotlight' }} className="next-event-link">
+        <Link
+            to={`/cities/${CITY_IDS.medellin}`}
+            state={{ openItineraries: true, openQuotePlanId: SANTA_ELENA_PLAN_ID }}
+            className="next-event-link"
+        >
             <span className="next-event-link-label">{copy.label}</span>
-            <span className="next-event-link-title">{localize(event.title)}</span>
-            <NextEventDays startsAt={event.startsAt} />
+            <span className="next-event-link-title">{t.home.santaElena.title}</span>
             <span className="next-event-link-arrow" aria-hidden="true">
                 →
             </span>
         </Link>
     )
-}
-
-function NextEventDays({ startsAt }: { startsAt: string }) {
-    const { t } = useTranslation()
-    const { days, isOver } = useCountdown(startsAt)
-
-    if (isOver) return null
-
-    return <span className="next-event-link-days">{t.home.hero.nextEvent.startsIn(days)}</span>
 }

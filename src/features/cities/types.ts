@@ -7,11 +7,12 @@ export type CityStat = {
 
 /**
  * Rollout stage of a destination.
- * - `launching`: first destinations to open; highlighted across the UI.
+ * - `open`: destination has launched and supports trip planning.
+ * - `launching`: destination is scheduled to open next.
  * - `under-review`: still navigable, but shown with a "coming soon" notice while the
  *   technical, legal, and logistics review is completed.
  */
-export type CityStatus = 'launching' | 'under-review'
+export type CityStatus = 'open' | 'launching' | 'under-review'
 
 export type City = {
     id: string

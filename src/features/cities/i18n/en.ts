@@ -3,6 +3,7 @@ import type { CityStatus } from '../types'
 export const citiesEn = {
     status: {
         labels: {
+            open: 'Open',
             launching: 'Opening soon',
             'under-review': 'Coming soon',
         } satisfies Record<CityStatus, string>,

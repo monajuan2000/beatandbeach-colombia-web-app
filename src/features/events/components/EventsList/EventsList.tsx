@@ -30,7 +30,7 @@ export function EventsList() {
         { value: ALL, label: t.common.all, count: events.length },
         ...citiesByRollout.map((city) => ({
             value: city.id,
-            tone: city.status === 'launching' ? 'lime' as const : undefined,
+            tone: city.status === 'open' ? 'lime' as const : undefined,
             label: (
                 <span className="events-list-city-filter-label">
                     {city.name}

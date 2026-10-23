@@ -4,6 +4,7 @@ import type { CityStatus } from '../../types'
 import './CityStatusBadge.css'
 
 const toneByStatus = {
+    open: 'green',
     launching: 'green',
     'under-review': 'amber',
 } as const satisfies Record<CityStatus, string>

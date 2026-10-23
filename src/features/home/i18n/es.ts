@@ -22,8 +22,8 @@ export const homeEs: HomeMessages = {
         viewCities: 'Ver ciudades',
         statsAriaLabel: 'Estadísticas principales',
         stats: {
-            events: 'Eventos',
-            cities: 'Ciudades',
+            openCities: 'Ciudades abiertas',
+            upcomingCities: 'Próxima apertura',
             rating: 'Calificación de viajeros',
         },
         visualAriaLabel: 'Resumen de destinos destacados',

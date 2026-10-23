@@ -74,7 +74,9 @@ export function EventCard({ event, onViewDetails, variant = 'standard' }: EventC
                 <Badge tone="blue">{categoryLabel}</Badge>
                 <div className="event-card-status-badges">
                     {event.comingSoon ? (
-                        <CityStatusBadge status="under-review" />
+                        <Badge tone="amber" className="event-card-coming-soon-badge">
+                            {t.events.card.comingSoon}
+                        </Badge>
                     ) : city?.status === 'under-review' ? (
                         <CityStatusBadge status={city.status} />
                     ) : null}

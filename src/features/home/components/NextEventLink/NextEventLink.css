@@ -4,8 +4,9 @@
   align-items: center;
   gap: 8px 10px;
   width: fit-content;
-  padding: 6px 14px 6px 6px;
-  border-radius: 999px;
+  max-width: 100%;
+  padding: 7px 14px 7px 7px;
+  border-radius: 16px;
   border: 1px solid rgba(var(--home-rgb-accent), 0.35);
   background: linear-gradient(135deg, rgba(var(--home-rgb-accent), 0.14), rgba(var(--home-rgb-accent-cool), 0.1));
   color: var(--color-text);
@@ -33,6 +34,7 @@
 .next-event-link-title {
   color: var(--home-color-foreground);
   font-weight: 700;
+  line-height: 1.4;
 }
 
 .next-event-link-days {

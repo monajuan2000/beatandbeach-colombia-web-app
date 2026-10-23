@@ -20,8 +20,8 @@ export const homeEn = {
         viewCities: 'View cities',
         statsAriaLabel: 'Key event statistics',
         stats: {
-            events: 'Events',
-            cities: 'Cities',
+            openCities: 'Cities open',
+            upcomingCities: 'Opening soon',
             rating: 'Traveler rating',
         },
         visualAriaLabel: 'Featured destinations summary',

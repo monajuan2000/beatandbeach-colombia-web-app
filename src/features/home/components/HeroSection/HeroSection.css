@@ -1,21 +1,27 @@
 .hero-section {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 40px 78px;
+  grid-template-columns: minmax(0, 1.12fr) minmax(340px, 0.88fr);
+  gap: 48px 64px;
   align-items: center;
-  padding: 40px 0 8px;
+  padding: 48px 0 16px;
 }
 
 .hero-copy {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 18px;
+  min-width: 0;
+}
+
+.hero-copy > .eyebrow {
+  margin: 0;
 }
 
 .hero-copy h1 {
   margin: 0;
-  font-size: clamp(2.8rem, 5vw, 5rem);
-  line-height: 0.95;
+  font-size: clamp(2.7rem, 4.8vw, 4.7rem);
+  line-height: 1;
   letter-spacing: -0.07em;
   max-width: 660px;
 }
@@ -32,36 +38,47 @@
 }
 
 .hero-copy p {
-  margin-top: 1.25rem;
+  margin: 0;
   max-width: 620px;
   color: var(--home-color-muted);
-  font-size: 1.08rem;
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 4px;
 }
 
 .hero-copy .action-row {
-  margin: 2rem 0 1.4rem;
+  gap: 12px;
+  margin: 0;
 }
 
 /* Stats as one glass strip with dividers. */
 .hero-stats {
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  margin: 2rem 0 0;
-  padding: 14px 6px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  margin: 4px 0 0;
+  padding: 16px 4px;
   border-radius: 20px;
   border: 1px solid rgba(var(--home-rgb-neutral), 0.16);
-  background: rgba(var(--home-rgb-ink), 0.55);
+  background: linear-gradient(135deg, rgba(var(--home-rgb-ink), 0.72), rgba(var(--home-rgb-ink), 0.4));
 }
 
 .hero-stats li {
   display: flex;
   flex-direction: column;
-  min-width: 110px;
-  padding: 0 20px;
+  min-width: 0;
+  padding: 0 16px;
 }
 
-.hero-stats li+li {
+.hero-stats li + li {
   border-left: 1px solid rgba(var(--home-rgb-neutral), 0.18);
 }
 
@@ -81,29 +98,30 @@
 .hero-stats span {
   color: var(--home-color-subtle);
   font-size: 0.82rem;
+  line-height: 1.4;
 }
 
 /* Visual */
 .hero-visual {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
   justify-self: end;
-  width: min(100%, 400px);
-  margin-left: 24px;
+  width: min(100%, 460px);
+  margin-left: 0;
 }
 
 .feature-card {
   background: linear-gradient(180deg, rgba(var(--home-rgb-ink), 0.96), rgba(var(--home-rgb-ink), 0.72));
   border: 1px solid rgba(var(--home-rgb-neutral), 0.16);
   border-radius: 28px;
-  padding: 24px;
+  padding: 22px;
   box-shadow: 0 22px 40px rgba(var(--home-rgb-ink), 0.24);
 }
 
 .destination-visual {
   position: relative;
-  min-height: 320px;
+  min-height: 380px;
   overflow: hidden;
   border: 1px solid rgba(var(--home-rgb-accent-cool), 0.22);
   box-shadow: 0 0 0 1px rgba(var(--home-rgb-accent), 0.08), 0 26px 50px rgba(var(--home-rgb-deep), 0.45);
@@ -136,7 +154,7 @@
   flex-direction: column;
   justify-content: flex-end;
   height: 100%;
-  min-height: 272px;
+  min-height: 332px;
 }
 
 .destination-copy p {
@@ -157,7 +175,11 @@
 .hero-destinations {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid rgba(var(--home-rgb-neutral), 0.14);
+  border-radius: 20px;
+  background: rgba(var(--home-rgb-ink), 0.42);
 }
 
 .hero-destinations-label {
@@ -203,24 +225,78 @@
 @media (max-width: 960px) {
   .hero-section {
     grid-template-columns: 1fr;
+    gap: 36px;
   }
 
   .hero-visual {
     justify-self: stretch;
     width: 100%;
+    max-width: none;
     margin-left: 0;
+  }
+
+  .destination-visual {
+    min-height: 340px;
+  }
+
+  .destination-copy {
+    min-height: 292px;
   }
 }
 
 @media (max-width: 640px) {
+  .hero-section {
+    gap: 30px;
+    padding-top: 28px;
+  }
+
+  .hero-copy {
+    gap: 16px;
+  }
+
   .hero-copy h1 {
     letter-spacing: -0.05em;
   }
 
+  .hero-copy p {
+    font-size: 0.98rem;
+  }
+
+  .hero-copy .action-row {
+    width: 100%;
+  }
+
+  .hero-copy .action-row > a {
+    flex: 1;
+  }
+
+  .hero-actions {
+    width: 100%;
+  }
+
   .hero-stats li {
     min-width: 0;
-    flex: 1;
-    padding: 0 12px;
+    padding: 0 9px;
+  }
+
+  .hero-stats strong {
+    font-size: 1.3rem;
+  }
+
+  .hero-stats span {
+    font-size: 0.7rem;
+  }
+
+  .destination-visual {
+    min-height: 300px;
+  }
+
+  .destination-copy {
+    min-height: 252px;
+  }
+
+  .hero-destinations {
+    padding: 14px;
   }
 
   .hero-scroll-cue {

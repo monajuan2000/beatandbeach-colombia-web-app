@@ -17,6 +17,7 @@ export const events: EventItem[] = [
             es: 'La mayor celebración electrónica de la ciudad, con escenarios inmersivos, DJs icónicos y un fin de semana completo de música, luces y ambiente.',
         },
         featured: true,
+        comingSoon: true,
         audience: { en: 'Electronic music fans', es: 'Fans de la música electrónica' },
         image: edcColombiaImage,
     },
@@ -33,6 +34,7 @@ export const events: EventItem[] = [
         },
         price: { en: 'From $80.000', es: 'Desde $80.000' },
         featured: true,
+        comingSoon: true,
         audience: { en: 'Young adults and music lovers', es: 'Jóvenes y amantes de la música' },
     },
     {
@@ -79,6 +81,7 @@ export const events: EventItem[] = [
         },
         price: { en: 'Free Entry', es: 'Entrada libre' },
         featured: false,
+        comingSoon: true,
         audience: { en: 'Families and foodies', es: 'Familias y amantes de la buena comida' },
     },
     {
@@ -94,6 +97,7 @@ export const events: EventItem[] = [
         },
         price: { en: 'From $50.000', es: 'Desde $50.000' },
         featured: false,
+        comingSoon: true,
         audience: { en: 'Live music lovers', es: 'Amantes de la música en vivo' },
     },
     {
@@ -109,6 +113,7 @@ export const events: EventItem[] = [
         },
         price: { en: 'Free Entry', es: 'Entrada libre' },
         featured: false,
+        comingSoon: true,
         audience: { en: 'Families and culture lovers', es: 'Familias y amantes de la cultura' },
     },
     {
@@ -124,6 +129,7 @@ export const events: EventItem[] = [
         },
         price: { en: 'From $120.000', es: 'Desde $120.000' },
         featured: false,
+        comingSoon: true,
         audience: { en: 'Concert goers', es: 'Amantes de los conciertos' },
     },
     {
@@ -139,6 +145,7 @@ export const events: EventItem[] = [
         },
         price: { en: 'From $30.000', es: 'Desde $30.000' },
         featured: false,
+        comingSoon: true,
         audience: { en: 'Dancers and night owls', es: 'Bailarines y amantes de la noche' },
     },
     {
@@ -154,6 +161,7 @@ export const events: EventItem[] = [
         },
         price: { en: 'From $40.000', es: 'Desde $40.000' },
         featured: false,
+        comingSoon: true,
         audience: { en: 'Founders and creatives', es: 'Emprendedores y creativos' },
     },
     {

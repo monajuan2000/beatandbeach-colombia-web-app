@@ -3,6 +3,7 @@ import type { CitiesMessages } from './en'
 export const citiesEs: CitiesMessages = {
     status: {
         labels: {
+            open: 'Abierta',
             launching: 'Próxima apertura',
             'under-review': 'Muy pronto',
         },

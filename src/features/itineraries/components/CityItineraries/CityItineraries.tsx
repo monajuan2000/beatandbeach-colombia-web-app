@@ -39,7 +39,7 @@ export function CityItineraries({ city }: { city: City }) {
     )
     const [isOpen, setIsOpen] = useState(false)
     const sectionRef = useRef<HTMLElement>(null)
-    const selectedPlanRef = useRef<HTMLParagraphElement>(null)
+    const itineraryBodyRef = useRef<HTMLDivElement>(null)
     const { t, localize, locale } = useTranslation()
     const copy = t.itineraries.section
     const requestedQuotePlan = dismissedQuoteLocationKey !== location.key && typeof routeQuotePlanId === 'string'
@@ -71,11 +71,27 @@ export function CityItineraries({ city }: { city: City }) {
     const basicPlans = catalog.plans.filter((item) => !item.specialLabel)
     const planOptions: FilterOption[] = [
         ...catalog.plans.flatMap((item) =>
-            item.specialLabel ? [{ value: item.id, label: localize(item.specialLabel), tone: 'lime' as const }] : [],
+            item.specialLabel
+                ? [{
+                    value: item.id,
+                    label: (
+                        <span className="city-itineraries-plan-option">
+                            <span>{localize(item.selectorLabel ?? item.name)}</span>
+                            <small>{localize(item.specialLabel)}</small>
+                        </span>
+                    ),
+                    tone: 'lime' as const,
+                }]
+                : [],
         ),
         ...basicPlans.map((item) => ({
             value: item.id,
-            label: item.durationLabel ? localize(item.durationLabel) : copy.duration(item.days.length),
+            label: (
+                <span className="city-itineraries-plan-option">
+                    <span>{localize(item.selectorLabel ?? item.name)}</span>
+                    <small>{item.durationLabel ? localize(item.durationLabel) : copy.duration(item.days.length)}</small>
+                </span>
+            ),
         })),
     ]
     const lowestTotal = Math.min(...basicPlans.map((item) => getPlanCostBreakdown(item, catalog).total))
@@ -147,18 +163,12 @@ export function CityItineraries({ city }: { city: City }) {
                         setIsOpen(true)
                         setDismissedQuoteLocationKey(location.key)
                         window.requestAnimationFrame(() => {
-                            selectedPlanRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                            itineraryBodyRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
                         })
                     }}
                 />
 
-                <p ref={selectedPlanRef} className="city-itineraries-selected-plan" aria-live="polite">
-                    <span className="city-itineraries-selected-plan-indicator" aria-hidden="true" />
-                    <span>{copy.selectedPlan}: </span>
-                    <strong>{localize(plan.name)}</strong>
-                </p>
-
-                <div className="city-itineraries-body">
+                <div ref={itineraryBodyRef} className="city-itineraries-body">
                     <ItineraryTimeline plan={plan} catalog={catalog} />
                     <ItineraryCostSummary
                         plan={plan}

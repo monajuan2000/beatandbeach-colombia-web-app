@@ -29,6 +29,8 @@ export const itinerariesEn = {
         free: 'Free',
         tentative: 'To be confirmed',
         specialPlan: 'Special plan',
+        inclusions: 'Included in the experience',
+        conditions: 'Conditions',
         kinds: {
             transport: 'Transport',
             meal: 'Meal',
@@ -40,6 +42,7 @@ export const itinerariesEn = {
     costs: {
         eyebrow: 'Price per person',
         categories: {
+            package: 'All-inclusive experience',
             transport: 'Transport',
             insurance: 'Accident insurance',
             meals: 'Meals',

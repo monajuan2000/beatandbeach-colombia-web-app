@@ -77,6 +77,28 @@ export function ItineraryTimeline({ plan, catalog }: ItineraryTimelineProps) {
                     </ol>
                 </article>
             ))}
+
+            {plan.inclusions?.length ? (
+                <section className="itinerary-plan-details">
+                    <h4>{copy.inclusions}</h4>
+                    <ul>
+                        {plan.inclusions.map((inclusion) => (
+                            <li key={inclusion.en}>{localize(inclusion)}</li>
+                        ))}
+                    </ul>
+                </section>
+            ) : null}
+
+            {plan.conditions?.length ? (
+                <section className="itinerary-plan-details">
+                    <h4>{copy.conditions}</h4>
+                    <ul>
+                        {plan.conditions.map((condition) => (
+                            <li key={condition.en}>{localize(condition)}</li>
+                        ))}
+                    </ul>
+                </section>
+            ) : null}
         </section>
     )
 }

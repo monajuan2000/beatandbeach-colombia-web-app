@@ -191,34 +191,24 @@
   outline-offset: 3px;
 }
 
-.city-itineraries-selected-plan {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: fit-content;
-  max-width: 100%;
-  margin: -12px auto 24px;
-  padding: 9px 16px;
-  border: 1px solid rgba(8, 145, 178, 0.3);
-  border-radius: 999px;
-  background: linear-gradient(110deg, rgba(207, 250, 254, 0.85), rgba(220, 252, 231, 0.85));
-  color: #164e63;
-  font-size: 0.9rem;
-  text-align: center;
+.city-itineraries .chip-group .chip {
+  min-width: min(230px, 100%);
+  justify-content: flex-start;
+  padding: 10px 16px;
+  border-radius: 14px;
+  text-align: left;
 }
 
-.city-itineraries-selected-plan-indicator {
-  width: 9px;
-  height: 9px;
-  flex: 0 0 9px;
-  border-radius: 50%;
-  background: #0891b2;
-  box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.15), 0 0 12px rgba(8, 145, 178, 0.45);
+.city-itineraries-plan-option {
+  display: grid;
+  gap: 3px;
 }
 
-.city-itineraries-selected-plan strong {
-  color: #082f49;
+.city-itineraries-plan-option small {
+  color: currentColor;
+  font-size: 0.72rem;
+  font-weight: 600;
+  opacity: 0.75;
 }
 
 .city-itineraries-body {

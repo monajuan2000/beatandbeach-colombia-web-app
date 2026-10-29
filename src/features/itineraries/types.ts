@@ -1,7 +1,7 @@
 import type { LocalizedText } from '@/i18n/types'
 
 /** Groups used in the cost breakdown; display labels live in `itineraries/i18n`. */
-export type CostCategory = 'transport' | 'insurance' | 'meals' | 'lodging' | 'attractions'
+export type CostCategory = 'package' | 'transport' | 'insurance' | 'meals' | 'lodging' | 'attractions'
 
 /** A priced service, in Colombian pesos per person. */
 export type PriceItem = {
@@ -37,6 +37,7 @@ export type ItineraryPlan = {
     /** Short destination and plan identifier shown with selected tours. */
     code: string
     name: LocalizedText
+    selectorLabel?: LocalizedText
     summary: LocalizedText
     /** Optional cover shown with this plan's itinerary. */
     coverImage?: {
@@ -45,6 +46,9 @@ export type ItineraryPlan = {
     }
     /** Optional display label for plans whose overnight duration differs from their calendar days. */
     durationLabel?: LocalizedText
+    packagePriceId?: string
+    inclusions?: LocalizedText[]
+    conditions?: LocalizedText[]
     days: ItineraryDay[]
     /**
      * Marks a plan made for a specific group (e.g. SENA). It is shown as the selector label instead

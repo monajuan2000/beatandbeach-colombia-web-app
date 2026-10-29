@@ -1,7 +1,7 @@
 import type { CityItineraries, CostCategory, ItineraryPlan, PriceItem } from '../types'
 
 /** Order in which categories are listed in the breakdown. */
-const CATEGORY_ORDER: CostCategory[] = ['transport', 'insurance', 'meals', 'lodging', 'attractions']
+const CATEGORY_ORDER: CostCategory[] = ['package', 'transport', 'insurance', 'meals', 'lodging', 'attractions']
 
 export type CostLine = {
     item: PriceItem
@@ -33,12 +33,16 @@ export function getPlanCostBreakdown(plan: ItineraryPlan, catalog: CityItinerari
     const add = (priceId: string, quantity: number) =>
         quantities.set(priceId, (quantities.get(priceId) ?? 0) + quantity)
 
-    for (const day of plan.days) {
-        for (const stop of day.stops) {
-            if (stop.priceId) add(stop.priceId, 1)
+    if (plan.packagePriceId) {
+        add(plan.packagePriceId, 1)
+    } else {
+        for (const day of plan.days) {
+            for (const stop of day.stops) {
+                if (stop.priceId) add(stop.priceId, 1)
+            }
         }
+        for (const priceId of catalog.dailyPriceIds) add(priceId, plan.days.length)
     }
-    for (const priceId of catalog.dailyPriceIds) add(priceId, plan.days.length)
 
     const lines: CostLine[] = catalog.prices
         .filter((item) => quantities.has(item.id))

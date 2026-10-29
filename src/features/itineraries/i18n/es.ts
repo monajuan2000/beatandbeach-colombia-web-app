@@ -29,6 +29,8 @@ export const itinerariesEs: ItinerariesMessages = {
         free: 'Gratis',
         tentative: 'Por confirmar',
         specialPlan: 'Plan especial',
+        inclusions: 'Incluido en la experiencia',
+        conditions: 'Condiciones',
         kinds: {
             transport: 'Transporte',
             meal: 'Comida',
@@ -40,6 +42,7 @@ export const itinerariesEs: ItinerariesMessages = {
     costs: {
         eyebrow: 'Precio por persona',
         categories: {
+            package: 'Experiencia todo incluido',
             transport: 'Transporte',
             insurance: 'Póliza de accidentes',
             meals: 'Alimentación',

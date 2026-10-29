@@ -69,6 +69,7 @@ export const tripEs: TripMessages = {
     submitError: 'No pudimos enviar tu solicitud. Revisa tu conexión e inténtalo de nuevo.',
     requestStatusNotice: 'Esta es una solicitud de disponibilidad, no una reserva confirmada. Te contactaremos después de verificarla.',
     requestEmail: {
+        subject: (reference: string) => `Solicitud de viaje ${reference} · Beat & Beach Colombia`,
         reference: 'Referencia de solicitud',
         destination: 'Destino',
         arrivalDate: 'Fecha de llegada',

@@ -69,6 +69,7 @@ export const tripEn = {
     submitError: 'We could not send your request. Please check your connection and try again.',
     requestStatusNotice: 'This is an availability request, not a confirmed reservation. We will contact you after checking availability.',
     requestEmail: {
+        subject: (reference: string) => `Trip request ${reference} · Beat & Beach Colombia`,
         reference: 'Request reference',
         destination: 'Destination',
         arrivalDate: 'Arrival date',

@@ -64,6 +64,14 @@ function transport(time: string, returning = false): ItineraryStop {
     }
 }
 
+function interpretiveStop(
+    time: string,
+    title: ItineraryStop['title'],
+    description: ItineraryStop['description'],
+): ItineraryStop {
+    return { time, kind: 'attraction', title, description, isTentative: true }
+}
+
 const countrysidePackagePriceId = 'medellin-countryside-package'
 
 export const medellinItineraries: CityItineraries = {
@@ -366,6 +374,136 @@ export const medellinItineraries: CityItineraries = {
                             description: {
                                 en: 'Return transport from the selected estate.',
                                 es: 'Transporte de regreso desde la finca seleccionada.',
+                            },
+                            isTentative: true,
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            id: 'medellin-sena-nature',
+            code: 'MED-SENA-001',
+            name: {
+                en: 'Ancestral Waters & Muleteer Trail',
+                es: 'Ruta de las Aguas Ancestrales & El Camino del Arriero',
+            },
+            selectorLabel: { en: 'Ancestral Waters · SENA', es: 'Aguas Ancestrales · SENA' },
+            specialLabel: { en: 'SENA plan', es: 'Plan SENA' },
+            isSenaPlan: true,
+            summary: {
+                en: 'A six-hour, approximately 6 km countryside walk through the Copacabana–Barbosa rural corridor, following historic muleteer trails, exploring local water landscapes, and sharing a traditional fiambre wrapped in bijao leaf. Low-to-moderate difficulty. The exact trail and any water access depend on local authorization and current conditions.',
+                es: 'Una caminata veredal de seis horas y aproximadamente 6 km por el corredor Copacabana–Barbosa, siguiendo antiguos caminos de arriería, explorando los paisajes del agua y compartiendo un fiambre tradicional envuelto en hoja de bijao. Dificultad baja-media. El sendero exacto y el acceso al agua dependen de la autorización local y las condiciones del momento.',
+            },
+            inclusions: [
+                {
+                    en: 'Integrated public transport from Niquía and back; the fare is pending confirmation.',
+                    es: 'Pasajes integrados de transporte público desde Niquía y regreso; tarifa pendiente de confirmación.',
+                },
+                {
+                    en: 'Traditional countryside fiambre wrapped in bijao leaf at a local rural eatery.',
+                    es: 'Fiambre campesino tradicional envuelto en hoja de bijao en un almorzadero local.',
+                },
+            ],
+            conditions: [
+                {
+                    en: 'Meet at Niquía Metro Station at 08:00; the experience closes there at approximately 14:00.',
+                    es: 'Encuentro en la estación Niquía del Metro a las 08:00; la experiencia termina allí aproximadamente a las 14:00.',
+                },
+                {
+                    en: 'Bring closed-toe shoes with good grip, swimsuit, quick-dry towel, reusable water bottle, personal hydration, and a rain poncho or waterproof jacket.',
+                    es: 'Lleva calzado cerrado con buen agarre, traje de baño, toalla de secado rápido, termo reutilizable, hidratación personal y capa impermeable o poncho.',
+                },
+                {
+                    en: 'Swimming is only possible at an authorized site and when water and weather conditions are considered safe by the local guide. Water access may be removed from the itinerary.',
+                    es: 'El baño solo se realizará en un sitio autorizado y si el guía local considera seguras las condiciones del agua y del clima. El acceso al agua puede retirarse del itinerario.',
+                },
+                {
+                    en: 'The exact trail, transport service, and water access must be confirmed with local operators before the tour. The integrated transport fare is not yet included in the displayed cost breakdown.',
+                    es: 'La ruta exacta, el servicio de transporte y el acceso al agua deben confirmarse con operadores locales antes del recorrido. La tarifa de transporte integrado aún no está incluida en el desglose de costos mostrado.',
+                },
+            ],
+            days: [
+                {
+                    title: { en: 'Ancestral Waters & Muleteer Trail', es: 'Aguas Ancestrales & Camino del Arriero' },
+                    stops: [
+                        {
+                            time: '08:00',
+                            kind: 'transport',
+                            title: { en: 'Meet at Niquía Metro Station', es: 'Encuentro en la estación Niquía' },
+                            description: {
+                                en: 'Meet the group by the turnstiles, receive a route and safety briefing, and board the integrated rural bus toward the Copacabana–Barbosa corridor. The integrated fare is pending confirmation.',
+                                es: 'Encuentro del grupo en los torniquetes, indicaciones de ruta y seguridad, y abordaje del bus integrado veredal hacia el corredor Copacabana–Barbosa. La tarifa integrada está pendiente de confirmación.',
+                            },
+                            isTentative: true,
+                        },
+                        interpretiveStop(
+                            '08:50',
+                            { en: 'Start of the interpretive trail', es: 'Inicio del sendero interpretativo' },
+                            {
+                                en: 'Begin the approximately 6 km walk on a rural bridle path, with short landscape and botanical observation stops.',
+                                es: 'Inicio de la caminata de aproximadamente 6 km por un camino de herradura veredal, con paradas breves de observación botánica y paisajística.',
+                            },
+                        ),
+                        interpretiveStop(
+                            '09:30',
+                            { en: 'The historic stone muleteer road', es: 'El antiguo camino real de piedra' },
+                            {
+                                en: 'Learn how mule trains carried coffee, panela, and other goods along Antioquia’s historic rural routes.',
+                                es: 'Conoce cómo las recuas de mulas transportaban café, panela y otras mercancías por los caminos históricos de Antioquia.',
+                            },
+                        ),
+                        interpretiveStop(
+                            '10:15',
+                            { en: 'Muleteer stories and mountain plants', es: 'Historias de arriería y plantas de montaña' },
+                            {
+                                en: 'Hear local muleteer stories and learn about traditional uses of mountain plants without harvesting or consuming them.',
+                                es: 'Escucha historias locales de arriería y conoce usos tradicionales de plantas de montaña, sin recolectarlas ni consumirlas.',
+                            },
+                        ),
+                        interpretiveStop(
+                            '10:50',
+                            { en: 'Waterways and local legends', es: 'Quebradas y relatos del agua' },
+                            {
+                                en: 'Explore the role of local streams in the rural landscape and hear community stories about their water guardians.',
+                                es: 'Explora el papel de las quebradas en el paisaje veredal y escucha relatos comunitarios sobre sus guardianes del agua.',
+                            },
+                        ),
+                        interpretiveStop(
+                            '11:15',
+                            { en: 'Rest by the stream or waterfall', es: 'Descanso junto a la quebrada o cascada' },
+                            {
+                                en: 'Time to rest, take photos, or enter the water only if the site is authorized and the guide confirms safe conditions.',
+                                es: 'Tiempo para descansar, tomar fotografías o entrar al agua solo si el sitio está autorizado y el guía confirma que las condiciones son seguras.',
+                            },
+                        ),
+                        {
+                            time: '12:30',
+                            kind: 'meal',
+                            title: { en: 'Traditional fiambre in bijao leaf', es: 'Fiambre campesino en hoja de bijao' },
+                            description: {
+                                en: 'Lunch break at a local rural eatery.',
+                                es: 'Receso para almorzar en una fonda veredal local.',
+                            },
+                            priceId: 'santa-elena-lunch',
+                        },
+                        {
+                            time: '13:20',
+                            kind: 'transport',
+                            title: { en: 'Integrated return toward Niquía', es: 'Regreso integrado hacia Niquía' },
+                            description: {
+                                en: 'Board the integrated rural transport back toward the Metro station. The fare is pending confirmation.',
+                                es: 'Abordaje del transporte integrado veredal de regreso hacia la estación del Metro. La tarifa está pendiente de confirmación.',
+                            },
+                            isTentative: true,
+                        },
+                        {
+                            time: '14:00',
+                            kind: 'activity',
+                            title: { en: 'Close at Niquía Metro Station', es: 'Cierre en la estación Niquía' },
+                            description: {
+                                en: 'End of the experience at the meeting point.',
+                                es: 'Fin de la experiencia en el punto de encuentro.',
                             },
                             isTentative: true,
                         },

@@ -165,10 +165,10 @@
 }
 
 .city-itineraries.surface-light .chip-group .chip.chip-lime {
-  border-color: #65a30d;
-  background: #a3e635;
-  color: #1a2e05;
-  box-shadow: 0 6px 16px rgba(101, 163, 13, 0.22);
+  border-color: rgba(8, 145, 178, 0.62);
+  background: linear-gradient(120deg, #bae6fd, #99f6e4 58%, #bbf7d0);
+  color: #0c4a6e;
+  box-shadow: 0 7px 18px rgba(8, 145, 178, 0.24);
 }
 
 .city-itineraries.surface-light .chip-group .chip.is-active {

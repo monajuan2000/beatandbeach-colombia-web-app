@@ -376,6 +376,7 @@ export const guatapeItineraries: CityItineraries = {
             code: 'GUA-SENA-001',
             name: { en: 'SENA special plan', es: 'Plan especial SENA' },
             specialLabel: { en: 'SENA plan', es: 'Plan SENA' },
+            isSenaPlan: true,
             summary: {
                 en: 'A 6-hour interpretive tour in Guatapé, plus the ride from and back to Medellín. Includes round-trip transport, accident insurance, a snack and lunch.',
                 es: 'Un recorrido interpretativo de 6 horas en Guatapé, más el trayecto desde y hacia Medellín. Incluye transporte de ida y regreso, póliza de accidentes, refrigerio y almuerzo.',

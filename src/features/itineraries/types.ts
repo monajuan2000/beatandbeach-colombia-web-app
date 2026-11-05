@@ -55,6 +55,8 @@ export type ItineraryPlan = {
      * of the duration, and the plan is left out of the public "from" price.
      */
     specialLabel?: LocalizedText
+    /** Highlights this plan in the itinerary selector as a SENA plan. */
+    isSenaPlan?: boolean
 }
 
 /** Every plan (basic and special) offered for one city, with the price list its stops refer to. */

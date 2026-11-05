@@ -67,33 +67,26 @@ export function CityItineraries({ city }: { city: City }) {
 
     if (!catalog || !plan) return null
 
-    // Special plans lead the selector in lime; basic plans stay visible even when their booking actions are paused.
+    // SENA plans lead the selector in lime; all other plans retain the standard chip styling.
     const basicPlans = catalog.plans.filter((item) => !item.specialLabel)
-    const planOptions: FilterOption[] = [
-        ...catalog.plans.flatMap((item) =>
-            item.specialLabel
-                ? [{
-                    value: item.id,
-                    label: (
-                        <span className="city-itineraries-plan-option">
-                            <span>{localize(item.selectorLabel ?? item.name)}</span>
-                            <small>{localize(item.specialLabel)}</small>
-                        </span>
-                    ),
-                    tone: 'lime' as const,
-                }]
-                : [],
-        ),
-        ...basicPlans.map((item) => ({
+    const senaPlans = catalog.plans.filter((item) => item.isSenaPlan)
+    const otherSpecialPlans = catalog.plans.filter((item) => item.specialLabel && !item.isSenaPlan)
+    const planOptions: FilterOption[] = [...senaPlans, ...otherSpecialPlans, ...basicPlans].map((item) => ({
             value: item.id,
             label: (
                 <span className="city-itineraries-plan-option">
                     <span>{localize(item.selectorLabel ?? item.name)}</span>
-                    <small>{item.durationLabel ? localize(item.durationLabel) : copy.duration(item.days.length)}</small>
+                    <small>
+                        {item.specialLabel
+                            ? localize(item.specialLabel)
+                            : item.durationLabel
+                                ? localize(item.durationLabel)
+                                : copy.duration(item.days.length)}
+                    </small>
                 </span>
             ),
-        })),
-    ]
+            tone: item.isSenaPlan ? 'lime' : 'default',
+        }))
     const lowestTotal = Math.min(...basicPlans.map((item) => getPlanCostBreakdown(item, catalog).total))
     const contentId = `${city.id}-itineraries-content`
 

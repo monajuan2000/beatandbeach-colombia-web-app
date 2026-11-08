@@ -50,6 +50,14 @@ export const homeEs: HomeMessages = {
         imageAlt: 'Paisaje de un camping en Santa Elena, Medellín',
         cta: 'Ver itinerario',
     },
+    senaItinerary: {
+        eyebrow: 'Medellín · Copacabana–Barbosa · SENA',
+        title: 'Aguas Ancestrales & El Camino del Arriero',
+        description:
+            'Recorre cerca de 6 km por antiguos caminos veredales, descubre historias locales y paisajes del agua, y disfruta un fiambre campesino en esta experiencia interpretativa de seis horas.',
+        imageAlt: 'Estudiantes del SENA guían un grupo por un sendero de montaña junto a una quebrada',
+        cta: 'Explorar el itinerario SENA',
+    },
     wonders: {
         ariaLabel: 'Banner de lo mejor de Colombia',
         eyebrow: 'Un país de contrastes',

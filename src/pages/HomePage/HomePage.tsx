@@ -3,6 +3,7 @@ import { PageSection } from '@/components/layout/PageSection/PageSection'
 import { SiteFooter } from '@/components/layout/SiteFooter/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader/SiteHeader'
 import santaElenaCampingImage from '@/assets/images/destinations/Medellin-Santa-Elena-an-attractive-campground.png'
+import ancestralWatersTrailImage from '@/assets/images/destinations/ancestral-waters-muleteer-trail.jpeg'
 import { CityCard } from '@/features/cities/components/CityCard/CityCard'
 import { FEATURED_CITY_ID } from '@/features/cities/config'
 import { CitiesGrid } from '@/features/cities/components/CitiesGrid/CitiesGrid'
@@ -33,6 +34,26 @@ export function HomePage() {
                 <PageSection index={1} label={sections.featured} surface="dark">
                     <HighlightedEventsHeading />
                     <SenaTourProgress />
+                    <article className="home-santa-elena-card home-sena-itinerary-card" aria-labelledby="home-sena-itinerary-title">
+                        <img
+                            className="home-santa-elena-image"
+                            src={ancestralWatersTrailImage}
+                            alt={t.home.senaItinerary.imageAlt}
+                        />
+                        <div className="home-santa-elena-copy">
+                            <span className="card-tag">{t.home.senaItinerary.eyebrow}</span>
+                            <h2 id="home-sena-itinerary-title">{t.home.senaItinerary.title}</h2>
+                            <p>{t.home.senaItinerary.description}</p>
+                            <Link
+                                className="primary-button home-santa-elena-cta"
+                                to="/cities/medellin"
+                                state={{ openItineraries: true, openItineraryPlanId: 'medellin-sena-nature' }}
+                            >
+                                {t.home.senaItinerary.cta}
+                                <span aria-hidden="true"> →</span>
+                            </Link>
+                        </div>
+                    </article>
                     {featuredDestination ? (
                         <div className="home-featured-destination-card">
                             <CityCard city={featuredDestination} />

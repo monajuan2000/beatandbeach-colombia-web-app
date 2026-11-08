@@ -13,7 +13,7 @@ export function NextEventLink() {
     return (
         <Link
             to={`/cities/${CITY_IDS.medellin}`}
-            state={{ openItineraries: true, openQuotePlanId: SANTA_ELENA_PLAN_ID }}
+            state={{ openItineraries: true, openItineraryPlanId: SANTA_ELENA_PLAN_ID }}
             className="next-event-link"
         >
             <span className="next-event-link-label">{copy.label}</span>

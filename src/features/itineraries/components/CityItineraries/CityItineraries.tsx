@@ -28,14 +28,21 @@ export function CityItineraries({ city }: { city: City }) {
     const routeState = location.state as {
         openItineraries?: unknown
         itineraryRequestId?: unknown
+        openItineraryPlanId?: unknown
         openQuotePlanId?: unknown
     } | null
     const routeOpenItineraries = routeState?.openItineraries === true
     const routeQuotePlanId = routeState?.openQuotePlanId
+    const routeItineraryPlanId =
+        typeof routeState?.openItineraryPlanId === 'string'
+            ? routeState.openItineraryPlanId
+            : typeof routeQuotePlanId === 'string'
+                ? routeQuotePlanId
+                : undefined
     const [dismissedQuoteLocationKey, setDismissedQuoteLocationKey] = useState<string>()
     // Opens on the first basic plan; under-review plans remain selectable but their actions are disabled.
     const [selectedPlanId, setSelectedPlanId] = useState(() =>
-        typeof routeQuotePlanId === 'string' ? routeQuotePlanId : firstAvailablePlan?.id ?? '',
+        routeItineraryPlanId ?? firstAvailablePlan?.id ?? '',
     )
     const [isOpen, setIsOpen] = useState(false)
     const sectionRef = useRef<HTMLElement>(null)
@@ -45,13 +52,12 @@ export function CityItineraries({ city }: { city: City }) {
     const requestedQuotePlan = dismissedQuoteLocationKey !== location.key && typeof routeQuotePlanId === 'string'
         ? catalog?.plans.find((item) => item.id === routeQuotePlanId && isQuoteablePlan(city.id, item.id))
         : undefined
-    const isSectionOpen = isOpen || routeOpenItineraries || Boolean(requestedQuotePlan)
-
     const routeSelectedPlanId =
-        dismissedQuoteLocationKey !== location.key && typeof routeQuotePlanId === 'string' &&
-        catalog?.plans.some((item) => item.id === routeQuotePlanId)
-            ? routeQuotePlanId
+        dismissedQuoteLocationKey !== location.key && routeItineraryPlanId &&
+        catalog?.plans.some((item) => item.id === routeItineraryPlanId)
+            ? routeItineraryPlanId
             : undefined
+    const isSectionOpen = isOpen || routeOpenItineraries || Boolean(requestedQuotePlan) || Boolean(routeSelectedPlanId)
     const activePlanId = requestedQuotePlan?.id ?? routeSelectedPlanId ?? selectedPlanId
     const plan = catalog?.plans.find((item) => item.id === activePlanId) ?? firstAvailablePlan
 
@@ -63,7 +69,7 @@ export function CityItineraries({ city }: { city: City }) {
         }, 550)
 
         return () => window.clearTimeout(timeoutId)
-    }, [isSectionOpen, routeOpenItineraries, routeState?.itineraryRequestId, requestedQuotePlan?.id])
+    }, [isSectionOpen, routeOpenItineraries, routeState?.itineraryRequestId, routeItineraryPlanId, requestedQuotePlan?.id])
 
     if (!catalog || !plan) return null
 
@@ -96,7 +102,7 @@ export function CityItineraries({ city }: { city: City }) {
             sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
         }
         setIsOpen(!isSectionOpen)
-        if (routeOpenItineraries || requestedQuotePlan) {
+        if (routeOpenItineraries || routeSelectedPlanId || requestedQuotePlan) {
             navigate(location.pathname, { replace: true, state: null })
         }
     }

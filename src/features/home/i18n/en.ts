@@ -48,6 +48,14 @@ export const homeEn = {
         imageAlt: 'Scenic campground in Santa Elena, Medellín',
         cta: 'View the itinerary',
     },
+    senaItinerary: {
+        eyebrow: 'Medellín · Copacabana–Barbosa · SENA',
+        title: 'Ancestral Waters & the Muleteer Trail',
+        description:
+            'Walk about 6 km along historic rural trails, discover local stories and water landscapes, and enjoy a traditional countryside fiambre on this six-hour interpretive experience.',
+        imageAlt: 'SENA students guide a group along a mountain trail beside a stream',
+        cta: 'Explore the SENA itinerary',
+    },
     wonders: {
         ariaLabel: 'Colombia highlights banner',
         eyebrow: 'A country of contrasts',

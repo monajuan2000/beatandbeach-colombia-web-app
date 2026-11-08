@@ -1,4 +1,5 @@
 import santaElenaCampingImage from '@/assets/images/destinations/Medellin-Santa-Elena-an-attractive-campground.png'
+import ancestralWatersTrailImage from '@/assets/images/destinations/ancestral-waters-muleteer-trail.jpeg'
 import { CITY_IDS } from '@/features/cities/config'
 import type { CityItineraries, ItineraryStop } from '../types'
 
@@ -391,6 +392,13 @@ export const medellinItineraries: CityItineraries = {
             selectorLabel: { en: 'Ancestral Waters · SENA', es: 'Aguas Ancestrales · SENA' },
             specialLabel: { en: 'SENA plan', es: 'Plan SENA' },
             isSenaPlan: true,
+            coverImage: {
+                src: ancestralWatersTrailImage,
+                alt: {
+                    en: 'SENA students guiding a group along the Ancestral Waters and Muleteer Trail beside a mountain stream',
+                    es: 'Estudiantes del SENA guían un grupo por la Ruta de las Aguas Ancestrales junto a una quebrada de montaña',
+                },
+            },
             summary: {
                 en: 'A six-hour, approximately 6 km countryside walk through the Copacabana–Barbosa rural corridor, following historic muleteer trails, exploring local water landscapes, and sharing a traditional fiambre wrapped in bijao leaf. Low-to-moderate difficulty. The exact trail and any water access depend on local authorization and current conditions.',
                 es: 'Una caminata veredal de seis horas y aproximadamente 6 km por el corredor Copacabana–Barbosa, siguiendo antiguos caminos de arriería, explorando los paisajes del agua y compartiendo un fiambre tradicional envuelto en hoja de bijao. Dificultad baja-media. El sendero exacto y el acceso al agua dependen de la autorización local y las condiciones del momento.',
